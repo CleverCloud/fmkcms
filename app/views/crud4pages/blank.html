@@ -10,7 +10,27 @@
 
     <div class="objectForm">
 	#{form action:@create(), enctype:'multipart/form-data'}
-		#{crud.form /}
+		#{crud.form}
+        #{crud.custom 'tags'}
+        <input type="hidden" name="object.tags@id" value="" />
+
+
+        #{field 'object.tags'}
+        <p>
+            <label>&{field.name}</label>
+
+            #{list items:models.Tag.findAll(), as:'tag'}
+            <input id="object_tags" name="object.tags@id" type="checkbox" value="${tag.id}">${tag.name}
+                   #{/list}
+                   <span class="error">${field.error}</span>
+        </p>
+        #{/field}
+        #{/crud.custom}
+
+
+        #{/crud.form}
+                <input type="text" name="extratags" value="" />
+
         <p class="crudButtons">
             <input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
             <input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
