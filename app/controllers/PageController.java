@@ -4,7 +4,9 @@
  */
 package controllers;
 
+import com.google.gson.Gson;
 import models.Page;
+import play.Logger;
 import play.mvc.Controller;
 
 /**
@@ -14,13 +16,24 @@ import play.mvc.Controller;
 public class PageController extends Controller {
 
     public static void page(String urlid) {
-        if(urlid == null){
+        if (urlid == null) {
             notFound();
         }
+
         Page p = Page.getByUrlid(urlid);
-        if(p == null){
+        if (p == null) {
             notFound();
         }
+        if (request.headers.get("accept").value().contains("json")) {
+            renderJSON(p);
+        }
+
         render(p);
+    }
+
+    public static void pagejson(String urlid) {
+        renderText("sdfhjgqsdkjfhgsqdf");
+
+
     }
 }
