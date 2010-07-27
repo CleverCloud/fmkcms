@@ -1,5 +1,6 @@
 package controllers;
 
+import job.WritePages;
 import play.mvc.*;
 
 public class Application extends Controller {
@@ -8,4 +9,9 @@ public class Application extends Controller {
         render();
     }
 
+    public static void writePages() {
+        new WritePages().now();
+
+     //   redirect("/");
+    }
 }

@@ -1,2 +1,4 @@
 nbproject
 tmp
+*.DS_Store
+*.log
