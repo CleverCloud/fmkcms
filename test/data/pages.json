@@ -1,1 +1,1 @@
-[{"title":"Index","content":"index","urlid":"index","id":1},{"title":"another page","content":"skjdfhjksqdf sqdf sq dfqksdhfkjqsdhfqs dfsq df qsdf","urlid":"another_page","id":2}]
+[{"title":"Index","content":"index","urlid":"index","tags":[{"name":"azerty","id":1}],"id":1},{"title":"another page","content":"skjdfhjksqdf sqdf sq dfqksdhfkjqsdhfqs dfsq df qsdf","urlid":"another_page","tags":[],"id":2},{"title":"azerty","content":"sqhdgfqkjshdfgqskjdfhgsqdjfkhg","urlid":"azerty","tags":[],"id":3}]

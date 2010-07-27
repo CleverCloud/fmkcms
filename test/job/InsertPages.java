@@ -16,6 +16,9 @@ import play.test.Fixtures;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+import models.Tag;
 
 /**
  *
@@ -34,6 +37,12 @@ public class InsertPages extends Job {
             for (Iterator<Page> it = lp.iterator(); it.hasNext();) {
                 Page page = it.next();
                 page.id = null;
+                Set<Tag> st = new TreeSet<Tag>();
+                for (Iterator<Tag> it1 = page.tags.iterator(); it1.hasNext();) {
+                    Tag tag = it1.next();
+                    st.add(Tag.findOrCreateByName(tag.name));
+                }
+                page.tags = st;
                 page.save();
             }
         }
