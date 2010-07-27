@@ -1,27 +1,47 @@
 #{extends 'main.html' /}
 #{set 'moreStyles'}
 
-        <link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
 #{/set}
 
 <div id="crudShow" class="${type.name}">
-	
-	<h2 id="crudShowTitle">&{'crud.show.title', type.modelName}</h2>
-	
-	<div class="objectForm">
+
+    <h2 id="crudShowTitle">&{'crud.show.title', type.modelName}</h2>
+
+    <div class="objectForm">
 	#{form action:@save(object.id), enctype:'multipart/form-data'}
-		#{crud.form /}
-		<p class="crudButtons">
-			<input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
-			<input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
-		</p>
+		#{crud.form}
+        #{crud.custom 'tags'}
+        <input type="hidden" name="object.tags@id" value="" />
+
+
+        #{field 'object.tags'}
+        <p>
+            <label>&{field.name}</label>
+            #{list items:models.Tag.findAll(), as:'tag'}
+                <input id="object_tags" name="object.tags@id" type="checkbox" value="${tag.id}" #{if field.value.contains(tag)}checked="checked"#{/if}>${tag.name}
+            #{/list}
+            <span class="error">${field.error}</span>
+        </p>
+        #{/}
+
+
+
+        #{/crud.custom}
+
+
+        #{/crud.form}
+        <p class="crudButtons">
+            <input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+            <input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+        </p>
 	#{/form}
-	</div>
-	
+    </div>
+
 	#{form @delete(object.id)}
-		<p class="crudDelete">
-			<input type="submit" value="&{'crud.delete', type.modelName}" />
-		</p>
+    <p class="crudDelete">
+        <input type="submit" value="&{'crud.delete', type.modelName}" />
+    </p>
 	#{/form}
 
 </div>
