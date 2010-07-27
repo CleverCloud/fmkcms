@@ -6,6 +6,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -20,6 +21,7 @@ public class Page extends Model {
     public String title;
     @Required
     @Lob
+    @MaxSize(60000)
     public String content;
     @Required
     public String urlid;
