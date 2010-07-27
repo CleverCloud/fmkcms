@@ -1,5 +1,8 @@
-#{extends 'CRUD/layout.html' /}
+#{extends 'main.html' /}
+#{set 'moreStyles'}
 
+        <link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
+#{/set}
 <div id="crudList" class="${type.name}">
 	
 	<h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
