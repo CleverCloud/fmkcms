@@ -2,3 +2,5 @@ nbproject
 tmp
 *.DS_Store
 *.log
+test-result
+test-result/application.log
