@@ -6,6 +6,7 @@
 GET     /                                       Application.index
 
 GET     /page/{urlid}                          PageController.page
+GET     /pages/tag/{tagname}                          PageController.pagestag
 
 
 # Map static resources from the /app/public folder to the /public path

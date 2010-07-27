@@ -5,7 +5,9 @@
 package controllers;
 
 import com.google.gson.Gson;
+import java.util.List;
 import models.Page;
+import models.Tag;
 import play.Logger;
 import play.mvc.Controller;
 
@@ -31,9 +33,10 @@ public class PageController extends Controller {
         render(p);
     }
 
-    public static void pagejson(String urlid) {
-        renderText("sdfhjgqsdkjfhgsqdf");
+    public static void pagestag(String tagname) {
+        Tag tag = Tag.findOrCreateByName(tagname);
+        List<Page> listOfPages = Page.findTaggedWith(tagname);
 
-
+        render(listOfPages, tag);
     }
 }
