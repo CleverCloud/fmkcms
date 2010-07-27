@@ -14,8 +14,13 @@ import play.mvc.Controller;
 public class PageController extends Controller {
 
     public static void page(String urlid) {
+        if(urlid == null){
+            notFound();
+        }
         Page p = Page.getByUrlid(urlid);
+        if(p == null){
+            notFound();
+        }
         render(p);
-
     }
 }
