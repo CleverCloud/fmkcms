@@ -51,11 +51,12 @@ public class Page extends Model {
 
     @PrePersist
     public void tagsManagement() {
-        Set<Tag> tst = new TreeSet<Tag>();
-        for (Iterator<Tag> it = tags.iterator(); it.hasNext();) {
+        Set<Tag> newTags = new TreeSet<Tag>();
+        Iterator<Tag> it = tags.iterator();
+        while (it.hasNext()) {
             Tag tag = it.next();
-            tst.add(Tag.findOrCreateByName(tag.name));
+            newTags.add(Tag.findOrCreateByName(tag.name));
         }
-        this.tags = tst;
+        this.tags = newTags;
     }
 }
