@@ -32,43 +32,43 @@ public class Page extends Model {
     @MaxSize(60000)
     public String content;
     @Required
-    public String urlid;
+    public String urlId;
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 
-    public static Page getByUrlid(String urlid) {
-        Page p = (Page) Cache.get("page_" + urlid);
+    public static Page getByUrlId(String urlId) {
+        Page p = (Page) Cache.get("page_" + urlId);
         if (p == null) {
-            p = Page.find("urlid = ?", urlid).first();
-            Cache.set("page_" + urlid, p, "10min");
+            p = Page.find("urlId = ?", urlId).first();
+            Cache.set("page_" + urlId, p, "10min");
         }
         return p;
     }
 
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
-        Cache.safeDelete("page_" + this.urlid);
+        Cache.safeDelete("page_" + this.urlId);
         return this;
     }
 
     public void setContent(String content) {
         this.content = content;
-        Cache.safeDelete("page_" + this.urlid);
+        Cache.safeDelete("page_" + this.urlId);
     }
 
     public void setTitle(String title) {
         this.title = title;
-        Cache.safeDelete("page_" + this.urlid);
+        Cache.safeDelete("page_" + this.urlId);
     }
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
-        Cache.safeDelete("page_" + this.urlid);
+        Cache.safeDelete("page_" + this.urlId);
     }
 
-    public void setUrlid(String urlid) {
-        Cache.safeDelete("page_" + this.urlid);
-        this.urlid = urlid;
+    public void setUrlid(String urlId) {
+        Cache.safeDelete("page_" + this.urlId);
+        this.urlId = urlId;
 
     }
 
@@ -78,12 +78,13 @@ public class Page extends Model {
     }
 
     @PrePersist
-    public void tagsmanagement() {
-        Set<Tag> tst = new TreeSet<Tag>();
-        for (Iterator<Tag> it = tags.iterator(); it.hasNext();) {
+    public void tagsManagement() {
+        Set<Tag> newTags = new TreeSet<Tag>();
+        Iterator<Tag> it = tags.iterator();
+        while (it.hasNext()) {
             Tag tag = it.next();
-            tst.add(Tag.findOrCreateByName(tag.name));
+            newTags.add(Tag.findOrCreateByName(tag.name));
         }
-        this.tags = tst;
+        this.tags = newTags;
     }
 }

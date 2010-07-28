@@ -8,7 +8,6 @@ package models;
  *
  * @author waxzce
  */
-import java.util.*;
 import javax.persistence.*;
 
 import play.db.jpa.*;
