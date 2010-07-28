@@ -31,12 +31,12 @@ public class Page extends Model {
     @MaxSize(60000)
     public String content;
     @Required
-    public String urlid;
+    public String urlId;
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 
-    public static Page getByUrlid(String urlid) {
-        return Page.find("urlid = ?", urlid).first();
+    public static Page getByUrlId(String urlId) {
+        return Page.find("urlId = ?", urlId).first();
     }
 
     public Page tagItWith(String name) {
@@ -50,7 +50,7 @@ public class Page extends Model {
     }
 
     @PrePersist
-    public void tagsmanagement() {
+    public void tagsManagement() {
         Set<Tag> tst = new TreeSet<Tag>();
         for (Iterator<Tag> it = tags.iterator(); it.hasNext();) {
             Tag tag = it.next();

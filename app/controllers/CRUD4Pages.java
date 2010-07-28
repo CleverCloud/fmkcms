@@ -4,7 +4,6 @@
  */
 package controllers;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -20,24 +19,23 @@ import play.mvc.Before;
 public class CRUD4Pages extends CRUD {
 
     @Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})
-    static void rwsometags() {
-        List<String> extratags = Arrays.asList(params.all().get("extratags"));
-        String tagsasstring = extratags.get(0);
-        if (!tagsasstring.isEmpty()) {
-            List<String> tags = Arrays.asList(tagsasstring.split(","));
+    static void rewriteSomeTags() {
+        List<String> extraTags = Arrays.asList(params.all().get("extraTags"));
+        String tagsAsString = extraTags.get(0);
+        if (!tagsAsString.isEmpty()) {
+            List<String> tags = Arrays.asList(tagsAsString.split(","));
 
-            List<String> ltid = new ArrayList<String>(Arrays.asList(params.all().get("object.tags@id")));
+            List<String> ids = new ArrayList<String>(Arrays.asList(params.all().get("object.tags@id")));
 
-            for (Iterator<String> it = tags.iterator(); it.hasNext();) {
-                String tagname = it.next();
-                if (!tagname.isEmpty()) {
-                    Tag tag = Tag.findOrCreateByName(tagname);
-                    ltid.add(tag.id.toString());
+            Iterator<String> it = tags.iterator();
+            while (it.hasNext()) {
+                String tagName = it.next();
+                if (!tagName.isEmpty()) {
+                    Tag tag = Tag.findOrCreateByName(tagName);
+                    ids.add(tag.id.toString());
                 }
             }
-            params.all().put("object.tags@id", ltid.toArray(new String[0]));
+            params.all().put("object.tags@id", ids.toArray(new String[0]));
         }
-
-
     }
 }

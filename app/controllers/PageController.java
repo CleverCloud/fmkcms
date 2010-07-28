@@ -4,11 +4,9 @@
  */
 package controllers;
 
-import com.google.gson.Gson;
 import java.util.List;
 import models.Page;
 import models.Tag;
-import play.Logger;
 import play.mvc.Controller;
 
 /**
@@ -17,12 +15,12 @@ import play.mvc.Controller;
  */
 public class PageController extends Controller {
 
-    public static void page(String urlid) {
-        if (urlid == null) {
+    public static void page(String urlId) {
+        if (urlId == null) {
             notFound();
         }
 
-        Page p = Page.getByUrlid(urlid);
+        Page p = Page.getByUrlId(urlId);
         if (p == null) {
             notFound();
         }
@@ -33,9 +31,9 @@ public class PageController extends Controller {
         render(p);
     }
 
-    public static void pagestag(String tagname) {
-        Tag tag = Tag.findOrCreateByName(tagname);
-        List<Page> listOfPages = Page.findTaggedWith(tagname);
+    public static void pagesTag(String tagName) {
+        Tag tag = Tag.findOrCreateByName(tagName);
+        List<Page> listOfPages = Page.findTaggedWith(tagName);
 
         render(listOfPages, tag);
     }
