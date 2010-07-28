@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
+import play.cache.Cache;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -36,12 +37,39 @@ public class Page extends Model {
     public Set<Tag> tags;
 
     public static Page getByUrlid(String urlid) {
-        return Page.find("urlid = ?", urlid).first();
+        Page p = (Page) Cache.get("page_" + urlid);
+        if (p == null) {
+            p = Page.find("urlid = ?", urlid).first();
+            Cache.set("page_" + urlid, p, "10min");
+        }
+        return p;
     }
 
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
+        Cache.safeDelete("page_" + this.urlid);
         return this;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+        Cache.safeDelete("page_" + this.urlid);
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        Cache.safeDelete("page_" + this.urlid);
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+        Cache.safeDelete("page_" + this.urlid);
+    }
+
+    public void setUrlid(String urlid) {
+        Cache.safeDelete("page_" + this.urlid);
+        this.urlid = urlid;
+
     }
 
     public static List<Page> findTaggedWith(String tag) {
