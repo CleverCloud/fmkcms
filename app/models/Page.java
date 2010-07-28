@@ -66,7 +66,7 @@ public class Page extends Model {
         Cache.safeDelete("page_" + this.urlId);
     }
 
-    public void setUrlid(String urlId) {
+    public void setUrlId(String urlId) {
         Cache.safeDelete("page_" + this.urlId);
         this.urlId = urlId;
 
