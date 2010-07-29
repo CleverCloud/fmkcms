@@ -8,11 +8,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import play.cache.Cache;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
@@ -23,6 +25,7 @@ import play.db.jpa.Model;
  * @author waxzce
  */
 @Entity
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
 public class Page extends Model {
 
     @Required
@@ -37,39 +40,13 @@ public class Page extends Model {
     public Set<Tag> tags;
 
     public static Page getByUrlId(String urlId) {
-        Page p = (Page) Cache.get("page_" + urlId);
-        if (p == null) {
-            p = Page.find("urlId = ?", urlId).first();
-            Cache.set("page_" + urlId, p, "10min");
-        }
+        Page p = Page.find("urlId = ?", urlId).first();
         return p;
     }
 
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
-        Cache.safeDelete("page_" + this.urlId);
         return this;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-        Cache.safeDelete("page_" + this.urlId);
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        Cache.safeDelete("page_" + this.urlId);
-    }
-
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-        Cache.safeDelete("page_" + this.urlId);
-    }
-
-    public void setUrlId(String urlId) {
-        Cache.safeDelete("page_" + this.urlId);
-        this.urlId = urlId;
-
     }
 
     public static List<Page> findTaggedWith(String tag) {
