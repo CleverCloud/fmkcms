@@ -1,5 +1,9 @@
 #{extends 'main.html' /}
 #{set 'moreStyles'}
+#{greenscript.javascript sm:gsSM, loadMissing:true /}
+#{greenscript.javascript sm:gsSM, load:['aloha-global'] /}
+#{greenscript.javascript sm:gsSM, load:['get-textarea'] /}
+
 
 <link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
 #{/set}
