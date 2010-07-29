@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -56,12 +57,14 @@ public class Page extends Model {
 
     @PrePersist
     public void tagsManagement() {
-        Set<Tag> newTags = new TreeSet<Tag>();
-        Iterator<Tag> it = tags.iterator();
-        while (it.hasNext()) {
-            Tag tag = it.next();
-            newTags.add(Tag.findOrCreateByName(tag.name));
+        if (tags != null) {
+            Set<Tag> newTags = new TreeSet<Tag>();
+            Iterator<Tag> it = tags.iterator();
+            while (it.hasNext()) {
+                Tag tag = it.next();
+                newTags.add(Tag.findOrCreateByName(tag.name));
+            }
+            this.tags = newTags;
         }
-        this.tags = newTags;
     }
 }
