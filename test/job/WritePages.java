@@ -7,11 +7,8 @@ package job;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Iterator;
 import models.Page;
-import org.yaml.snakeyaml.Yaml;
 import play.Play;
-import play.db.jpa.JPABase;
 import play.jobs.Job;
 
 /**
