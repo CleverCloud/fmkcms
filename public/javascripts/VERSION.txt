@@ -1,0 +1,25 @@
+0.9.20
+2010-07-23 16:20:47
+
+Aloha currently depends on
+jQuery 1.4.2 http://jquery.com/
+jQuery Plugins
+jquery.json-2.2.min.js http://code.google.com/p/jquery-json/
+jquery.getUrlParam.js http://www.mathias-bank.de/2007/04/21/jquery-plugin-geturlparam-version-2/
+jquery.cookie.js http://plugins.jquery.com/project/cookie
+Ext JS 3.2.1 http://www.sencha.com/products/js/
+ext-jquery-adapter-debug.js
+ext-foundation-debug.js
+cmp-foundation-debug.js
+ext-dd-debug.js
+window-debug.js
+pkg-buttons-debug.js
+pkg-tabs-debug.js
+pkg-tips-debug.js
+pkg-toolbars-debug.js
+pkg-menu-debug.js
+resources/css/ext-all.css
+resources/css/xtheme-gray.css
+resources/images/default/*
+resources/images/gray/*
+s
