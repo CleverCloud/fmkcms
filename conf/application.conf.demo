@@ -188,4 +188,4 @@ mail.smtp=mock
 %test.mail.smtp=mock
 
 # The greenscript module
-module.greenscript=${play.path}/modules/greenscript-1.0
+#module.greenscript=${play.path}/modules/greenscript-1.0

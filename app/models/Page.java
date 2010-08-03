@@ -14,6 +14,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -23,17 +27,24 @@ import play.db.jpa.Model;
  * @author waxzce
  */
 @Entity
+@Indexed(index="fmkpage")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
 public class Page extends Model {
 
     @Required
+    @Field
     public String title;
+
     @Required
     @Lob
+    @Field
     @MaxSize(60000)
     public String content;
+
     @Required
     public String urlId;
+    
+    @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 

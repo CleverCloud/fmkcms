@@ -20,6 +20,12 @@
                 <li><a href="@{PageController.pagestag("azerty")}">tag azerty</a></li>
                 <li><a href="/admin/">admin</a></li>
             </ul>
+            #{form @PageController.searchPage()}
+            <label for="toFind"> Find : </label>
+            <input type="text" name="toFind" id="toFind" /><br />
+
+            <input type="submit" value="Find !" />
+            #{/form}
         </div>
         #{doLayout /}
     </body>

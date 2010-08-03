@@ -20,6 +20,7 @@ public class CRUD4Pages extends CRUD {
 
     @Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})
     static void rewriteSomeTags() {
+        System.out.println("params.all() : " + params.all());
         List<String> extraTags = Arrays.asList(params.all().get("extraTags"));
         String tagsAsString = extraTags.get(0);
         if (!tagsAsString.isEmpty()) {
