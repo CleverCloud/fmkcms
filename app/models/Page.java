@@ -17,6 +17,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
@@ -35,19 +37,23 @@ public class Page extends Model {
 
     @Required
     @Field
+    @Boost(3.0f)
     public String title;
 
     @Required
     @Lob
     @Field
     @MaxSize(60000)
+    @Boost(0.5f)
     public String content;
 
     @Required
+    @Boost(3.5f)
     public String urlId;
 
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
+    @Boost(1.0f)
     public Set<Tag> tags;
 
     @Required
