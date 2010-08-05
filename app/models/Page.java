@@ -67,14 +67,18 @@ public class Page extends Model {
         return this;
     }
 
-    public void translate(Locale lang, Page translated) {
-        this.otherLanguages.put(lang.getLanguage(), translated);
+    public void translate(Page translated) {
+        if (this.lang.getLanguage().equals(translated.lang.getLanguage()))
+            return;
+        this.otherLanguages.put(translated.lang.getLanguage(), translated);
         translated.otherLanguages.put(this.lang.getLanguage(), this);
         this.save();
         translated.save();
     }
 
     public Page getTranslation(Locale lang) {
+        if (this.lang.getLanguage().equals(lang.getLanguage()))
+            return this;
         return this.otherLanguages.get(lang.getLanguage());
     }
 
