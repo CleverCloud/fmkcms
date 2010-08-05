@@ -4,17 +4,20 @@
  */
 package models;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
@@ -48,6 +51,12 @@ public class Page extends Model {
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 
+    @Required
+    public Locale lang;
+
+    @Basic(fetch=FetchType.LAZY)
+    public HashMap<String, Page> otherLanguages;
+
     public static Page getByUrlId(String urlId) {
         Page p = Page.find("urlId = ?", urlId).first();
         return p;
@@ -56,6 +65,17 @@ public class Page extends Model {
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
         return this;
+    }
+
+    public void translate(Locale lang, Page translated) {
+        this.otherLanguages.put(lang.getLanguage(), translated);
+        translated.otherLanguages.put(this.lang.getLanguage(), this);
+        this.save();
+        translated.save();
+    }
+
+    public Page getTranslation(Locale lang) {
+        return this.otherLanguages.get(lang.getLanguage());
     }
 
     public static List<Page> findTaggedWith(String tag) {
