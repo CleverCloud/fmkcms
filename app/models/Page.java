@@ -66,6 +66,7 @@ public class Page extends Model {
 
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
+        this.save();
         return this;
     }
 
