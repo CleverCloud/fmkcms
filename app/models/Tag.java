@@ -20,8 +20,8 @@ import play.db.jpa.*;
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
 public class Tag extends Model implements Comparable<Tag> {
 
-   @Column(unique=true)
-   @Field
+    @Column(unique=true)
+    @Field
     public String name;
 
     private Tag(String name) {

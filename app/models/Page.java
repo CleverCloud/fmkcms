@@ -4,26 +4,17 @@
  */
 package models;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Field;
@@ -45,18 +36,23 @@ public class Page extends Model {
     @Required
     @Field
     public String title;
+
     @Required
     @Lob
     @Field
     @MaxSize(60000)
     public String content;
+
     @Required
     public String urlId;
+
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
+
     @Required
     public Locale lang;
+    
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     public Map<String, Page> otherLanguages;
 
