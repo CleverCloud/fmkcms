@@ -56,6 +56,9 @@ public class Page extends Model {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     public Map<String, Page> otherLanguages;
 
+    @Required
+    public Boolean published;
+
     public static Page getByUrlId(String urlId) {
         Page p = Page.find("urlId = ?", urlId).first();
         return p;
@@ -64,6 +67,16 @@ public class Page extends Model {
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
         return this;
+    }
+
+    public void publish() {
+        this.published = true;
+        this.save();
+    }
+
+    public void unPublish() {
+        this.published = false;
+        this.save();
     }
 
     public void translate(Page translated) {
