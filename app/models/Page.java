@@ -79,7 +79,7 @@ public class Page extends Model {
         this.save();
     }
 
-    public void translate(Page translated) {
+    public void addTranslation(Page translated) {
         if (this.lang.getLanguage().equals(translated.lang.getLanguage())) {
             return;
         }
