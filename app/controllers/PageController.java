@@ -15,6 +15,7 @@ import org.hibernate.search.FullTextSession;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import play.db.jpa.JPA;
+import play.mvc.Before;
 import play.mvc.Controller;
 
 /**
@@ -23,6 +24,8 @@ import play.mvc.Controller;
  */
 public class PageController extends Controller {
 
+    
+    @Check(SecureConstants.READ_PAGE)
     public static void page(String urlId) {
         if (urlId == null) {
             notFound();
