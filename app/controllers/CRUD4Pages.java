@@ -19,16 +19,23 @@ import play.mvc.Before;
 public class CRUD4Pages extends CRUD {
 
     //@Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})
-    
-    @Before(only={"save"})
+    @Before(only = {"save"})
     static void rewriteSomeTags() {
+        
         System.out.println("params.all() : " + params.all());
+        System.out.println("tags : " + Arrays.asList(params.all().get("object.tags.id")));
+
         List<String> extraTags = Arrays.asList(params.all().get("extraTags"));
         String tagsAsString = extraTags.get(0);
+
+
+        List<String> ids = new ArrayList<String>(Arrays.asList(params.all().get("object.tags.id")));
+            
+
         if (!tagsAsString.isEmpty()) {
             List<String> tags = Arrays.asList(tagsAsString.split(","));
 
-            List<String> ids = new ArrayList<String>(Arrays.asList(params.all().get("object.tags@id")));
+            
 
             Iterator<String> it = tags.iterator();
             while (it.hasNext()) {
@@ -38,7 +45,11 @@ public class CRUD4Pages extends CRUD {
                     ids.add(tag.id.toString());
                 }
             }
-            params.all().put("object.tags@id", ids.toArray(new String[0]));
+
         }
+
+        System.out.println("ids : "+ids);
+            params.all().put("object.tags.id", ids.toArray(new String[0]));
+
     }
 }

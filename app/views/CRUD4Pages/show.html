@@ -15,15 +15,13 @@
 	#{form action:@save(object.id), enctype:'multipart/form-data'}
 		#{crud.form}
         #{crud.custom 'tags'}
-        <input type="hidden" name="object.tags@id" value="" />
-
-
+        
         #{field 'object.tags'}
         <p>
             <label>&{field.name}</label>
 
             #{list items:models.Tag.findAll(), as:'tag'}
-                <input id="object_tags" name="object.tags@id" type="checkbox" value="${tag.id}" #{if field.value.contains(tag)}checked="checked"#{/if}>${tag.name}
+                <input id="object_tags" name="${field.name}.id" type="checkbox" value="${tag.id}" #{if field.value.contains(tag)}checked="checked"#{/if}/>${tag.name}
             #{/list}
             <span class="error">${field.error}</span>
         </p>
