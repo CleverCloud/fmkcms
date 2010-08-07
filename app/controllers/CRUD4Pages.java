@@ -18,8 +18,9 @@ import play.mvc.Before;
 @CRUD.For(Page.class)
 public class CRUD4Pages extends CRUD {
 
-    @Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})
-    //@Before(only={"save"})
+    //@Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})
+    
+    @Before(only={"save"})
     static void rewriteSomeTags() {
         System.out.println("params.all() : " + params.all());
         List<String> extraTags = Arrays.asList(params.all().get("extraTags"));
