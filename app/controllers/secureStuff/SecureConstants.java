@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package controllers;
+package controllers.secureStuff;
 
 /**
  *
@@ -12,8 +12,6 @@ package controllers;
 public class SecureConstants {
 
     public final static String READ_PAGE = "READ_PAGE";
-    public final static String EDIT_PAGE = "EDIT_PAGE";
-    public final static String NEW_PAGE = "NEW_PAGE";
-    public final static String DELETE_PAGE = "DELETE_PAGE";
+    public final static String MANAGE_PAGE = "MANAGE_PAGE";
 
 }

@@ -22,6 +22,7 @@ import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.jboss.netty.channel.ChannelHandler;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -39,31 +40,25 @@ public class Page extends Model {
     @Field
     @Boost(3.0f)
     public String title;
-
     @Required
     @Lob
     @Field
     @MaxSize(60000)
     @Boost(0.5f)
     public String content;
-
     @Required
     @Boost(3.5f)
     public String urlId;
-
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     @Boost(1.0f)
     public Set<Tag> tags;
-
     @Required
     public Locale lang;
-    
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     public Map<String, Page> otherLanguages;
-
     @Required
-    public Boolean published;
+    public Boolean published = false;
 
     public static Page getByUrlId(String urlId) {
         Page p = Page.find("urlId = ?", urlId).first();

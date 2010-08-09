@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.secureStuff.SecureConstants;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +16,6 @@ import org.hibernate.search.FullTextSession;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import play.db.jpa.JPA;
-import play.mvc.Before;
 import play.mvc.Controller;
 
 /**
@@ -24,7 +24,6 @@ import play.mvc.Controller;
  */
 public class PageController extends Controller {
 
-    
     @Check(SecureConstants.READ_PAGE)
     public static void page(String urlId) {
         if (urlId == null) {
@@ -33,6 +32,9 @@ public class PageController extends Controller {
 
         Page p = Page.getByUrlId(urlId);
         if (p == null) {
+            notFound();
+        }
+        if (!p.published) {
             notFound();
         }
         if (request.headers.get("accept").value().contains("json")) {
@@ -60,13 +62,13 @@ public class PageController extends Controller {
             Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        org.hibernate.Session s = ((org.hibernate.Session)JPA.em().getDelegate()) ;
+        org.hibernate.Session s = ((org.hibernate.Session) JPA.em().getDelegate());
         FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(s);
-        
+
         Transaction tx = fullTextSession.beginTransaction();
 
 
-        String[] fields = new String[]{"title", "content", "urlId","tags.name"};
+        String[] fields = new String[]{"title", "content", "urlId", "tags.name"};
 
         MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
         org.apache.lucene.search.Query query = null;
@@ -83,6 +85,6 @@ public class PageController extends Controller {
         tx.commit();
 
         renderJSON(results);
-        
+
     }
 }
