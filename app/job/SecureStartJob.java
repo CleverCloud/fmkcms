@@ -37,19 +37,38 @@ public class SecureStartJob extends Job {
         }.getType();
         List<SecurityLevel> securityLevelList = gson.fromJson(new FileReader(pathSecurityLevels), listOfSecurityLevelType);
 
-        System.out.println(securityLevelList);
         // now find Roles
         Type listOfRolesType = new TypeToken<List<Roles>>() {
         }.getType();
         String pathRoles = Play.applicationPath + separator + "conf" + separator + "roles.json";
         List<Roles> listOfRoles = gson.fromJson(new FileReader(pathRoles), listOfRolesType);
         Map<String, String> rightsMap = new HashMap<String, String>();
+        Map<String, String> rightsMap2 = new HashMap<String, String>();
 
-        Iterator<SecurityLevel> itsll = securityLevelList.iterator();
-        while (itsll.hasNext()) {
-            SecurityLevel securityLevel = itsll.next();
-            
+
+        Iterator<Roles> itr = listOfRoles.iterator();
+        while (itr.hasNext()) {
+            Roles role = itr.next();
+            Iterator<String> it = role.rights_names.iterator();
+            while (it.hasNext()) {
+                String string = it.next();
+                rightsMap.put(string, role.name);
+            }
         }
+
+        Iterator<SecurityLevel> itsl = securityLevelList.iterator();
+        while (itsl.hasNext()) {
+            SecurityLevel securityLevel = itsl.next();
+            Iterator<String> it = securityLevel.controllers.iterator();
+            while (it.hasNext()) {
+                String controllerName = it.next();
+                if (controllerName.contains("*")) {
+                } else {
+                    rightsMap2.put(controllerName, rightsMap.get(securityLevel.name));
+                }
+            }
+        }
+        System.out.println(rightsMap2);
 
     }
 }
