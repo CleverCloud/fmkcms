@@ -28,7 +28,7 @@ jQuery(document).ready(function() {
      * When submitting, this function copy the content of 
      * the div in the textarea.
     */
-    jQuery("#page_form").submit(function(){
+    jQuery("form").submit(function(){
     jQuery('#object_content').val(jQuery('#editable2').html());
 
   });
