@@ -3,18 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                                       Application.index
-
+GET     /admin/                                AdminCMS.index
 GET     /page/{urlId}                          PageController.page
-GET     /pages/tag/{tagName}                          PageController.pagestag
-POST /page/find                                 PageController.searchPage
+GET     /pages/tag/{tagName}                   PageController.pagestag
+POST    /page/find                             PageController.searchPage
 
-
-# Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
-
-
-
-# Catch all
-*       /{controller}/{action}                  {controller}.{action}
-*      /admin              module:crud
