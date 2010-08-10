@@ -5,3 +5,10 @@
 #{verbatim}
 ${p.content}
 #{/verbatim}
+
+<ul>
+    #{list items:p.tags, as:'tag'}
+    <li>#{a @PageController.pagesTag(tag.name)}${tag.name}#{/a}</li>
+    #{/list}
+
+</ul>
