@@ -12,21 +12,40 @@ import play.Play;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import play.Logger;
+import play.cache.Cache;
+import play.mvc.Before;
 
 /**
  *
  * @author waxzce
  */
 @OnApplicationStart
-public class SecureStartJob extends Job {
+public class SecureStartJob extends Job<String> {
+
+    private static Map<String, String> cacheMap = new HashMap<String, String>();
+
+    private void fluchCache() {
+        Set<Map.Entry<String, String>> setcacheMap = SecureStartJob.cacheMap.entrySet();
+        Iterator<Map.Entry<String, String>> itc = setcacheMap.iterator();
+        while (itc.hasNext()) {
+            Map.Entry<String, String> entry = itc.next();
+            Cache.delete("SECURE_" + entry.getKey());
+
+        }
+    }
 
     @Override
-    public void doJob() throws Exception {
+    public String doJobWithResult() throws Exception {
+        fluchCache();
         // make a gson object
         Gson gson = new Gson();
         // find separator usefull in m$ window case
@@ -43,7 +62,7 @@ public class SecureStartJob extends Job {
         String pathRoles = Play.applicationPath + separator + "conf" + separator + "roles.json";
         List<Roles> listOfRoles = gson.fromJson(new FileReader(pathRoles), listOfRolesType);
         Map<String, String> rightsMap = new HashMap<String, String>();
-        Map<String, String> rightsMap2 = new HashMap<String, String>();
+        SecureStartJob.cacheMap = new HashMap<String, String>();
 
 
         Iterator<Roles> itr = listOfRoles.iterator();
@@ -63,12 +82,35 @@ public class SecureStartJob extends Job {
             while (it.hasNext()) {
                 String controllerName = it.next();
                 if (controllerName.contains("*")) {
+                    try {
+                        controllerName = controllerName.substring(0, controllerName.length() - 2);
+                        Class c = Class.forName("controllers." + controllerName);
+                        Method[] cm = c.getMethods();
+                        List<Method> lm = Arrays.asList(cm);
+                        Iterator<Method> im = lm.iterator();
+                        while (im.hasNext()) {
+                            Method method = im.next();
+                            SecureStartJob.cacheMap.put(controllerName + "." + method.getName(), rightsMap.get(securityLevel.name));
+                        }
+
+                    } catch (ClassNotFoundException e) {
+                        Logger.error("invalid rules : %s", controllerName);
+                    }
+
+
                 } else {
-                    rightsMap2.put(controllerName, rightsMap.get(securityLevel.name));
+                    SecureStartJob.cacheMap.put(controllerName, rightsMap.get(securityLevel.name));
                 }
             }
         }
-        System.out.println(rightsMap2);
 
+        Set<Map.Entry<String, String>> setcacheMap = SecureStartJob.cacheMap.entrySet();
+        Iterator<Map.Entry<String, String>> itc = setcacheMap.iterator();
+        while (itc.hasNext()) {
+            Map.Entry<String, String> entry = itc.next();
+            Cache.add("SECURE_" + entry.getKey(), entry.getValue());
+        }
+
+        return SecureStartJob.cacheMap.toString();
     }
 }
