@@ -4,23 +4,20 @@
  */
 package controllers;
 
-import controllers.secureStuff.SecureConstants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.*;
 import play.mvc.Before;
-import controllers.Check;
+import play.mvc.With;
 
 /**
  *
  * @author waxzce
  */
 @CRUD.For(Page.class)
-@Check(SecureConstants.MANAGE_PAGE)
+@With(CheckRights.class)
 public class CRUD4Pages extends CRUD {
 
     //@Before(unless = {"addType", "attachment", "blank", "delete", "getPageSize", "index", "list", "show"})

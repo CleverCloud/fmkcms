@@ -8,11 +8,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import job.SecureStartJob;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  *
  * @author waxzce
  */
+@With(CheckRights.class)
 public class SecureManager extends Controller {
 
     public static void reloadPerms() throws InterruptedException, ExecutionException {

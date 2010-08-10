@@ -1,6 +1,5 @@
 package controllers;
 
-import controllers.secureStuff.SecureConstants;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,14 +16,15 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  *
  * @author waxzce
  */
+@With(CheckRights.class)
 public class PageController extends Controller {
 
-    @Check(SecureConstants.READ_PAGE)
     public static void page(String urlId) {
         if (urlId == null) {
             notFound();
