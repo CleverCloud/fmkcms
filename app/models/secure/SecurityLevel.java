@@ -5,18 +5,18 @@
 package models.secure;
 
 import com.google.gson.Gson;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *s
  * @author waxzce
  */
-public class SecurityLevels {
+public class SecurityLevel {
 
-    public Map<String, List<String>> securityLevels = new HashMap<String, List<String>>();
+    public String name;
+    public List<String> controllers;
 
+    
     @Override
     public String toString() {
         Gson gson = new Gson();
