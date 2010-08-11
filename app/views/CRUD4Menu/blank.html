@@ -1,0 +1,43 @@
+#{extends 'main.html' /}
+#{set 'moreStyles'}
+<link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
+#{/set}
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/menu_management.js'}" type="text/javascript" charset="utf-8"></script>
+#{/set}
+<div id="crudBlank" class="${type.name}">
+
+    <h2 id="crudBlankTitle">&{'crud.blank.title', type.modelName}</h2>
+
+    <div class="objectForm">
+
+
+
+	#{form action:@create(), enctype:'multipart/form-data'}
+		#{crud.form}
+        #{crud.custom 'entries'}
+        <div id="hereEntries" style="display: none">
+
+        </div>
+       
+        #{/crud.custom}
+
+
+        #{/crud.form}
+
+        <p class="crudButtons">
+            <input type="submit" name="_save" value="&{'crud.save', type.modelName}" />
+            <input type="submit" name="_saveAndContinue" value="&{'crud.saveAndContinue', type.modelName}" />
+            <input type="submit" name="_saveAndAddAnother" value="&{'crud.saveAndAddAnother', type.modelName}" />
+        </p>
+	#{/form}
+
+        <div id="form_entrie">
+
+        </div>
+        <div id="add_entrie">
+            <input id="add_page_btn" type="button" value="add Page Entrie" />
+        </div>
+    </div>
+
+</div>
