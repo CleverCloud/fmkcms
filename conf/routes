@@ -6,5 +6,5 @@
 GET     /admin/                                AdminCMS.index
 GET     /page/{urlId}                          PageController.page
 GET     /pages/tag/{tagName}                   PageController.pagestag
-POST    /page/find                             PageController.searchPage
+*       /pages/search                           PageController.searchPage
 

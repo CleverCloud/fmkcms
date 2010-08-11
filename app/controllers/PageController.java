@@ -51,7 +51,11 @@ public class PageController extends Controller {
         render(listOfPages, tag);
     }
 
-    public static void searchPage(String toFind) {
+    public static void searchPage(String q) {
+
+        if (q == null) {
+            q = "search";
+        }
 
         EntityManager em = JPA.entityManagerFactory.createEntityManager();
 
@@ -73,7 +77,7 @@ public class PageController extends Controller {
         MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
         org.apache.lucene.search.Query query = null;
         try {
-            query = parser.parse(toFind);
+            query = parser.parse(q);
         } catch (ParseException ex) {
             Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -84,7 +88,7 @@ public class PageController extends Controller {
 
         tx.commit();
 
-        render(results, toFind);
+        render(results, q);
 
     }
 }
