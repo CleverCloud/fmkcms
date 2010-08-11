@@ -113,6 +113,7 @@ public class Page extends Model {
                 newTags.add(Tag.findOrCreateByName(tag.name));
             }
             this.tags = newTags;
+
         }
     }
 }
