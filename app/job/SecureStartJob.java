@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import play.Logger;
 import play.cache.Cache;
+import play.jobs.Every;
 import play.mvc.Before;
 
 /**
@@ -29,6 +30,7 @@ import play.mvc.Before;
  * @author waxzce
  */
 @OnApplicationStart
+@Every("3d")
 public class SecureStartJob extends Job<String> {
 
     private static Map<String, String> cacheMap = new HashMap<String, String>();
@@ -108,7 +110,7 @@ public class SecureStartJob extends Job<String> {
         Iterator<Map.Entry<String, String>> itc = setcacheMap.iterator();
         while (itc.hasNext()) {
             Map.Entry<String, String> entry = itc.next();
-            Cache.add("SECURE_" + entry.getKey(), entry.getValue());
+            Cache.add("SECURE_" + entry.getKey(), entry.getValue(), "100d");
         }
 
         return SecureStartJob.cacheMap.toString();

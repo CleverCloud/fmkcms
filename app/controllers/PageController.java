@@ -84,7 +84,7 @@ public class PageController extends Controller {
 
         tx.commit();
 
-        renderJSON(results);
+        render(results, toFind);
 
     }
 }
