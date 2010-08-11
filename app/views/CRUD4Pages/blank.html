@@ -1,9 +1,11 @@
 #{extends 'main.html' /}
 #{set 'moreStyles'}
-
 <link rel="stylesheet" type="text/css" media="screen" href="/public/stylesheets/crud.css" />
 #{/set}
-
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/aloha-global.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/get-textarea.js'}" type="text/javascript" charset="utf-8"></script>
+#{/set}
 <div id="crudBlank" class="${type.name}">
 
     <h2 id="crudBlankTitle">&{'crud.blank.title', type.modelName}</h2>
