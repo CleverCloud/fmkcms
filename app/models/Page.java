@@ -100,8 +100,8 @@ public class Page extends Model {
         if (this.lang.equals(lang)) {
             return this;
         }
-        Page returnPage = this.otherLanguages.get(lang.getLanguage());
-        if ((returnPage != null))
+        Page returnPage = this.otherLanguages.get(lang);
+        if (returnPage != null)
             return returnPage;
         Iterator<Locale> it = this.otherLanguages.keySet().iterator();
         Locale current = null;
