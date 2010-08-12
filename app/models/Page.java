@@ -18,11 +18,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Boost;
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import org.jboss.netty.channel.ChannelHandler;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -61,7 +59,7 @@ public class Page extends Model {
     public Locale lang;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    public Map<String, Page> otherLanguages;
+    public Map<Locale, Page> otherLanguages;
     
     @Required
     public Boolean published = false;
@@ -90,20 +88,30 @@ public class Page extends Model {
     }
 
     public Page addTranslation(Page translated) {
-        if (! this.lang.getLanguage().equals(translated.lang.getLanguage())) {
-            this.otherLanguages.put(translated.lang.getLanguage(), translated);
-            translated.otherLanguages.put(this.lang.getLanguage(), this);
+        if (! this.lang.equals(translated.lang)) {
+            this.otherLanguages.put(translated.lang, translated);
+            translated.addTranslation(this).save();
             this.save();
-            translated.save();
         }
         return this;
     }
 
     public Page getTranslation(Locale lang) {
-        if (this.lang.getLanguage().equals(lang.getLanguage())) {
+        if (this.lang.equals(lang)) {
             return this;
         }
-        return this.otherLanguages.get(lang.getLanguage());
+        Page returnPage = this.otherLanguages.get(lang.getLanguage());
+        if ((returnPage != null))
+            return returnPage;
+        Iterator<Locale> it = this.otherLanguages.keySet().iterator();
+        Locale current = null;
+        while (it.hasNext()) {
+            current = it.next();
+            if (current.getLanguage().equals(lang.getLanguage())) {
+                return this.otherLanguages.get(current);
+            }
+        }
+        return null;
     }
 
     public static List<Page> findTaggedWith(String tag) {
