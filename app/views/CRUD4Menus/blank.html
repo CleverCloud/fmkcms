@@ -16,10 +16,13 @@
 	#{form action:@create(), enctype:'multipart/form-data'}
 		#{crud.form}
         #{crud.custom 'entries'}
-        <div id="hereEntries" style="display: none">
+        <div id="hereEntries">
+            <ul>
+                
+            </ul>
 
         </div>
-       
+
         #{/crud.custom}
 
 
@@ -33,6 +36,14 @@
 	#{/form}
 
         <div id="form_entrie">
+            <div id="form_entrie_page" class="forms">
+                <form>
+                    <label for="urlId">urlid</label>
+                    <input name="urlId" type="text" id="urlId" />
+                    <input id="add_page_btn_submit" type="button" value="add Page Entrie" />
+                </form>
+
+            </div>
 
         </div>
         <div id="add_entrie">

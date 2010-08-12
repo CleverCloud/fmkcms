@@ -1,0 +1,14 @@
+#{field 'object.' + _name}
+<label for="${field.id}">
+    &{_name}
+</label>
+<select id="${field.id}" name="${field.id}">
+    #{list items:java.util.Arrays.asList(java.util.Locale.getAvailableLocales()), as:'l'}
+        <option value="${l}" ${_value?.equals(l) || (_value == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+    #{/list}
+</select>
+
+#{ifError field.name}
+<span class="error">${field.error}</span>
+#{/ifError}
+#{/field}
