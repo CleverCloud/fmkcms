@@ -40,23 +40,29 @@ public class Page extends Model {
     @Field
     @Boost(3.0f)
     public String title;
+
     @Required
     @Lob
     @Field
     @MaxSize(60000)
     @Boost(0.5f)
     public String content;
+
     @Required
     @Boost(3.5f)
     public String urlId;
+
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     @Boost(1.0f)
     public Set<Tag> tags;
+
     @Required
     public Locale lang;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     public Map<String, Page> otherLanguages;
+    
     @Required
     public Boolean published = false;
 
@@ -71,24 +77,26 @@ public class Page extends Model {
         return this;
     }
 
-    public void publish() {
+    public Page publish() {
         this.published = true;
         this.save();
+        return this;
     }
 
-    public void unPublish() {
+    public Page unPublish() {
         this.published = false;
         this.save();
+        return this;
     }
 
-    public void addTranslation(Page translated) {
-        if (this.lang.getLanguage().equals(translated.lang.getLanguage())) {
-            return;
+    public Page addTranslation(Page translated) {
+        if (! this.lang.getLanguage().equals(translated.lang.getLanguage())) {
+            this.otherLanguages.put(translated.lang.getLanguage(), translated);
+            translated.otherLanguages.put(this.lang.getLanguage(), this);
+            this.save();
+            translated.save();
         }
-        this.otherLanguages.put(translated.lang.getLanguage(), translated);
-        translated.otherLanguages.put(this.lang.getLanguage(), this);
-        this.save();
-        translated.save();
+        return this;
     }
 
     public Page getTranslation(Locale lang) {
