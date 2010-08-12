@@ -90,8 +90,8 @@ public class Page extends Model {
     public Page addTranslation(Page translated) {
         if (! this.lang.equals(translated.lang)) {
             this.otherLanguages.put(translated.lang, translated);
-            translated.addTranslation(this).save();
             this.save();
+            translated.addTranslation(this).save();
         }
         return this;
     }
