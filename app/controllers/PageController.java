@@ -26,15 +26,8 @@ import play.mvc.With;
 public class PageController extends Controller {
 
     public static void page(String urlId) {
-        if (urlId == null) {
-            notFound();
-        }
-
         Page p = Page.getByUrlId(urlId);
-        if (p == null) {
-            notFound();
-        }
-        if (!p.published) {
+        if (p == null || !p.published) {
             notFound();
         }
         if (request.headers.get("accept").value().contains("json")) {
@@ -66,7 +59,7 @@ public class PageController extends Controller {
             Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        org.hibernate.Session s = ((org.hibernate.Session) JPA.em().getDelegate());
+        org.hibernate.Session s = (org.hibernate.Session) JPA.em().getDelegate();
         FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(s);
 
         Transaction tx = fullTextSession.beginTransaction();

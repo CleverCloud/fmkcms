@@ -64,6 +64,9 @@ public class Page extends Model {
     public Boolean published = false;
 
     public static Page getByUrlId(String urlId) {
+        if (urlId == null)
+            return null;
+        
         Page p = Page.find("urlId = ?", urlId).first();
         return p;
     }
