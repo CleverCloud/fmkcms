@@ -128,7 +128,6 @@ public class Page extends Model {
         for (Page current : this.otherLanguages.values()) {
             current.otherLanguages.remove(this.lang);
             current.otherLanguages.put(lang, this);
-            current.save();
         }
         this.lang = lang;
         this.save();
