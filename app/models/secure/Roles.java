@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package models.secure;
 
 import com.google.gson.Gson;
@@ -20,8 +15,7 @@ public class Roles {
 
     @Override
     public String toString() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        return (new Gson()).toJson(this);
     }
 
 }
