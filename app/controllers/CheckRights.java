@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,7 +24,6 @@ public class CheckRights extends Controller {
             try {
                 Class c = Class.forName("controllers.RolesManagement");
                 Class[] p1 = new Class[]{String.class};
-                Class[] pempty = new Class[]{};
                 Method m = c.getMethod("haveRole", p1);
 
                 Object[] args = new Object[]{role};
@@ -37,7 +32,6 @@ public class CheckRights extends Controller {
                 if (!auth) {
                    forbidden();
                 }
-
 
             } catch (IllegalAccessException ex) {
                 Logger.error(ex, null);
