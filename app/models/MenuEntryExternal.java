@@ -18,11 +18,11 @@ public class MenuEntryExternal extends MenuEntry{
     public String url;
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public String getLink() {
-        return url;
+        return this.url;
     }
 
 }

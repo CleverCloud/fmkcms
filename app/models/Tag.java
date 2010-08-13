@@ -30,11 +30,11 @@ public class Tag extends Model implements Comparable<Tag> {
 
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
 
     public int compareTo(Tag otherTag) {
-        return name.compareTo(otherTag.name);
+        return this.name.compareTo(otherTag.name);
     }
 
     public static Tag findOrCreateByName(String name) {
