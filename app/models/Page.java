@@ -132,4 +132,14 @@ public class Page extends Model {
 
         }
     }
+
+    public void setLang(Locale lang) {
+        for (Page current : this.otherLanguages.values()) {
+            current.otherLanguages.remove(this.lang);
+            current.otherLanguages.put(lang, this);
+            current.save();
+        }
+        this.lang = lang;
+        this.save();
+    }
 }
