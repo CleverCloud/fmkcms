@@ -4,12 +4,7 @@
  */
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import models.*;
-import play.mvc.Before;
 import play.mvc.With;
 
 /**

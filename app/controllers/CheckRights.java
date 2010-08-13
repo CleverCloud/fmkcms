@@ -6,10 +6,6 @@ package controllers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
 import play.Logger;
 import play.cache.Cache;
 import play.mvc.Before;
