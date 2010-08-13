@@ -4,7 +4,6 @@
  */
 package models;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -71,42 +70,37 @@ public class Page extends Model {
 
     public Page tagItWith(String name) {
         tags.add(Tag.findOrCreateByName(name));
-        this.save();
-        return this;
+        return this.save();
     }
 
     public Page publish() {
         this.published = true;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public Page unPublish() {
         this.published = false;
-        this.save();
-        return this;
+        return this.save();
     }
 
     public Page addTranslation(Page translated) {
-        if (! this.lang.equals(translated.lang)) {
-            this.otherLanguages.put(translated.lang, translated);
-            this.save();
-            translated.addTranslation(this).save();
-        }
-        return this;
+        if (this.lang.equals(translated.lang))
+            return this;
+        
+        this.otherLanguages.put(translated.lang, translated);
+        translated.otherLanguages.put(this.lang, this);
+        return this.save();
     }
 
     public Page getTranslation(Locale lang) {
-        if (this.lang.equals(lang)) {
+        if (this.lang.equals(lang))
             return this;
-        }
+        
         Page returnPage = this.otherLanguages.get(lang);
         if (returnPage != null)
             return returnPage;
-        Iterator<Locale> it = this.otherLanguages.keySet().iterator();
-        Locale current = null;
-        while (it.hasNext()) {
-            current = it.next();
+
+        for (Locale current : this.otherLanguages.keySet()) {
             if (current.getLanguage().equals(lang.getLanguage())) {
                 return this.otherLanguages.get(current);
             }
@@ -123,13 +117,10 @@ public class Page extends Model {
     public void tagsManagement() {
         if (tags != null) {
             Set<Tag> newTags = new TreeSet<Tag>();
-            Iterator<Tag> it = tags.iterator();
-            while (it.hasNext()) {
-                Tag tag = it.next();
+            for (Tag tag : this.tags) {
                 newTags.add(Tag.findOrCreateByName(tag.name));
             }
             this.tags = newTags;
-
         }
     }
 
