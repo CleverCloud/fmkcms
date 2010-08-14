@@ -94,11 +94,18 @@ public class Page extends Model {
     public Page getTranslation(Locale lang) {
         if (this.lang.equals(lang))
             return this;
-        
+
+        // Try exact Locale
         Page returnPage = this.otherLanguages.get(lang);
         if (returnPage != null)
             return returnPage;
 
+        // Try exact language
+        returnPage = this.otherLanguages.get(new Locale(lang.getLanguage()));
+        if (returnPage != null)
+            return returnPage;
+
+        // Try from another country
         for (Locale current : this.otherLanguages.keySet()) {
             if (current.getLanguage().equals(lang.getLanguage())) {
                 return this.otherLanguages.get(current);
