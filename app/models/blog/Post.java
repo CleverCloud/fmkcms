@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -45,6 +46,10 @@ public class Post extends Model {
     }
 
     public Post removeTranslation(Locale language) {
+        if (language.equals(this.defaultLanguage)) {
+            Logger.error("Cannot remove translation for default language for " + this.getDefaultData().title + ". Please change defaultLanguage first.", new Object[0]);
+            return this;
+        }
         this.translations.remove(language);
         return this.save();
     }
