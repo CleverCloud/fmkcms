@@ -30,7 +30,6 @@ public class PostData extends Model {
     @Required
     public User author;
 
-    //TODO: get/remove comment
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
 
