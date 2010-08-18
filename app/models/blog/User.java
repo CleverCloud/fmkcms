@@ -34,4 +34,12 @@ public class User extends Model {
         return find("byEmailAndPassword", email, password).first();
     }
 
+    @Override
+    public String toString() {
+        if (this.fullname == null || this.fullname.equals("")) {
+            return this.email;
+        }
+        return this.fullname + " <" + this.email + ">";
+    }
+
 }
