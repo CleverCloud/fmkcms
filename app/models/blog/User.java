@@ -18,6 +18,7 @@ public class User extends Model {
     @Email
     public String email;
 
+    // TODO: Is it encrypted ?
     @Required
     @Password
     @MinSize(6)
