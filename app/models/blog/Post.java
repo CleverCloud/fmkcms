@@ -47,7 +47,7 @@ public class Post extends Model {
 
     public Post removeTranslation(Locale language) {
         if (language.equals(this.defaultLanguage)) {
-            Logger.error("Cannot remove translation for default language for " + this.getDefaultData().title + ". Please change defaultLanguage first.", new Object[0]);
+            Logger.error("Cannot remove translation for default language for: " + this.getDefaultData().title + ". Please change defaultLanguage first.", new Object[0]);
             return this;
         }
         this.translations.remove(language);
@@ -83,6 +83,8 @@ public class Post extends Model {
     public void setDefaultLanguage(Locale language) {
         if (this.translations.containsKey(language)) {
             this.defaultLanguage = language;
+        } else {
+            Logger.error("Cannot change default language for: " + this.getDefaultData().title + ". No translation available for this language.", new Object[0]);
         }
     }
 
