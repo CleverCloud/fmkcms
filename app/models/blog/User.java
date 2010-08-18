@@ -31,7 +31,7 @@ public class User extends Model {
 
     public User(String email, String password, String fullname) {
         this.email = email;
-        this.password = password;
+        this.password = Crypto.passwordHash(password);
         this.fullname = fullname;
     }
 
