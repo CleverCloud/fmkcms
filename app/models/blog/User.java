@@ -1,6 +1,7 @@
 package models.blog;
 
 import javax.persistence.Entity;
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 /**
@@ -9,10 +10,17 @@ import play.db.jpa.Model;
  */
 @Entity
 public class User extends Model {
+
+    @Required
     public String email;
+
+    @Required
     public String password;
+
+    @Required
+    public boolean isAdmin = false;
+
     public String fullname;
-    public boolean isAdmin;
 
     public User(String email, String password, String fullname) {
         this.email = email;
@@ -23,4 +31,5 @@ public class User extends Model {
     public static User connect(String email, String password) {
         return find("byEmailAndPassword", email, password).first();
     }
+
 }
