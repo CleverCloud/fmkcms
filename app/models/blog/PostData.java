@@ -47,7 +47,6 @@ public class PostData extends Model {
 
     public PostData removeComment(String author, String content, Boolean removeAll) {
         // We want to got through it the reverse way to delete most recent comment first (duplicates)
-        // TODO: .size() or .size() - 1 for use with hasPrevious and deal withthe last element
         ListIterator<Comment> iterator = this.comments.listIterator(this.comments.size());
         Comment current = null;
         while (iterator.hasPrevious()) {
