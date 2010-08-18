@@ -1,5 +1,6 @@
 package models.blog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.persistence.CascadeType;
@@ -68,6 +69,15 @@ public class PostData extends Model {
 
     public PostData removeComment(String author, String content) {
         return this.removeComment(author, content, false);
+    }
+
+    public List<Comment> getComments(String author) {
+        List<Comment> returnList = new ArrayList<Comment>();
+        for (Comment current : this.comments) {
+            if (current.author.equalsIgnoreCase(author))
+                returnList.add(current);
+        }
+        return returnList;
     }
 
 }
