@@ -7,4 +7,5 @@ GET     /admin/                                AdminCMS.index
 GET     /page/{urlId}                          PageController.page
 GET     /pages/tag/{tagName}                   PageController.pagestag
 *       /pages/search                           PageController.searchPage
+GET     /captcha                                BlogController.captcha
 
