@@ -2,6 +2,8 @@ package models.blog;
 
 import javax.persistence.Entity;
 import play.data.validation.Email;
+import play.data.validation.MinSize;
+import play.data.validation.Password;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -17,6 +19,8 @@ public class User extends Model {
     public String email;
 
     @Required
+    @Password
+    @MinSize(6)
     public String password;
 
     @Required
