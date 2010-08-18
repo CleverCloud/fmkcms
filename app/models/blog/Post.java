@@ -3,7 +3,9 @@ package models.blog;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import play.data.validation.Required;
@@ -26,12 +28,14 @@ public class Post extends Model {
     @Required
     public User author;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @Required
     public Map<Locale, PostData> translations;
 
-    public Post(User author) {
+    public Post(User author, Locale language, String title, String content) {
         this.author = author;
+        this.defaultLanguage = language;
+        this.translations.put(language, new PostData(author, title, content));
         this.postedAt = new Date();
     }
 
