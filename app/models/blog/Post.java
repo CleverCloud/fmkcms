@@ -28,7 +28,7 @@ public class Post extends Model {
     @Required
     public User author;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Required
     public Map<Locale, PostData> translations;
 
@@ -37,6 +37,16 @@ public class Post extends Model {
         this.defaultLanguage = language;
         this.translations.put(language, new PostData(author, title, content));
         this.postedAt = new Date();
+    }
+
+    public Post addTranslation(User author, Locale language, String title, String content) {
+        this.translations.put(language, new PostData(author, title, content));
+        return this.save();
+    }
+
+    public Post removeTranslation(Locale language) {
+        this.translations.remove(language);
+        return this.save();
     }
 
     public Post previous() {
