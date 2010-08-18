@@ -75,6 +75,12 @@ public class Post extends Model {
         return this.translations.get(this.defaultLanguage);
     }
 
+    public void setDefaultLanguage(Locale language) {
+        if (this.translations.containsKey(language)) {
+            this.defaultLanguage = language;
+        }
+    }
+
     public Post previous() {
         return Post.find("postedAt < ? order by postedAt desc", postedAt).first();
     }
