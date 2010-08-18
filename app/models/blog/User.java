@@ -6,6 +6,7 @@ import play.data.validation.MinSize;
 import play.data.validation.Password;
 import play.data.validation.Required;
 import play.db.jpa.Model;
+import play.libs.Crypto;
 
 /**
  *
@@ -18,10 +19,9 @@ public class User extends Model {
     @Email
     public String email;
 
-    // TODO: Is it encrypted ?
     @Required
     @Password
-    @MinSize(6)
+    @MinSize(6) // Look in setPassword for this value too
     public String password;
 
     @Required
@@ -36,7 +36,7 @@ public class User extends Model {
     }
 
     public static User connect(String email, String password) {
-        return find("byEmailAndPassword", email, password).first();
+        return find("byEmailAndPassword", email, Crypto.passwordHash(password)).first();
     }
 
     @Override
@@ -45,6 +45,13 @@ public class User extends Model {
             return this.email;
         }
         return this.fullname + " <" + this.email + ">";
+    }
+
+    public void setPassword(String password) {
+        if (password.length() < 6)
+            this.password = password; // Let @MinSize handle the error
+        else
+            this.password = Crypto.passwordHash(password); // Encrypt the password
     }
 
 }
