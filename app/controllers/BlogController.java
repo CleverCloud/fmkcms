@@ -14,7 +14,7 @@ import play.mvc.Http;
  */
 public class BlogController extends Controller {
 
-    public static List<Locale> getBrowserLanguages(){
+    public static List<Locale> getBrowserLanguages() {
         List<String> languages = Http.Request.current().acceptLanguage();
         List<Locale> locales = new ArrayList<Locale>();
 

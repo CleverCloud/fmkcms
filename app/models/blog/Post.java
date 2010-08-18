@@ -75,7 +75,8 @@ public class Post extends Model {
                 return data;
         }
 
-         for (Locale language : languages) {   // Try from another country
+         for (Locale language : languages) {
+             // Try from another country
             for (Locale current : this.translations.keySet()) {
                 if (current.getLanguage().equals(language.getLanguage())) {
                     return this.translations.get(current);
