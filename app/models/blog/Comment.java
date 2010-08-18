@@ -20,6 +20,7 @@ public class Comment extends Model {
     @Required
     public Date postedAt;
 
+    @Required
     @Lob
     public String content;
 
