@@ -1,6 +1,7 @@
 package models.blog;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.persistence.CascadeType;
@@ -57,21 +58,28 @@ public class Post extends Model {
         return this.save();
     }
 
-    public PostData getData(Locale language) {
-        // Try exact Locale
-        PostData data = this.translations.get(language);
-        if (data != null)
-            return data;
+    public PostData getData(List<Locale> languages) {
+        PostData data = null;
 
-        // Try exact language
-        data = this.translations.get(new Locale(language.getLanguage()));
-        if (data != null)
-            return data;
+        for (Locale language : languages) {
+            // Try exact Locale
+            data = this.translations.get(language);
+            if (data != null)
+                return data;
+        }
 
-        // Try from another country
-        for (Locale current : this.translations.keySet()) {
-            if (current.getLanguage().equals(language.getLanguage())) {
-                return this.translations.get(current);
+        for (Locale language : languages) {
+            // Try exact language
+            data = this.translations.get(new Locale(language.getLanguage()));
+            if (data != null)
+                return data;
+        }
+
+         for (Locale language : languages) {   // Try from another country
+            for (Locale current : this.translations.keySet()) {
+                if (current.getLanguage().equals(language.getLanguage())) {
+                    return this.translations.get(current);
+                }
             }
         }
 
