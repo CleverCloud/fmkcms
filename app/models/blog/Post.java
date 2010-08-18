@@ -49,6 +49,32 @@ public class Post extends Model {
         return this.save();
     }
 
+    public PostData getData(Locale language) {
+        // Try exact Locale
+        PostData data = this.translations.get(language);
+        if (data != null)
+            return data;
+
+        // Try exact language
+        data = this.translations.get(new Locale(language.getLanguage()));
+        if (data != null)
+            return data;
+
+        // Try from another country
+        for (Locale current : this.translations.keySet()) {
+            if (current.getLanguage().equals(language.getLanguage())) {
+                return this.translations.get(current);
+            }
+        }
+
+        // Return default
+        return this.getDefaultData();
+    }
+
+    public PostData getDefaultData() {
+        return this.translations.get(this.defaultLanguage);
+    }
+
     public Post previous() {
         return Post.find("postedAt < ? order by postedAt desc", postedAt).first();
     }
