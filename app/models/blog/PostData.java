@@ -55,6 +55,7 @@ public class PostData extends Model {
             if (! (current.author.equalsIgnoreCase(author) && current.content.equalsIgnoreCase(content)))
                 continue;
 
+            iterator.remove();
             current.delete();
 
             // Quit if we only want to remove one occurence of the comment
