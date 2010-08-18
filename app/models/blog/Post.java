@@ -36,12 +36,14 @@ public class Post extends Model {
     public Post(User author, Locale language, String title, String content) {
         this.author = author;
         this.defaultLanguage = language;
-        this.translations.put(language, new PostData(author, title, content));
+        PostData defaultTranslation = new PostData(author, title, content).save();
+        this.translations.put(language, defaultTranslation);
         this.postedAt = new Date();
     }
 
     public Post addTranslation(User author, Locale language, String title, String content) {
-        this.translations.put(language, new PostData(author, title, content));
+        PostData translation = new PostData(author, title, content).save();
+        this.translations.put(language, translation);
         return this.save();
     }
 

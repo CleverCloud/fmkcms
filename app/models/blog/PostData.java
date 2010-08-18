@@ -39,7 +39,8 @@ public class PostData extends Model {
     }
 
     public PostData addComment(String author, String content) {
-        this.comments.add(new Comment(author, content));
+        Comment comment = new Comment(author, content).save();
+        this.comments.add(comment);
         return this.save();
     }
 
