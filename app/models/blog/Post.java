@@ -66,17 +66,17 @@ public class Post extends Model {
             data = this.translations.get(language);
             if (data != null)
                 return data;
+
+            // Try exact language but don't double check
+            if (! language.getCountry().equals("")) {
+                data = this.translations.get(new Locale(language.getLanguage()));
+                if (data != null)
+                    return data;
+            }
         }
 
         for (Locale language : languages) {
-            // Try exact language
-            data = this.translations.get(new Locale(language.getLanguage()));
-            if (data != null)
-                return data;
-        }
-
-         for (Locale language : languages) {
-             // Try from another country
+            // Try from another country
             for (Locale current : this.translations.keySet()) {
                 if (current.getLanguage().equals(language.getLanguage())) {
                     return this.translations.get(current);
