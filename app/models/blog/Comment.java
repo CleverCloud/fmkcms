@@ -13,9 +13,10 @@ import play.db.jpa.Model;
 @Entity
 public class Comment extends Model {
 
-    // TODO: Decide wether we support/require authentication here
     @Required
-    public String author;
+    public String email;
+
+    public String pseudo;
 
     @Required
     public Date postedAt;
@@ -24,8 +25,16 @@ public class Comment extends Model {
     @Lob
     public String content;
 
-    public Comment(String author, String content) {
-        this.author = author;
+    public Comment(String email, String pseudo, String content) {
+        this.email = email;
+        this.pseudo = pseudo;
+        this.content = content;
+        this.postedAt = new Date();
+    }
+
+    public Comment(User user, String content) {
+        this.email = user.email;
+        this.pseudo = user.pseudo;
         this.content = content;
         this.postedAt = new Date();
     }

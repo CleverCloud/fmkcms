@@ -34,7 +34,7 @@ public class BlogController extends Controller {
         render(frontPost, olderPosts);
     }
 
-    public static void postComment(Long postId, String author, String content, String code, String randomID) {
+    public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
         Post post = Post.findById(postId);
         if (post == null)
             return;
@@ -43,7 +43,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors())
             render("BlogController/show.html", Post.findById(postId), randomID);
 
-        post.getData(I18nController.getBrowserLanguages()).addComment(author, content);
+        post.getData(I18nController.getBrowserLanguages()).addComment(email, pseudo, password, content);
         Cache.delete(randomID);
         BlogController.show(postId);
     }

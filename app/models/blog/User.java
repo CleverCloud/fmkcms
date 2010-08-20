@@ -44,6 +44,14 @@ public class User extends Model {
         return User.find("byPseudoAndPassword", emailOrPseudo, Crypto.passwordHash(password)).first();
     }
 
+    public static User findByEmail(String email) {
+        return User.find("byEmail", email).first();
+    }
+
+    public static User findByPseudo(String pseudo) {
+        return User.find("byPseudo", pseudo).first();
+    }
+
     @Override
     public String toString() {
         if (this.fullname == null || this.fullname.equals("")) {

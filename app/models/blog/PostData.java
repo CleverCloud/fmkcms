@@ -39,20 +39,29 @@ public class PostData extends Model {
         this.content = content;
     }
 
-    public PostData addComment(String author, String content) {
-        Comment comment = new Comment(author, content).save();
+    public PostData addComment(String email, String pseudo, String password, String content) {
+        Comment comment = null;
+        if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
+            // If email is referrenced or pseudo is referrenced for another email, just do nothing.
+            User user = User.connect(email, password);
+            if (user == null)
+                return this;
+            else
+                comment = new Comment(user, content).save();
+        } else
+            comment = new Comment(email, pseudo, content).save();
         this.comments.add(comment);
         return this.save();
     }
 
-    public PostData removeComment(String author, String content, Boolean removeAll) {
-        // We want to got through it the reverse way to delete most recent comment first (duplicates)
+    public PostData removeComment(String email, String content, Boolean removeAll) {
+        // We want to get through it the reverse way to delete most recent comment first (duplicates)
         ListIterator<Comment> iterator = this.comments.listIterator(this.comments.size());
         Comment current = null;
         while (iterator.hasPrevious()) {
             current = iterator.previous();
             // Continue if it's not the one we're looking for
-            if (! (current.author.equalsIgnoreCase(author) && current.content.equalsIgnoreCase(content)))
+            if (! (current.email.equalsIgnoreCase(email) && current.content.equalsIgnoreCase(content)))
                 continue;
 
             iterator.remove();
@@ -66,14 +75,14 @@ public class PostData extends Model {
         return this.save();
     }
 
-    public PostData removeComment(String author, String content) {
-        return this.removeComment(author, content, false);
+    public PostData removeComment(String email, String content) {
+        return this.removeComment(email, content, false);
     }
 
-    public List<Comment> getComments(String author) {
+    public List<Comment> getComments(String email) {
         List<Comment> returnList = new ArrayList<Comment>();
         for (Comment current : this.comments) {
-            if (current.author.equalsIgnoreCase(author))
+            if (current.email.equalsIgnoreCase(email))
                 returnList.add(current);
         }
         return returnList;
