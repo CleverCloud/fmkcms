@@ -5,14 +5,14 @@
     #{if post.previous()}
         <li id="previous">
             <a href="@{BlogController.show(post.previous().id)}">
-                ${post.previous().getData(controllers.BlogController.getBrowserLanguages()).title}
+                ${post.previous().getData(controllers.I18nController.getBrowserLanguages()).title}
             </a>
         </li>
     #{/if}
     #{if post.next()}
         <li id="next">
             <a href="@{BlogController.show(post.next().id)}">
-                ${post.next().getData(controllers.BlogController.getBrowserLanguages()).title}
+                ${post.next().getData(controllers.I18nController.getBrowserLanguages()).title}
             </a>
         </li>
     #{/if}
