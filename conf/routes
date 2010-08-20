@@ -3,9 +3,12 @@
 # ~~~~
 
 # Home page
-GET     /admin/                                AdminCMS.index
-GET     /page/{urlId}                          PageController.page
-GET     /pages/tag/{tagName}                   PageController.pagestag
+GET     /admin/                                 AdminCMS.index
+GET     /page/{urlId}                           PageController.page
+GET     /pages/tag/{tagName}                    PageController.pagestag
 *       /pages/search                           PageController.searchPage
 GET     /captcha                                BlogController.captcha
+GET     /posts/{id}                             BlogController.show
+POST    /posts/{postId}/{postDataId}/comments   BlogController.postComment
+
 
