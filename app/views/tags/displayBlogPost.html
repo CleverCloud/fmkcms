@@ -1,0 +1,62 @@
+*{ Display a post in one of these modes: 'full', 'home' or 'teaser' }*
+
+${import models.blog.PostData}
+${import controllers.BlogController}
+${import java.util.List}
+${import java.util.Locale}
+
+${PostData data = _post.getData(BlogController.getBrowserLanguages())}
+
+<div class="post ${_as == 'teaser' ? 'teaser' : ''}">
+    <h2 class="post-title">
+        <a href="@{Application.show(_post.id)}">${data.title}</a>
+    </h2>
+    <div class="post-metadata">
+        <span class="post-author">by ${_post.author}</span>,
+        <span class="post-date">${_post.postedAt.format('dd MMM yy')}</span>
+        #{if data.author != _post.author}
+            <span class="post-translator">translated by ${data.author}</span>
+            <span class="post-translation-date">${data.postedAt.format('MMM dd')}</span>
+        #{/if}
+        #{if _as != 'full'}
+            <span class="post-comments">
+                &nbsp;|&nbsp; ${data.comments.size() ?: 'no'}
+                comment${data.comments.size().pluralize()}
+                #{if data.comments}
+                    , latest by ${data.comments[data.comments.size()-1].author}
+                #{/if}
+            </span>
+        #{/if}
+    </div>
+    #{if _as != 'teaser'}
+        <div class="post-content">
+            <div class="about">Detail: </div>
+            ${data.content.nl2br()}
+        </div>
+    #{/if}
+</div>
+
+#{if _as == 'full'}
+    <div class="comments">
+        <h3>
+            ${data.comments.size() ?: 'no'}
+            comment${data.comments.size().pluralize()}
+        </h3>
+
+        #{list items:data.comments, as:'comment'}
+            <div class="comment">
+                <div class="comment-metadata">
+                    <span class="comment-author">by ${comment.author},</span>
+                    <span class="comment-date">
+                        ${comment.postedAt.format('dd MMM yy')}
+                    </span>
+                </div>
+                <div class="comment-content">
+                    <div class="about">Detail: </div>
+                    ${comment.content.escape().nl2br()}
+                </div>
+            </div>
+        #{/list}
+
+    </div>
+#{/if}
