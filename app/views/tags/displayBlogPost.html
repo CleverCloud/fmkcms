@@ -1,11 +1,6 @@
 *{ Display a post in one of these modes: 'full', 'home' or 'teaser' }*
 
-${import models.blog.PostData}
-${import controllers.BlogController}
-${import java.util.List}
-${import java.util.Locale}
-
-${PostData data = _post.getData(BlogController.getBrowserLanguages())}
+${models.blog.PostData data = _post.getData(controllers.BlogController.getBrowserLanguages())}
 
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
