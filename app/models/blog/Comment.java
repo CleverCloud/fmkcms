@@ -17,6 +17,7 @@ public class Comment extends Model {
     public String email;
 
     public String pseudo;
+    public User user;
 
     @Required
     public Date postedAt;
@@ -35,6 +36,7 @@ public class Comment extends Model {
     public Comment(User user, String content) {
         this.email = user.email;
         this.pseudo = user.pseudo;
+        this.user = user;
         this.content = content;
         this.postedAt = new Date();
     }
