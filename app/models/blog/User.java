@@ -28,6 +28,8 @@ public class User extends Model {
     public boolean isAdmin = false;
 
     public String fullname;
+    public String pseudo;
+    public String webSite;
 
     public User(String email, String password, String fullname) {
         this.email = email;
@@ -35,8 +37,11 @@ public class User extends Model {
         this.fullname = fullname;
     }
 
-    public static User connect(String email, String password) {
-        return find("byEmailAndPassword", email, Crypto.passwordHash(password)).first();
+    public static User connect(String emailOrPseudo, String password) {
+        User user = User.find("byEmailAndPassword", emailOrPseudo, Crypto.passwordHash(password)).first();
+        if (user != null)
+            return user;
+        return User.find("byPseudoAndPassword", emailOrPseudo, Crypto.passwordHash(password)).first();
     }
 
     @Override
