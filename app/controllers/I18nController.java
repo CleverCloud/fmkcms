@@ -18,10 +18,10 @@ public class I18nController extends Controller {
 
         Locale locale = null;
         for (String language : languages) {
-            if (language.split("-").length == 2) {
+            if (language.contains("-")) {
                 locale = new Locale(language.split("-")[0], language.split("-")[1]);
             } else {
-                locale = new Locale(language.split("-")[0]);
+                locale = new Locale(language);
             }
 
             locales.add(locale);
