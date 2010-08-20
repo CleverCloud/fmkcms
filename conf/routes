@@ -8,7 +8,6 @@ GET     /page/{urlId}                           PageController.page
 GET     /pages/tag/{tagName}                    PageController.pagestag
 *       /pages/search                           PageController.searchPage
 GET     /captcha                                BlogController.captcha
-GET     /posts/{id}                             BlogController.show
+GET     /posts/{<[0-9]+>id}                     BlogController.show
+GET     /posts/{tag}                            BlogController.listTagged
 POST    /posts/{postId}/{postDataId}/comments   BlogController.postComment
-
-

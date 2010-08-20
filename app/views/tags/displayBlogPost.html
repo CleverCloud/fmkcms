@@ -22,6 +22,14 @@ ${models.blog.PostData data = _post.getData(controllers.BlogController.getBrowse
                 #{/if}
             </span>
         #{/if}
+        #{elseif _post.tags}
+            <span class="post-tags">
+                - Tagged
+                #{list items:_post.tags, as:'tag'}
+                    <a href="@{BlogController.listTagged(tag.name)}">${tag}</a>${tag.isLast ? '' : ', '}
+                #{/list}
+            </span>
+        #{/elseif}
     </div>
     #{if _as != 'teaser'}
         <div class="post-content">

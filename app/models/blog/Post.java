@@ -1,14 +1,19 @@
 package models.blog;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import models.Tag;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -34,12 +39,17 @@ public class Post extends Model {
     @Required
     public Map<Locale, PostData> translations;
 
+    @ManyToMany(cascade=CascadeType.PERSIST)
+    public Set<Tag> tags;
+
     public Post(User author, Locale language, String title, String content) {
         this.author = author;
         this.defaultLanguage = language;
         PostData defaultTranslation = new PostData(author, title, content).save();
+        this.translations = new HashMap<Locale, PostData>();
         this.translations.put(language, defaultTranslation);
         this.postedAt = new Date();
+        this.tags = new TreeSet<Tag>();
     }
 
     public Post addTranslation(User author, Locale language, String title, String content) {
@@ -106,6 +116,17 @@ public class Post extends Model {
 
     public Post next() {
         return Post.find("postedAt > ? order by postedAt asc", postedAt).first();
+    }
+
+    public Post tagItWith(String name) {
+        this.tags.add(Tag.findOrCreateByName(name));
+        return this.save();
+    }
+
+    public static List<Post> findTaggedWith(String ... tags) {
+        return Post.find(
+                "select distinct p from Post p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size"
+        ).bind("tags", tags).bind("size", tags.length).fetch();
     }
 
 }
