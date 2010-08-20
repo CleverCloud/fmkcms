@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import models.Tag;
+import net.sf.oval.constraint.NotEmpty;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -37,6 +38,7 @@ public class Post extends Model {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Required
+    @NotEmpty
     // TODO: Handle Map with CRUD
     public Map<Locale, PostData> translations;
 
