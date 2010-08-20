@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -44,9 +45,10 @@ public class PostData extends Model {
         if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
             // If email is referrenced or pseudo is referrenced for another email, just do nothing.
             User user = User.connect(email, password);
-            if (user == null)
+            if (user == null) {
+                Logger.error("Failed connection for existing user, aborting comment posting.", new Object[0]);
                 return this;
-            else
+            } else
                 comment = new Comment(user, content).save();
         } else
             comment = new Comment(email, pseudo, content).save();
