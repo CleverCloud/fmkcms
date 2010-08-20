@@ -54,6 +54,7 @@ public class Page extends Model {
     public Locale lang;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    // TODO: Handle Map with CRUD
     public Map<Locale, Page> otherLanguages;
     
     @Required

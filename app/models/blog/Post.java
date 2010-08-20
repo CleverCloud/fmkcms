@@ -37,6 +37,7 @@ public class Post extends Model {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Required
+    // TODO: Handle Map with CRUD
     public Map<Locale, PostData> translations;
 
     @ManyToMany(cascade=CascadeType.PERSIST)
