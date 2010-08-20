@@ -4,7 +4,7 @@ ${models.blog.PostData data = _post.getData(controllers.BlogController.getBrowse
 
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
-        <a href="@{Application.show(_post.id)}">${data.title}</a>
+        <a href="@{BlogController.show(_post.id)}">${data.title}</a>
     </h2>
     <div class="post-metadata">
         <span class="post-author">by ${_post.author}</span>,

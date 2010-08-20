@@ -56,7 +56,7 @@ public class BlogController extends Controller {
         render(frontPost, olderPosts);
     }
 
-    public static void postComment(Long postDataId,Long postId, String author, String content, String code, String randomID){
+    public static void postComment(Long postId, Long postDataId, String author, String content, String code, String randomID) {
         PostData postData = PostData.findById(postDataId);
 
         validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
