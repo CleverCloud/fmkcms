@@ -1,9 +1,8 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
 
 #{if frontPost}
 
-    #{display post:frontPost, as:'home' /}
+    #{displayBlogPost post:frontPost, as:'home' /}
 
     #{if olderPosts.size()}
 
@@ -11,7 +10,7 @@
             <h3>Older posts <span class="from">from this blog</span></h3>
 
             #{list items:olderPosts, as:'oldPost'}
-                #{display post:oldPost, as:'teaser' /}
+                #{displayBlogPost post:oldPost, as:'teaser' /}
             #{/list}
         </div>
 
