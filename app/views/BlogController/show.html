@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+#{set title:post.title /}
+
+<ul id="pagination">
+    #{if post.previous()}
+        <li id="previous">
+            <a href="@{BlogController.show(post.previous().id)}">
+                ${post.previous().getData(controllers.BlogController.getBrowserLanguages()).title}
+            </a>
+        </li>
+    #{/if}
+    #{if post.next()}
+        <li id="next">
+            <a href="@{BlogController.show(post.next().id)}">
+                ${post.next().getData(controllers.BlogController.getBrowserLanguages()).title}
+            </a>
+        </li>
+    #{/if}
+</ul>
+
+#{displayBlogPost post:post, as:'full' /}
+
+<h3>Post a comment</h3>
+
+#{form @BlogController.postComment(post.id, post.getData(controllers.BlogController.getBrowserLanguages()).id)}
+
+    #{ifErrors}
+        <p class="error">
+            ${errors[0]}
+        </p>
+    #{/ifErrors}
+
+    <p>
+        <label for="author">Your name: </label>
+        <input type="text" name="author" id="author" value="${params.author}" />
+    </p>
+    <p>
+        <label for="content">Your message: </label>
+        <textarea name="content" id="content" cols="100" rows="5">${params.content}</textarea>
+    </p>
+    <p>
+        <label for="code">Please type the code below: </label>
+        <img src="@{BlogController.captcha(randomID)}" alt="captcha" />
+        <br />
+        <input type="text" name="code" id="code" size="18" value="" />
+        <input type="hidden" name="randomID" value="${randomID}" />
+    </p>
+    <p>
+        <input type="submit" value="Submit your comment" />
+    </p>
+#{/form}
