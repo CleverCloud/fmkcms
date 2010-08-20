@@ -8,6 +8,6 @@ import play.mvc.With;
  * @author keruspe
  */
 @CRUD.For(PostData.class)
-@With(CheckRights.class)
+//@With(CheckRights.class)
 public class CRUD4BlogPostDatas extends CRUD {
 }
