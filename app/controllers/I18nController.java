@@ -16,15 +16,11 @@ public class I18nController extends Controller {
         List<String> languages = Http.Request.current().acceptLanguage();
         List<Locale> locales = new ArrayList<Locale>();
 
-        Locale locale = null;
         for (String language : languages) {
-            if (language.contains("-")) {
-                locale = new Locale(language.split("-")[0], language.split("-")[1]);
-            } else {
-                locale = new Locale(language);
-            }
-
-            locales.add(locale);
+            if (language.contains("-"))
+                locales.add(new Locale(language.split("-")[0], language.split("-")[1]));
+            else
+                locales.add(new Locale(language));
         }
 
         return locales;
