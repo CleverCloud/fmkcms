@@ -27,15 +27,15 @@ public class PostData extends Model {
     @Required
     public String content;
 
-    @ManyToOne
+  /*  @ManyToOne
     @Required
     public User author;
-
+*/
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
 
     public PostData(User author, String title, String content) {
-        this.author = author;
+  //      this.author = author;
         this.title = title;
         this.content = content;
     }

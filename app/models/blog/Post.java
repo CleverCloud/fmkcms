@@ -1,5 +1,7 @@
 package models.blog;
 
+import controllers.UseCRUDFieldProvider;
+import crud.BlogDataMapField;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,13 +35,12 @@ public class Post extends Model {
     public Locale defaultLanguage;
 
     @ManyToOne
-    @Required
+ //   @Required
     public User author;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @Required
-    @NotEmpty
     // TODO: Handle Map with CRUD
+    @UseCRUDFieldProvider(BlogDataMapField.class)
     public Map<Locale, PostData> translations;
 
     @ManyToMany(cascade=CascadeType.PERSIST)

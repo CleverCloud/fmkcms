@@ -1,0 +1,45 @@
+#{field 'object.' + _name}
+<label for="${field.id}">
+    &{_name}
+</label>
+
+
+<script type="text/javascript">
+    function removeTD(e){
+        jQuery(e.target).parent().remove();
+    }
+
+    jQuery(document).ready(
+    function(){
+        jQuery('#addTDbtn').click(function(){
+            jQuery('#hereIsTD ul').append('<li><input type="text" name="${field.name}.name" /><input type="button" class="removeTypeDbtn" value="remove" /></li>');
+            jQuery('#hereIsTD input.removeTypeDbtn').click(removeTD);
+        });
+        jQuery('#hereIsTD input.removeTypeDbtn').click(removeTD);
+    }
+)
+</script>
+
+<div id="hereIsTD">
+    <ul>
+        %{
+        // support show
+        if(_value != null){
+        }%
+        #{list items:_value, as:'mtd'}
+        <li><input type="hidden" name="${field.name}.idtyped" value="${mtd.id}" />
+            <input type="text" value="${mtd.name}" name="${field.name}.name" />
+            <input type="button" class="removeTypeDbtn" value="remove ${mtd.name}" /></li>
+        #{/list}
+        %{
+        }
+        }%
+
+        <li><input type="text" name="${field.name}.name" /><input type="button" class="removeTypeDbtn" value="remove" /></li>
+    </ul>
+</div>
+<input type="button" id="addTDbtn" value="+" />
+#{ifError field.name}
+<span class="error">${field.error}</span>
+#{/ifError}
+#{/field}
