@@ -1,24 +1,18 @@
+
+
 #{field 'object.' + _name}
 <label for="${field.id}">
     &{_name}
 </label>
 
 
-<script type="text/javascript">
-    function removeTD(e){
-        jQuery(e.target).parent().remove();
+%{
+    java.util.TreeSet<String> ll = new java.util.TreeSet<String>();
+    Iterator<java.util.Locale> its = java.util.Arrays.asList(java.util.Locale.getAvailableLocales()).iterator();
+    while(its.hasNext()){
+        ll.add(its.next().toString());
     }
-
-    jQuery(document).ready(
-    function(){
-        jQuery('#addTDbtn').click(function(){
-            jQuery('#hereIsTD ul').append('<li><input type="text" name="${field.name}.name" /><input type="button" class="removeTypeDbtn" value="remove" /></li>');
-            jQuery('#hereIsTD input.removeTypeDbtn').click(removeTD);
-        });
-        jQuery('#hereIsTD input.removeTypeDbtn').click(removeTD);
-    }
-)
-</script>
+    }%
 
 <div id="hereIsTD">
     <ul>
@@ -26,19 +20,33 @@
         // support show
         if(_value != null){
         }%
-        #{list items:_value, as:'mtd'}
-        <li><input type="hidden" name="${field.name}.idtyped" value="${mtd.id}" />
-            <input type="text" value="${mtd.name}" name="${field.name}.name" />
-            <input type="button" class="removeTypeDbtn" value="remove ${mtd.name}" /></li>
+        #{list items:_value.entrySet(), as:'pd'}
+        <li>
+            <select name="${field.name}.lang">
+            #{list items:ll, as:'l'}
+                <option value="${l}" ${pd.getKey().toString().equals(l)? 'selected="true"'.raw() : ''}>${l}</option>
+            #{/list}
+            </select>
+            <input type="hidden" name="${field.name}.idpd" value="${pd.getValue().id}" />
+            <input type="text" value="${pd.getValue().title}" name="${field.name}.title" />
+            <input type="text" value="${pd.getValue().content}" name="${field.name}.content" />
+        </li>
         #{/list}
         %{
         }
         }%
 
-        <li><input type="text" name="${field.name}.name" /><input type="button" class="removeTypeDbtn" value="remove" /></li>
+        <li>
+            <select name="${field.name}.lang">
+            #{list items:ll, as:'l'}
+                <option value="${l}" ${request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString())? 'selected="true"'.raw() : ''}>${l}</option>
+            #{/list}
+            </select>
+            <input type="hidden" name="${field.name}.idpd" />
+            <input type="text" name="${field.name}.title" />
+            <input type="text" name="${field.name}.content" /></li>
     </ul>
 </div>
-<input type="button" id="addTDbtn" value="+" />
 #{ifError field.name}
 <span class="error">${field.error}</span>
 #{/ifError}

@@ -34,6 +34,9 @@ public class PostData extends Model {
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
 
+    public PostData() {
+    }
+
     public PostData(User author, String title, String content) {
   //      this.author = author;
         this.title = title;

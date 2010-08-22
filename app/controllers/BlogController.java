@@ -1,5 +1,6 @@
 package controllers;
 
+import com.google.gson.Gson;
 import java.util.List;
 import models.blog.Post;
 import play.cache.Cache;
@@ -51,6 +52,10 @@ public class BlogController extends Controller {
     public static void listTagged(String tag) {
         List<Post> posts = Post.findTaggedWith(tag);
         render(tag, posts);
+    }
+
+    public static void jsondump(){
+        renderJSON(new Gson().toJson(Post.all().fetch()));
     }
 
 }

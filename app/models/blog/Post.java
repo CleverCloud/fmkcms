@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.Transient;
 import models.Tag;
 import net.sf.oval.constraint.NotEmpty;
 import play.Logger;
@@ -30,31 +32,29 @@ public class Post extends Model {
 
     @Required
     public Date postedAt;
-
     @Required
     public Locale defaultLanguage;
-
     @ManyToOne
- //   @Required
+    //   @Required
     public User author;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     // TODO: Handle Map with CRUD
     @UseCRUDFieldProvider(BlogDataMapField.class)
     public Map<Locale, PostData> translations;
-
-    @ManyToMany(cascade=CascadeType.PERSIST)
+    //@ManyToMany()
+    @Transient
     public Set<Tag> tags;
-
+    /*
     public Post(User author, Locale language, String title, String content) {
-        this.author = author;
-        this.defaultLanguage = language;
-        PostData defaultTranslation = new PostData(author, title, content).save();
-        this.translations = new HashMap<Locale, PostData>();
-        this.translations.put(language, defaultTranslation);
-        this.postedAt = new Date();
-        this.tags = new TreeSet<Tag>();
+    this.author = author;
+    this.defaultLanguage = language;
+    PostData defaultTranslation = new PostData(author, title, content).save();
+    this.translations = new HashMap<Locale, PostData>();
+    this.translations.put(language, defaultTranslation);
+    this.postedAt = new Date();
+    this.tags = new TreeSet<Tag>();
     }
+     */
 
     public Post addTranslation(User author, Locale language, String title, String content) {
         PostData translation = new PostData(author, title, content).save();
@@ -78,14 +78,16 @@ public class Post extends Model {
         for (Locale language : languages) {
             // Try exact Locale
             data = this.translations.get(language);
-            if (data != null)
+            if (data != null) {
                 return data;
+            }
 
             // Try exact language but don't double check
-            if (! language.getCountry().equals("")) {
+            if (!language.getCountry().equals("")) {
                 data = this.translations.get(new Locale(language.getLanguage()));
-                if (data != null)
+                if (data != null) {
                     return data;
+                }
             }
         }
 
@@ -105,14 +107,17 @@ public class Post extends Model {
     public PostData getDefaultData() {
         return this.translations.get(this.defaultLanguage);
     }
-
+    /*
+     * TODO make this a validator, or a presave option
+     * ATM just block CRUD
     public void setDefaultLanguage(Locale language) {
-        if (this.translations.containsKey(language)) {
-            this.defaultLanguage = language;
-        } else {
-            Logger.error("Cannot change default language for: " + this.getDefaultData().title + ". No translation available for this language.", new Object[0]);
-        }
+    if (this.translations.containsKey(language)) {
+    this.defaultLanguage = language;
+    } else {
+    Logger.error("Cannot change default language for: " + this.getDefaultData().title + ". No translation available for this language.", new Object[0]);
     }
+    }
+     */
 
     public Post previous() {
         return Post.find("postedAt < ? order by postedAt desc", postedAt).first();
@@ -127,10 +132,19 @@ public class Post extends Model {
         return this.save();
     }
 
-    public static List<Post> findTaggedWith(String ... tags) {
+    public static List<Post> findTaggedWith(String... tags) {
         return Post.find(
-                "select distinct p from Post p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size"
-        ).bind("tags", tags).bind("size", tags.length).fetch();
+                "select distinct p from Post p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
     }
 
+    @PrePersist
+    public void tagsManagement() {
+        if (tags != null) {
+            Set<Tag> newTags = new TreeSet<Tag>();
+            for (Tag tag : this.tags) {
+                newTags.add(Tag.findOrCreateByName(tag.name));
+            }
+            this.tags = newTags;
+        }
+    }
 }
