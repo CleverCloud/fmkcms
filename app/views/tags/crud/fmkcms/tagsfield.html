@@ -3,23 +3,16 @@
     &{_name}
 </label>
 
-    <select id="${field.id}" name="${field.name}.tags">
-
-        #{list items:models.Tag.findAll(), as:'tag'}
-            <option value="${tag}">${tag}</option>
-        #{/list}
-    </select>
-
 %{
-String tagsasstring = "";
-if(_value != null){
-    java.util.Iterator itt = _value.iterator();
-    while(itt.hasNext()){
-        tagsasstring = tagsasstring + (tagsasstring.isEmpty() ? "" : ", ") + itt.next();
+    String tags = "";
+    if(_value != null){
+        for (String tag : _value) {
+            tags += (tags.isEmpty() ? "" : ", ") + tag;
+        }
     }
-}
 }%
-<input type="text" name="${field.name}.extraTags" value="${tagsasstring}" />
+
+<input type="text" name="${field.name}.tags" value="${tags}" size="50" />
 
 #{ifError field.name}
 <span class="error">${field.error}</span>

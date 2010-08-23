@@ -17,12 +17,8 @@ public class TagsField {
     
     public static Set<Tag> process(Map<String, List<String>> values) {
         Set<Tag> returnTags = new TreeSet<Tag>();
-System.out.println(values);
-        for (String tag : values.get("tags")) {
-            returnTags.add(Tag.findOrCreateByName(tag));
-        }
 
-        for (String tagsString : values.get("extraTags")) {
+        for (String tagsString : values.get("tags")) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
                 returnTags.add(Tag.findOrCreateByName(tag));
             }
@@ -34,7 +30,6 @@ System.out.println(values);
     public static Set<String> getArgsList() {
         Set<String> s = new TreeSet<String>();
         s.add("tags");
-        s.add("extraTags");
         return s;
     }
     
