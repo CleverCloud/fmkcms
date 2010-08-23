@@ -34,7 +34,7 @@ public class Page extends Model {
     @Boost(3.0f)
     public String title;
 
-    //@Required
+    @Required
     @Lob
     @Field
     @MaxSize(60000)
