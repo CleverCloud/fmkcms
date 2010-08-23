@@ -1,6 +1,7 @@
 package models.blog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -20,6 +22,8 @@ import play.db.jpa.Model;
  */
 @Entity
 public class Post extends Model {
+
+    public Date postedAt;
     
     @Required
     public String title;
@@ -142,6 +146,19 @@ public class Post extends Model {
 
     static Post getDefaultPost(PostRef postRef) {
         return Post.find("byPostRefAndDefaultTranslation", postRef, true).first();
+    }
+
+    @PrePersist
+    public void dateManagement() {
+        if (this.postedAt == null) {
+            this.postedAt = new Date();
+            if (this.defaultTranlation) {
+                // We are creating the first Post for the PostRef
+                this.postReference.author = this.author;
+                this.postReference.postedAt = this.postedAt;
+                this.postReference.save();
+            }
+        }
     }
 
 }

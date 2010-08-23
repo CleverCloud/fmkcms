@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.Transient;
 import models.Tag;
 import play.Logger;
 import play.data.validation.Required;
@@ -22,7 +21,6 @@ import play.db.jpa.Model;
 @Entity
 public class PostRef extends Model {
 
-    @Required
     public Date postedAt;
 
     @ManyToOne
@@ -30,7 +28,6 @@ public class PostRef extends Model {
     public User author;
 
     @ManyToMany
-    @Transient
     public Set<Tag> tags;
 
     public PostRef addTranslation(User author, Locale language, String title, String content) {
@@ -79,18 +76,6 @@ public class PostRef extends Model {
     public Post getDefaultData() {
         return Post.getDefaultPost(this);
     }
-    
-    /*
-     * TODO make this a validator, or a presave option
-     * ATM just block CRUD
-    public void setDefaultLanguage(Locale language) {
-    if (this.translations.containsKey(language)) {
-    this.defaultLanguage = language;
-    } else {
-    Logger.error("Cannot change default language for: " + this.getDefaultData().title + ". No translation available for this language.", new Object[0]);
-    }
-    }
-     */
 
     public PostRef previous() {
         return PostRef.find("postedAt < ? order by postedAt desc", postedAt).first();
