@@ -42,7 +42,6 @@
                 <option value="${l}" ${request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString())? 'selected="true"'.raw() : ''}>${l}</option>
             #{/list}
             </select>
-            <input type="hidden" name="${field.name}.idpd" />
             <input type="text" name="${field.name}.title" />
             <input type="text" name="${field.name}.content" /></li>
     </ul>
