@@ -1,0 +1,19 @@
+#{field 'object.' + _name}
+<label for="${field.id}">
+    &{_name}
+</label>
+%{ java.util.Set<models.Tag> tags = models.tag.findAll(); }%
+#{list items:_value.tags, as:'t'}
+    <select id="${field.id}" name="${field.name}.tags">
+
+        #{list items:tags, as:'tag'}
+            <option value="${tag}" ${t.toString().equals(tag)? 'selected="true"'.raw() : ''}>${tag}</option>
+        #{/list}
+    </select>
+#{/list}
+<input type="text" name="${field.name}.extraTags" />
+
+#{ifError field.name}
+<span class="error">${field.error}</span>
+#{/ifError}
+#{/field}

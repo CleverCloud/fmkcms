@@ -1,13 +1,13 @@
 package models;
 
+import controllers.UseCRUDFieldProvider;
+import crud.TagsField;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
@@ -34,7 +34,7 @@ public class Page extends Model {
     @Boost(3.0f)
     public String title;
 
-    @Required
+    //@Required
     @Lob
     @Field
     @MaxSize(60000)
@@ -48,6 +48,7 @@ public class Page extends Model {
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     @Boost(1.0f)
+    @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
     @Required
