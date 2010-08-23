@@ -1,18 +1,13 @@
 package models.blog;
 
-import controllers.UseCRUDFieldProvider;
-import crud.BlogDataMapField;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 import models.Tag;
@@ -29,71 +24,51 @@ public class PostRef extends Model {
 
     @Required
     public Date postedAt;
-    @Required
-    public Locale defaultLanguage;
+
     @ManyToOne
-    //   @Required
+    @Required
     public User author;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // TODO: Handle Map with CRUD
-    @UseCRUDFieldProvider(BlogDataMapField.class)
-    public Map<Locale, PostData> translations;
-    //@ManyToMany()
+
+    @ManyToMany
     @Transient
     public Set<Tag> tags;
-    /*
-    public Post(User author, Locale language, String title, String content) {
-    this.author = author;
-    this.defaultLanguage = language;
-    PostData defaultTranslation = new PostData(author, title, content).save();
-    this.translations = new HashMap<Locale, PostData>();
-    this.translations.put(language, defaultTranslation);
-    this.postedAt = new Date();
-    this.tags = new TreeSet<Tag>();
-    }
-     */
 
     public PostRef addTranslation(User author, Locale language, String title, String content) {
-        Post translation = new Post(author, title, content).save();
-        this.translations.put(language, translation);
-        return this.save();
+        Post.editOrCreate(this, author, language, title, content);
+        return this;
     }
 
     public PostRef removeTranslation(Locale language) {
-        if (language.equals(this.defaultLanguage)) {
-            Logger.error("Cannot remove translation for default language for: " + this.getDefaultData().title + ". Please change defaultLanguage first.", new Object[0]);
-            return this;
+        Post post = Post.getPostByLocale(this, language);
+        if (post.defaultTranlation) {
+            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change defaultLanguage first, by setting defaultLanguage to true on another translation.", new Object[0]);
         }
-        this.translations.get(language).delete();
-        this.translations.remove(language);
-        return this.save();
+        post.delete();
+        return this;
     }
 
-    public Post getData(List<Locale> languages) {
-        Post data = null;
+    public Post getPost(List<Locale> languages) {
+        Post post = null;
 
         for (Locale language : languages) {
             // Try exact Locale
-            data = this.translations.get(language);
-            if (data != null) {
-                return data;
-            }
+            post = Post.getPostByLocale(this, language);
+            if (post != null)
+                return post;
 
             // Try exact language but don't double check
             if (!language.getCountry().equals("")) {
-                data = this.translations.get(new Locale(language.getLanguage()));
-                if (data != null) {
-                    return data;
-                }
+                post = Post.getPostByLocale(this, new Locale(language.getLanguage()));
+                if (post != null)
+                    return post;
             }
         }
 
         for (Locale language : languages) {
             // Try from another country
-            for (Locale current : this.translations.keySet()) {
-                if (current.getLanguage().equals(language.getLanguage())) {
-                    return this.translations.get(current);
-                }
+            for (Post current : Post.getPostsByPostRef(this)) {
+                if (current.language.getLanguage().equals(language.getLanguage()))
+                    return current;
             }
         }
 
@@ -102,8 +77,9 @@ public class PostRef extends Model {
     }
 
     public Post getDefaultData() {
-        return this.translations.get(this.defaultLanguage);
+        return Post.getDefaultPost(this);
     }
+    
     /*
      * TODO make this a validator, or a presave option
      * ATM just block CRUD
