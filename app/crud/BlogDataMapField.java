@@ -12,8 +12,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import models.blog.PostData;
 import crud.java.util.LocaleField;
+import models.blog.Post;
 
 /**
  *
@@ -22,8 +22,8 @@ import crud.java.util.LocaleField;
 @CRUDFieldProvider(isMultiple = true, tagName = "crud.fmkcms.blogdatamap")
 public class BlogDataMapField {
 
-    public static Map<Locale, PostData> process(Map<String, List<String>> values) {
-        Map<Locale, PostData> returnmap = new HashMap<Locale, PostData>();
+    public static Map<Locale, Post> process(Map<String, List<String>> values) {
+        Map<Locale, Post> returnmap = new HashMap<Locale, Post>();
         Iterator<String> itrId = values.get("idpd").iterator();
         Iterator<String> itrTitle = values.get("title").iterator();
         Iterator<String> itrContent = values.get("content").iterator();
@@ -31,7 +31,7 @@ public class BlogDataMapField {
         while (itrId.hasNext()) {
             String id = itrId.next();
             if (!id.isEmpty()) {
-                PostData pd = PostData.findById(Long.parseLong(id));
+                Post pd = Post.findById(Long.parseLong(id));
                 String string = itrLang.next();
                 Locale locale = LocaleField.process(string);
                 pd.title = itrTitle.next();
@@ -44,7 +44,7 @@ public class BlogDataMapField {
         while (itrLang.hasNext()) {
             String string = itrLang.next();
             Locale locale = LocaleField.process(string);
-            PostData pd = new PostData();
+            Post pd = new Post();
             pd.title = itrTitle.next();
             pd.content = itrContent.next();
             pd.save();

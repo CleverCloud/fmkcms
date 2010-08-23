@@ -1,24 +1,13 @@
 package models.blog;
 
-import controllers.UseCRUDFieldProvider;
-import crud.BlogDataMapField;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ListIterator;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Transient;
-import models.Tag;
-import net.sf.oval.constraint.NotEmpty;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -31,120 +20,76 @@ import play.db.jpa.Model;
 public class Post extends Model {
 
     @Required
-    public Date postedAt;
+    public String title;
+
+    @Lob
     @Required
-    public Locale defaultLanguage;
-    @ManyToOne
-    //   @Required
+    public String content;
+
+  /*  @ManyToOne
+    @Required
     public User author;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // TODO: Handle Map with CRUD
-    @UseCRUDFieldProvider(BlogDataMapField.class)
-    public Map<Locale, PostData> translations;
-    //@ManyToMany()
-    @Transient
-    public Set<Tag> tags;
-    /*
-    public Post(User author, Locale language, String title, String content) {
-    this.author = author;
-    this.defaultLanguage = language;
-    PostData defaultTranslation = new PostData(author, title, content).save();
-    this.translations = new HashMap<Locale, PostData>();
-    this.translations.put(language, defaultTranslation);
-    this.postedAt = new Date();
-    this.tags = new TreeSet<Tag>();
-    }
-     */
+*/
+    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    public List<Comment> comments;
 
-    public Post addTranslation(User author, Locale language, String title, String content) {
-        PostData translation = new PostData(author, title, content).save();
-        this.translations.put(language, translation);
+    public Post() {
+    }
+
+    public Post(User author, String title, String content) {
+  //      this.author = author;
+        this.title = title;
+        this.content = content;
+    }
+
+    public Post addComment(String email, String pseudo, String password, String content) {
+        Comment comment = null;
+        if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
+            // If email is referrenced or pseudo is referrenced for another email, just do nothing.
+            User user = User.connect(email, password);
+            if (user == null) {
+                Logger.error("Failed connection for existing user, aborting comment posting.", new Object[0]);
+                return this;
+            } else
+                comment = new Comment(user, content).save();
+        } else
+            comment = new Comment(email, pseudo, content).save();
+        this.comments.add(comment);
         return this.save();
     }
 
-    public Post removeTranslation(Locale language) {
-        if (language.equals(this.defaultLanguage)) {
-            Logger.error("Cannot remove translation for default language for: " + this.getDefaultData().title + ". Please change defaultLanguage first.", new Object[0]);
-            return this;
+    public Post removeComment(String email, String content, Boolean removeAll) {
+        // We want to get through it the reverse way to delete most recent comment first (duplicates)
+        ListIterator<Comment> iterator = this.comments.listIterator(this.comments.size());
+        Comment current = null;
+        while (iterator.hasPrevious()) {
+            current = iterator.previous();
+            // Continue if it's not the one we're looking for
+            if (! (current.email.equalsIgnoreCase(email) && current.content.equalsIgnoreCase(content)))
+                continue;
+
+            iterator.remove();
+            current.delete();
+
+            // Quit if we only want to remove one occurence of the comment
+            if (! removeAll)
+                break;
         }
-        this.translations.get(language).delete();
-        this.translations.remove(language);
+
         return this.save();
     }
 
-    public PostData getData(List<Locale> languages) {
-        PostData data = null;
+    public Post removeComment(String email, String content) {
+        return this.removeComment(email, content, false);
+    }
 
-        for (Locale language : languages) {
-            // Try exact Locale
-            data = this.translations.get(language);
-            if (data != null) {
-                return data;
-            }
-
-            // Try exact language but don't double check
-            if (!language.getCountry().equals("")) {
-                data = this.translations.get(new Locale(language.getLanguage()));
-                if (data != null) {
-                    return data;
-                }
-            }
+    public List<Comment> getComments(String email) {
+        List<Comment> returnList = new ArrayList<Comment>();
+        for (Comment current : this.comments) {
+            if (current.email.equalsIgnoreCase(email))
+                returnList.add(current);
         }
-
-        for (Locale language : languages) {
-            // Try from another country
-            for (Locale current : this.translations.keySet()) {
-                if (current.getLanguage().equals(language.getLanguage())) {
-                    return this.translations.get(current);
-                }
-            }
-        }
-
-        // Return default
-        return this.getDefaultData();
+        return returnList;
     }
 
-    public PostData getDefaultData() {
-        return this.translations.get(this.defaultLanguage);
-    }
-    /*
-     * TODO make this a validator, or a presave option
-     * ATM just block CRUD
-    public void setDefaultLanguage(Locale language) {
-    if (this.translations.containsKey(language)) {
-    this.defaultLanguage = language;
-    } else {
-    Logger.error("Cannot change default language for: " + this.getDefaultData().title + ". No translation available for this language.", new Object[0]);
-    }
-    }
-     */
-
-    public Post previous() {
-        return Post.find("postedAt < ? order by postedAt desc", postedAt).first();
-    }
-
-    public Post next() {
-        return Post.find("postedAt > ? order by postedAt asc", postedAt).first();
-    }
-
-    public Post tagItWith(String name) {
-        this.tags.add(Tag.findOrCreateByName(name));
-        return this.save();
-    }
-
-    public static List<Post> findTaggedWith(String... tags) {
-        return Post.find(
-                "select distinct p from Post p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
-    }
-
-    @PrePersist
-    public void tagsManagement() {
-        if (tags != null) {
-            Set<Tag> newTags = new TreeSet<Tag>();
-            for (Tag tag : this.tags) {
-                newTags.add(Tag.findOrCreateByName(tag.name));
-            }
-            this.tags = newTags;
-        }
-    }
 }
