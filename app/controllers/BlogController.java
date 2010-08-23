@@ -23,9 +23,9 @@ public class BlogController extends Controller {
     }
 
     public static void show(Long id) {
-        PostRef post = PostRef.findById(id);
+        PostRef postRef = PostRef.findById(id);
         String randomID = Codec.UUID();
-        render(post, randomID);
+        render(postRef, randomID);
     }
 
     public static void index() {
@@ -36,15 +36,15 @@ public class BlogController extends Controller {
     }
 
     public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
-        PostRef post = PostRef.findById(postId);
-        if (post == null)
+        PostRef postRef = PostRef.findById(postId);
+        if (postRef == null)
             return;
 
         validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
         if (Validation.hasErrors())
             render("BlogController/show.html", PostRef.findById(postId), randomID);
 
-        post.getData(I18nController.getBrowserLanguages()).addComment(email, pseudo, password, content);
+        postRef.getPost(I18nController.getBrowserLanguages()).addComment(email, pseudo, password, content);
         Cache.delete(randomID);
         BlogController.show(postId);
     }
