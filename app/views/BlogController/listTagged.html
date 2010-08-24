@@ -3,10 +3,10 @@
 
 *{********* Title ********* }*
 
-#{if posts.size() > 1}
-   <h3>There are ${posts.size()} posts tagged '${tag}'</h3>
+#{if postRefs.size() > 1}
+   <h3>There are ${postRefs.size()} posts tagged '${tag}'</h3>
 #{/if}
-#{elseif posts}
+#{elseif postRefs}
     <h3>There is 1 post tagged '${tag}'</h3>
 #{/elseif}
 #{else}
@@ -16,7 +16,7 @@
 *{********* Posts list *********}*
 
 <div class="older-posts">
-    #{list items:posts, as:'post'}
-        #{display post:post, as:'teaser' /}
+    #{list items:postRefs, as:'postRef'}
+        #{display postRef:postRef, as:'teaser' /}
     #{/list}
 </div> 

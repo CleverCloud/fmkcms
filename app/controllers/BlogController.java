@@ -29,29 +29,29 @@ public class BlogController extends Controller {
     }
 
     public static void index() {
-        PostRef frontPost = PostRef.find("Order by postedAt desc").first();
-        List<PostRef> olderPosts = PostRef.find("Order by postedAt desc").from(1).fetch(10);
+        PostRef frontPostRef = PostRef.find("Order by postedAt desc").first();
+        List<PostRef> olderPostRefs = PostRef.find("Order by postedAt desc").from(1).fetch(10);
 
-        render(frontPost, olderPosts);
+        render(frontPostRef, olderPostRefs);
     }
 
-    public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
-        PostRef postRef = PostRef.findById(postId);
+    public static void postComment(Long postRefId, String email, String pseudo, String password, String content, String code, String randomID) {
+        PostRef postRef = PostRef.findById(postRefId);
         if (postRef == null)
             return;
 
         validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
         if (Validation.hasErrors())
-            render("BlogController/show.html", PostRef.findById(postId), randomID);
+            render("BlogController/show.html", postRef, randomID);
 
         postRef.getPost(I18nController.getBrowserLanguages()).addComment(email, pseudo, password, content);
         Cache.delete(randomID);
-        BlogController.show(postId);
+        BlogController.show(postRefId);
     }
 
     public static void listTagged(String tag) {
-        List<PostRef> posts = PostRef.findTaggedWith(tag);
-        render(tag, posts);
+        List<PostRef> postRefs = PostRef.findTaggedWith(tag);
+        render(tag, postRefs);
     }
 
     public static void jsondump() {

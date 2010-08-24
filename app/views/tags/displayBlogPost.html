@@ -1,31 +1,31 @@
 *{ Display a post in one of these modes: 'full', 'home' or 'teaser' }*
 
-%{models.blog.PostData data = _post.getData(controllers.I18nController.getBrowserLanguages())}%
+%{models.blog.Post post = _postRef.getPost(controllers.I18nController.getBrowserLanguages())}%
 
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
-        <a href="@{BlogController.show(_post.id)}">${data.title}</a>
+        <a href="@{BlogController.show(_postRef.id)}">${post.title}</a>
     </h2>
     <div class="post-metadata">
-        <span class="post-author">by ${_post.author}</span>,
-        <span class="post-date">${_post.postedAt.format('dd MMM yy')}</span>
-        #{if data.author != _post.author}
-            <span class="post-translator">translated by ${data.author}</span>
-            <span class="post-translation-date">${data.postedAt.format('MMM dd')}</span>
+        <span class="post-author">by ${_postRef.author}</span>,
+        <span class="post-date">${_postRef.postedAt.format('dd MMM yy')}</span>
+        #{if post.author != _postRef.author}
+            <span class="post-translator">translated by ${post.author}</span>
+            <span class="post-translation-date">${post.postedAt.format('MMM dd')}</span>
         #{/if}
         #{if _as != 'full'}
             <span class="post-comments">
-                &nbsp;|&nbsp; ${data.comments.size() ?: 'no'}
-                comment${data.comments.size().pluralize()}
-                #{if data.comments}
-                    , latest by ${data.comments[data.comments.size()-1].author}
+                &nbsp;|&nbsp; ${post.comments.size() ?: 'no'}
+                comment${post.comments.size().pluralize()}
+                #{if post.comments}
+                    , latest by ${post.comments[post.comments.size()-1].author}
                 #{/if}
             </span>
         #{/if}
-        #{elseif _post.tags}
+        #{elseif _postRef.tags}
             <span class="post-tags">
                 - Tagged
-                #{list items:_post.tags, as:'tag'}
+                #{list items:_postRef.tags, as:'tag'}
                     <a href="@{BlogController.listTagged(tag.name)}">${tag}</a>${tag.isLast ? '' : ', '}
                 #{/list}
             </span>
@@ -34,7 +34,7 @@
     #{if _as != 'teaser'}
         <div class="post-content">
             <div class="about">Detail: </div>
-            ${data.content.nl2br()}
+            ${post.content.nl2br()}
         </div>
     #{/if}
 </div>
@@ -42,11 +42,11 @@
 #{if _as == 'full'}
     <div class="comments">
         <h3>
-            ${data.comments.size() ?: 'no'}
-            comment${data.comments.size().pluralize()}
+            ${post.comments.size() ?: 'no'}
+            comment${post.comments.size().pluralize()}
         </h3>
 
-        #{list items:data.comments, as:'comment'}
+        #{list items:post.comments, as:'comment'}
             <div class="comment">
                 <div class="comment-metadata">
                     <span class="comment-author">by ${comment.author},</span>

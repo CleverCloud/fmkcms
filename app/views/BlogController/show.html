@@ -2,27 +2,27 @@
 #{set title:post.title /}
 
 <ul id="pagination">
-    #{if post.previous()}
+    #{if postRef.previous()}
         <li id="previous">
-            <a href="@{BlogController.show(post.previous().id)}">
-                ${post.previous().getData(controllers.I18nController.getBrowserLanguages()).title}
+            <a href="@{BlogController.show(postRef.previous().id)}">
+                ${postRef.previous().getPost(controllers.I18nController.getBrowserLanguages()).title}
             </a>
         </li>
     #{/if}
-    #{if post.next()}
+    #{if postRef.next()}
         <li id="next">
-            <a href="@{BlogController.show(post.next().id)}">
-                ${post.next().getData(controllers.I18nController.getBrowserLanguages()).title}
+            <a href="@{BlogController.show(postRef.next().id)}">
+                ${postRef.next().getPost(controllers.I18nController.getBrowserLanguages()).title}
             </a>
         </li>
     #{/if}
 </ul>
 
-#{displayBlogPost post:post, as:'full' /}
+#{displayBlogPost postRef:postRef, as:'full' /}
 
 <h3>Post a comment</h3>
 
-#{form @BlogController.postComment(post.id)}
+#{form @BlogController.postComment(postRef.id)}
 
     #{ifErrors}
         <p class="error">
