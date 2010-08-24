@@ -103,8 +103,13 @@ public class Post extends Model {
             defaultPost.isDefaultLanguage = false;
             defaultPost.save();
         }
+
         if (! this.isDefaultLanguage) // Or we'll create a loop from the setter
             this.isDefaultLanguage = Boolean.TRUE;
+
+        if (this.id == null) // We're creating it
+            return this;
+
         return this.save();
     }
 
@@ -164,10 +169,14 @@ public class Post extends Model {
     public void prePersistManagement() {
         if (this.postReference == null)
             this.postReference = new PostRef().save();
+
+        Post defaultPost = Post.getDefaultPost(this.postReference);
+        if (defaultPost == null) // We are creating the first Post for the PostRef
+            this.isDefaultLanguage = Boolean.TRUE;
+        
         if (this.postedAt == null) {
             this.postedAt = new Date();
-            if (this.isDefaultLanguage != null && this.isDefaultLanguage) { // TODO: Why is it null ??
-                // We are creating the first Post for the PostRef
+            if (this.isDefaultLanguage) {
                 this.postReference.author = this.author;
                 this.postReference.postedAt = this.postedAt;
                 this.postReference.save();
