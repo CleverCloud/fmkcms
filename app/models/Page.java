@@ -1,13 +1,13 @@
 package models;
 
+import controllers.UseCRUDFieldProvider;
+import crud.TagsField;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
@@ -48,14 +48,15 @@ public class Page extends Model {
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
     @Boost(1.0f)
+    @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
     @Required
     public Locale lang;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     // TODO: Handle Map with CRUD
-    public Map<Locale, Page> otherLanguages;
+    //public Map<Locale, Page> otherLanguages;
     
     @Required
     public Boolean published = false;
@@ -83,7 +84,7 @@ public class Page extends Model {
         return this.save();
     }
 
-    public Page addTranslation(Page translated) {
+    /*public Page addTranslation(Page translated) {
         if (this.lang.equals(translated.lang))
             return this;
         
@@ -114,6 +115,15 @@ public class Page extends Model {
         }
         return null;
     }
+     
+     public void setLang(Locale lang) {
+        for (Page current : this.otherLanguages.values()) {
+            current.otherLanguages.remove(this.lang);
+            current.otherLanguages.put(lang, this);
+        }
+        this.lang = lang;
+        this.save();
+    }*/
 
     public static List<Page> findTaggedWith(String tag) {
         return Page.find(
@@ -131,12 +141,6 @@ public class Page extends Model {
         }
     }
 
-    public void setLang(Locale lang) {
-        for (Page current : this.otherLanguages.values()) {
-            current.otherLanguages.remove(this.lang);
-            current.otherLanguages.put(lang, this);
-        }
-        this.lang = lang;
-        this.save();
-    }
+
+
 }
