@@ -1,0 +1,17 @@
+#{field 'object.' + _name}
+<label for="${field.id}">
+    &{_name}
+</label>
+
+%{
+    Boolean bool = false;
+    if(_value != null)
+        bool = _value;
+}%
+
+<input type="checkbox" name="${field.name}.bool" %{ if (bool) { }% checked %{ } }%" />
+
+#{ifError field.name}
+<span class="error">${field.error}</span>
+#{/ifError}
+#{/field}

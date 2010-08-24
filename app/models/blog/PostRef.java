@@ -1,5 +1,7 @@
 package models.blog;
 
+import controllers.UseCRUDFieldProvider;
+import crud.TagsField;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -24,10 +26,10 @@ public class PostRef extends Model {
     public Date postedAt;
 
     @ManyToOne
-    @Required
     public User author;
 
     @ManyToMany
+    @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
     public PostRef addTranslation(User author, Locale language, String title, String content) {

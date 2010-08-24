@@ -1,5 +1,7 @@
 package models.blog;
-
+    
+import controllers.UseCRUDFieldProvider;
+import crud.BooleanField;
 import javax.persistence.Entity;
 import play.data.validation.Email;
 import play.data.validation.MinSize;
@@ -25,7 +27,8 @@ public class User extends Model {
     public String password;
 
     @Required
-    public boolean isAdmin = false;
+    @UseCRUDFieldProvider(BooleanField.class)
+    public Boolean isAdmin = false;
 
     public String fullname;
     public String pseudo;
