@@ -13,14 +13,7 @@ import java.util.TreeSet;
 public class BooleanField {
     
     public static Boolean process(Map<String, String> values) {
-        System.out.println(values);
-        System.out.println("check1");
-        String r = values.get("bool");
-        if (r == null) {
-            return false;
-        }
-        System.out.println("check2");
-        return r.equals("on");
+        return (values.get("bool") != null);
     }
 
     public static Set<String> getArgsList() {
