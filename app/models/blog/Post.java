@@ -97,9 +97,9 @@ public class Post extends Model {
 
     public Post setAsDefaultLanguage() {
         Post defaultPost = Post.getDefaultPost(this.postReference);
-        if (defaultPost.id == this.id)
-            return this;
         if (defaultPost != null) {
+            if (defaultPost.id.equals(this.id))
+                return this;
             defaultPost.isDefaultLanguage = false;
             defaultPost.save();
         }
