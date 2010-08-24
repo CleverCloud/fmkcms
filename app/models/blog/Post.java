@@ -1,5 +1,7 @@
 package models.blog;
 
+import controllers.UseCRUDFieldProvider;
+import crud.BooleanField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,6 @@ public class Post extends Model {
     @Required
     public String content;
 
-    @Required
     @ManyToOne
     public PostRef postReference;
 
@@ -44,6 +45,7 @@ public class Post extends Model {
     public User author;
 
     @Required
+    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
@@ -93,21 +95,27 @@ public class Post extends Model {
         return this.save();
     }
 
-    public Post setAsDefaultLanguage() {
+    public Post setAsDefaultLanguage() { // TODO: work interface progress
         Post defaultPost = Post.getDefaultPost(this.postReference);
+            System.out.println("Entering setAsDefaultLanguage");
         if (defaultPost != null) {
+            System.out.println("Default post is not null");
             defaultPost.isDefaultLanguage = false;
             defaultPost.save();
         }
-        this.isDefaultLanguage = true;
+            System.out.println("Gonna make it default, current: " + this.isDefaultLanguage);
+        this.isDefaultLanguage = Boolean.TRUE; // TODO: why on Earth does it fail ?
+            System.out.println("Made it default, new current: " + this.isDefaultLanguage);
         return this.save();
     }
 
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
         if (isDefaultLanguage)
             this.setAsDefaultLanguage();
-        else
+        else if (this.isDefaultLanguage != null && this.isDefaultLanguage)
             Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
+        else
+            this.isDefaultLanguage = isDefaultLanguage;
     }
 
     public Post removeComment(String email, String content) {
@@ -152,10 +160,12 @@ public class Post extends Model {
     }
 
     @PrePersist
-    public void dateManagement() {
+    public void prePersistManagement() {
+        if (this.postReference == null)
+            this.postReference = new PostRef().save();
         if (this.postedAt == null) {
             this.postedAt = new Date();
-            if (this.isDefaultLanguage) {
+            if (this.isDefaultLanguage != null && this.isDefaultLanguage) { // TODO: Why is it null ??
                 // We are creating the first Post for the PostRef
                 this.postReference.author = this.author;
                 this.postReference.postedAt = this.postedAt;
