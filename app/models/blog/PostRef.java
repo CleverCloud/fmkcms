@@ -37,8 +37,8 @@ public class PostRef extends Model {
 
     public PostRef removeTranslation(Locale language) {
         Post post = Post.getPostByLocale(this, language);
-        if (post.defaultTranlation) {
-            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change defaultLanguage first, by setting defaultLanguage to true on another translation.", new Object[0]);
+        if (post.isDefaultLanguage) {
+            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
         }
         post.delete();
         return this;

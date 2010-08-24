@@ -44,7 +44,7 @@ public class Post extends Model {
     public User author;
 
     @Required
-    public Boolean defaultTranlation = false;
+    public Boolean isDefaultLanguage = false;
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
@@ -96,15 +96,21 @@ public class Post extends Model {
         return this.save();
     }
 
-    public Post setDefaultTranslation(Boolean defaultTranslation) {
+    public Post setAsDefaultLanguage() {
         Post defaultPost = Post.getDefaultPost(this.postReference);
         if (defaultPost != null) {
-            // We should always get here, but fear NPE !
-            defaultPost.defaultTranlation = false;
+            defaultPost.isDefaultLanguage = false;
             defaultPost.save();
         }
-        this.defaultTranlation = true;
+        this.isDefaultLanguage = true;
         return this.save();
+    }
+
+    public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
+        if (isDefaultLanguage)
+            this.setAsDefaultLanguage();
+        else
+            Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
     }
 
     public Post removeComment(String email, String content) {
@@ -139,7 +145,7 @@ public class Post extends Model {
         }
         
         if(Post.getDefaultPost(postRef) == null)
-            post.defaultTranlation = true;
+            post.isDefaultLanguage = true;
 
         return post.save();
     }
@@ -152,7 +158,7 @@ public class Post extends Model {
     public void dateManagement() {
         if (this.postedAt == null) {
             this.postedAt = new Date();
-            if (this.defaultTranlation) {
+            if (this.isDefaultLanguage) {
                 // We are creating the first Post for the PostRef
                 this.postReference.author = this.author;
                 this.postReference.postedAt = this.postedAt;
