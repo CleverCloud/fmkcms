@@ -124,11 +124,11 @@ public class Post extends Model {
     }
 
     static Post getPostByLocale(PostRef postRef, Locale language) {
-        return Post.find("byPostRefAndLanguage", postRef, language).first();
+        return Post.find("byPostRefereneceAndLanguage", postRef, language).first();
     }
 
     static List<Post> getPostsByPostRef(PostRef postRef) {
-        return Post.find("byPostRef", postRef).fetch();
+        return Post.find("byPostReference", postRef).fetch();
     }
 
     static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
@@ -148,7 +148,7 @@ public class Post extends Model {
     }
 
     static Post getDefaultPost(PostRef postRef) {
-        return Post.find("byPostRefAndDefaultTranslation", postRef, true).first();
+        return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
     }
 
     @PrePersist
