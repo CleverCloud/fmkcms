@@ -95,23 +95,24 @@ public class Post extends Model {
         return this.save();
     }
 
-    public Post setAsDefaultLanguage() { // TODO: work interface progress
+    public Post setAsDefaultLanguage() {
         Post defaultPost = Post.getDefaultPost(this.postReference);
-            System.out.println("Entering setAsDefaultLanguage");
+        if (defaultPost.id == this.id)
+            return this;
         if (defaultPost != null) {
-            System.out.println("Default post is not null");
             defaultPost.isDefaultLanguage = false;
             defaultPost.save();
         }
-            System.out.println("Gonna make it default, current: " + this.isDefaultLanguage);
-        this.isDefaultLanguage = Boolean.TRUE; // TODO: why on Earth does it fail ?
-            System.out.println("Made it default, new current: " + this.isDefaultLanguage);
+        if (! this.isDefaultLanguage) // Or we'll create a loop from the setter
+            this.isDefaultLanguage = Boolean.TRUE;
         return this.save();
     }
 
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
-        if (isDefaultLanguage)
+        if (isDefaultLanguage) {
+            this.isDefaultLanguage = Boolean.TRUE;
             this.setAsDefaultLanguage();
+        }
         else if (this.isDefaultLanguage != null && this.isDefaultLanguage)
             Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
         else
