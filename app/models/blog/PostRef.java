@@ -37,9 +37,8 @@ public class PostRef extends Model {
 
     public PostRef removeTranslation(Locale language) {
         Post post = Post.getPostByLocale(this, language);
-        if (post.isDefaultLanguage) {
+        if (post.isDefaultLanguage)
             Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
-        }
         post.delete();
         return this;
     }
@@ -90,7 +89,7 @@ public class PostRef extends Model {
         return this.save();
     }
 
-    public static List<PostRef> findTaggedWith(String... tags) {
+    public static List<PostRef> findTaggedWith(String ... tags) {
         return Post.find(
                 "select distinct p from Post p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
     }
@@ -105,4 +104,5 @@ public class PostRef extends Model {
             this.tags = newTags;
         }
     }
+    
 }

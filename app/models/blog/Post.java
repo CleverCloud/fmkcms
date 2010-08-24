@@ -49,9 +49,6 @@ public class Post extends Model {
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
 
-    public Post() {
-    }
-
     private Post(User author, Locale language, String title, String content) {
         this.author = author;
         this.language = language;
