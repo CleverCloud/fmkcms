@@ -53,7 +53,7 @@ public class PageRef extends Model {
         return this;
     }
 
-    public PageRef getByUrlId(String urlId) {
+    public static PageRef getByUrlId(String urlId) {
         return PageRef.find("byUrlId", urlId).first();
     }
 

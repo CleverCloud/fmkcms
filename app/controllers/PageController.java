@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import models.Page;
+import models.PageRef;
 import models.Tag;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -26,25 +27,29 @@ import play.mvc.With;
 public class PageController extends Controller {
 
     public static void page(String urlId) {
-        Page p = Page.getByUrlId(urlId);
-        if (p == null || !p.published) {
+        PageRef pageRef = PageRef.getByUrlId(urlId);
+        if (pageRef == null)
             notFound();
-        }
+
+        Page page = pageRef.getPage(I18nController.getBrowserLanguages());
+        if (page == null || ! page.published)
+            notFound();
+
         if (request.headers.get("accept").value().contains("json")) {
-            renderJSON(p);
+            renderJSON(pageRef);
         }
 
-        render(p);
+        render(pageRef);
     }
 
     public static void pagesTag(String tagName) {
         Tag tag = Tag.findOrCreateByName(tagName);
-        List<Page> listOfPages = Page.findTaggedWith(tagName);
+        List<PageRef> listOfPageRefs = PageRef.findTaggedWith(tagName);
 
-        render(listOfPages, tag);
+        render(listOfPageRefs, tag);
     }
 
-    public static void searchPage(String q) {
+    /*public static void searchPage(String q) {
 
         if (q == null) {
             q = "search";
@@ -83,5 +88,5 @@ public class PageController extends Controller {
 
         render(results, q);
 
-    }
+    }*/
 }
