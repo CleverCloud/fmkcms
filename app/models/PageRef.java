@@ -11,6 +11,7 @@ import javax.persistence.PrePersist;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import play.Logger;
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 /**
@@ -18,6 +19,10 @@ import play.db.jpa.Model;
  * @author keruspe
  */
 public class PageRef extends Model {
+
+    @Required
+    @Boost(3.5f)
+    public String urlId;
 
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
@@ -35,8 +40,8 @@ public class PageRef extends Model {
                 "select distinct p from Page p join p.tags as t where t.name = ?", tag).fetch();
     }
     
-    public PageRef addTranslation(String title, String content, String urlId, Locale language) {
-        Page.editOrCreate(this, title, content, urlId, language);
+    public PageRef addTranslation(String title, String content, Locale language) {
+        Page.editOrCreate(this, title, content, language);
         return this;
     }
 
@@ -46,6 +51,10 @@ public class PageRef extends Model {
             Logger.error("Cannot remove translation for default language for: " + page.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
         page.delete();
         return this;
+    }
+
+    public PageRef getByUrlId(String urlId) {
+        return PageRef.find("byUrlId", urlId).first();
     }
 
     public Page getPage(List<Locale> languages) {

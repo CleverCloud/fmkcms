@@ -39,16 +39,13 @@ public class Page extends Model {
     public String content;
 
     @Required
-    @Boost(3.5f)
-    public String urlId;
-
-    @Required
     public Locale language;
 
     @Required
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
 
+    @Required
     @ManyToOne
     public PageRef pageReference;
     
@@ -56,10 +53,9 @@ public class Page extends Model {
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
 
-    private Page(String title, String content, String urlId, Locale language) {
+    private Page(String title, String content, Locale language) {
         this.title = title;
         this.content = content;
-        this.urlId = urlId;
         this.language = language;
     }
 
@@ -118,16 +114,15 @@ public class Page extends Model {
         return Page.find("byPageReference", pageRef).fetch();
     }
 
-    public static Page editOrCreate(PageRef pageRef, String title, String content, String urlId, Locale language) {
+    public static Page editOrCreate(PageRef pageRef, String title, String content, Locale language) {
         Page page = Page.getPageByLocale(pageRef, language);
         if (page == null) {
-            page = new Page(title, content, urlId, language);
+            page = new Page(title, content, language);
             page.pageReference = pageRef;
         }
         else {
             page.title = title;
             page.content = content;
-            page.urlId = urlId;
         }
 
         if(Page.getDefaultPage(pageRef) == null)
