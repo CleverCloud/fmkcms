@@ -1,14 +1,11 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
-
-<h1>${p.title}</h1>
+<h1>${page.title}</h1>
 #{verbatim}
-${p.content}
+${page.content}
 #{/verbatim}
-
 <ul>
-    #{list items:p.tags, as:'tag'}
+    #{list items:page.pageReference.tags, as:'tag'}
     <li>#{a @PageController.pagesTag(tag.name)}${tag.name}#{/a}</li>
     #{/list}
-
 </ul>

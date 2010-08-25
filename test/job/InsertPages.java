@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package job;
 
 import com.google.gson.Gson;
@@ -13,7 +9,6 @@ import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
@@ -28,21 +23,21 @@ public class InsertPages extends Job {
     @Override
     public void doJob() throws Exception {
         Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<Page>>() {
-        }.getType();
+        Type collectionType = new TypeToken<List<Page>>() {}.getType();
         List<Page> lp = gson.fromJson(new FileReader(Play.applicationPath + "/test/data/pages.json"), collectionType);
         if (lp != null) {
-            for (Iterator<Page> it = lp.iterator(); it.hasNext();) {
-                Page page = it.next();
+            for (Page page : lp) {
                 page.id = null;
+                page.pageReference.id = null;
                 Set<Tag> st = new TreeSet<Tag>();
-                for (Iterator<Tag> it1 = page.tags.iterator(); it1.hasNext();) {
-                    Tag tag = it1.next();
+                for (Tag tag : page.pageReference.tags) {
                     st.add(Tag.findOrCreateByName(tag.name));
                 }
-                page.tags = st;
+                page.pageReference.tags = st;
+                page.pageReference = page.pageReference.save();
                 page.save();
             }
         }
     }
+
 }

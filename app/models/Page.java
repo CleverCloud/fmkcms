@@ -1,21 +1,18 @@
 package models;
 
 import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
+import crud.BooleanField;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -23,6 +20,7 @@ import play.db.jpa.Model;
 /**
  *
  * @author waxzce
+ * @author keruspe
  */
 @Entity
 @Indexed(index = "fmkpage")
@@ -42,36 +40,24 @@ public class Page extends Model {
     public String content;
 
     @Required
-    @Boost(3.5f)
-    public String urlId;
-
-    @IndexedEmbedded
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @Boost(1.0f)
-    @UseCRUDFieldProvider(TagsField.class)
-    public Set<Tag> tags;
+    public Locale language;
 
     @Required
-    public Locale lang;
+    @UseCRUDFieldProvider(BooleanField.class)
+    public Boolean isDefaultLanguage = false;
 
-    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    // TODO: Handle Map with CRUD
-    //public Map<Locale, Page> otherLanguages;
+    @Required
+    @ManyToOne
+    public PageRef pageReference;
     
     @Required
+    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
 
-    public static Page getByUrlId(String urlId) {
-        if (urlId == null)
-            return null;
-        
-        Page p = Page.find("urlId = ?", urlId).first();
-        return p;
-    }
-
-    public Page tagItWith(String name) {
-        this.tags.add(Tag.findOrCreateByName(name));
-        return this.save();
+    private Page(String title, String content, Locale language) {
+        this.title = title;
+        this.content = content;
+        this.language = language;
     }
 
     public Page publish() {
@@ -84,63 +70,72 @@ public class Page extends Model {
         return this.save();
     }
 
-    /*public Page addTranslation(Page translated) {
-        if (this.lang.equals(translated.lang))
+    public Page setAsDefaultLanguage() {
+        Page defaultPage = Page.getDefaultPage(this.pageReference);
+        if (defaultPage != null) {
+            if (defaultPage.id.equals(this.id))
+                return this;
+            defaultPage.isDefaultLanguage = false;
+            defaultPage.save();
+        }
+
+        if (! this.isDefaultLanguage) // Or we'll create a loop from the setter
+            this.isDefaultLanguage = Boolean.TRUE;
+
+        if (this.id == null) // We're creating it
             return this;
-        
-        this.otherLanguages.put(translated.lang, translated);
-        translated.otherLanguages.put(this.lang, this);
+
         return this.save();
     }
 
-    public Page getTranslation(Locale lang) {
-        if (this.lang.equals(lang))
-            return this;
-
-        // Try exact Locale
-        Page returnPage = this.otherLanguages.get(lang);
-        if (returnPage != null)
-            return returnPage;
-
-        // Try exact language
-        returnPage = this.otherLanguages.get(new Locale(lang.getLanguage()));
-        if (returnPage != null)
-            return returnPage;
-
-        // Try from another country
-        for (Locale current : this.otherLanguages.keySet()) {
-            if (current.getLanguage().equals(lang.getLanguage())) {
-                return this.otherLanguages.get(current);
-            }
+    public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
+        if (isDefaultLanguage) {
+            this.isDefaultLanguage = Boolean.TRUE;
+            this.setAsDefaultLanguage();
         }
-        return null;
+        else if (this.isDefaultLanguage != null && this.isDefaultLanguage)
+            Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
+        else
+            this.isDefaultLanguage = isDefaultLanguage;
     }
-     
-     public void setLang(Locale lang) {
-        for (Page current : this.otherLanguages.values()) {
-            current.otherLanguages.remove(this.lang);
-            current.otherLanguages.put(lang, this);
-        }
-        this.lang = lang;
-        this.save();
-    }*/
 
-    public static List<Page> findTaggedWith(String tag) {
-        return Page.find(
-                "select distinct p from Page p join p.tags as t where t.name = ?", tag).fetch();
+    public static Page getPageByLocale(PageRef pageRef, Locale language) {
+        return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
+    }
+
+    public static List<Page> getPagesByPageRef(PageRef pageRef) {
+        return Page.find("byPageReference", pageRef).fetch();
+    }
+
+    public static Page editOrCreate(PageRef pageRef, String title, String content, Locale language) {
+        Page page = Page.getPageByLocale(pageRef, language);
+        if (page == null) {
+            page = new Page(title, content, language);
+            page.pageReference = pageRef;
+        }
+        else {
+            page.title = title;
+            page.content = content;
+        }
+
+        if(Page.getDefaultPage(pageRef) == null)
+            page.isDefaultLanguage = true;
+
+        return page.save();
+    }
+
+    public static Page getDefaultPage(PageRef pageRef) {
+        return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
     }
 
     @PrePersist
-    public void tagsManagement() {
-        if (tags != null) {
-            Set<Tag> newTags = new TreeSet<Tag>();
-            for (Tag tag : this.tags) {
-                newTags.add(Tag.findOrCreateByName(tag.name));
-            }
-            this.tags = newTags;
-        }
+    public void prePersistManagement() {
+        if (this.pageReference == null)
+            this.pageReference = new PageRef().save();
+
+        Page defaultPage = Page.getDefaultPage(this.pageReference);
+        if (defaultPage == null) // We are creating the first Page for the PageRef
+            this.isDefaultLanguage = Boolean.TRUE;
     }
-
-
-
+    
 }

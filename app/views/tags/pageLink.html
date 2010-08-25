@@ -1,1 +1,1 @@
-#{a @PageController.page(_arg)}${models.Page.getByUrlId(_arg)?.title}#{/a}
+#{a @PageController.page(_arg)}${models.PageRef.getByUrlId(_arg)?.getPage(controllers.I18nController.getBrowserLanguages())?.title}#{/a}

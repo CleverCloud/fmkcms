@@ -12,7 +12,7 @@ import play.mvc.With;
 public class CRUD4MenuEntryPages extends CRUD {
 
     public static void quickAdd(String urlId) {
-        Page p = Page.getByUrlId(urlId);
+        PageRef p = PageRef.getByUrlId(urlId);
         if (p != null) {
             MenuEntryPage mep = new MenuEntryPage();
             mep.urlid = urlId;
