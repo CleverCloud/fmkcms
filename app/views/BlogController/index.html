@@ -1,16 +1,16 @@
 #{extends 'main.html' /}
 
-#{if frontPostRef}
+#{if frontPost}
 
-    #{displayBlogPost postRef:frontPostRef, as:'home' /}
+    #{displayBlogPost post:frontPost, as:'home' /}
 
-    #{if olderPostRefs.size()}
+    #{if olderPosts.size()}
 
         <div class="older-posts">
             <h3>Older posts <span class="from">from this blog</span></h3>
 
-            #{list items:olderPostRefs, as:'oldPostRef'}
-                #{displayBlogPost postRef:oldPostRef, as:'teaser' /}
+            #{list items:olderPosts, as:'oldPost'}
+                #{displayBlogPost post:oldPost, as:'teaser' /}
             #{/list}
         </div>
 
