@@ -2,6 +2,7 @@ package models;
 
 import controllers.UseCRUDFieldProvider;
 import crud.TagsField;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import play.Logger;
 import play.db.jpa.Model;
 
 /**
@@ -31,6 +33,52 @@ public class PageRef extends Model {
     public static List<Page> findTaggedWith(String tag) {
         return Page.find(
                 "select distinct p from Page p join p.tags as t where t.name = ?", tag).fetch();
+    }
+    
+    public PageRef addTranslation(String title, String content, String urlId, Locale language) {
+        Page.editOrCreate(this, title, content, urlId, language);
+        return this;
+    }
+
+    public PageRef removeTranslation(Locale language) {
+        Page page = Page.getPageByLocale(this, language);
+        if (page.isDefaultLanguage)
+            Logger.error("Cannot remove translation for default language for: " + page.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
+        page.delete();
+        return this;
+    }
+
+    public Page getPage(List<Locale> languages) {
+        Page page = null;
+
+        for (Locale language : languages) {
+            // Try exact Locale
+            page = Page.getPageByLocale(this, language);
+            if (page != null)
+                return page;
+
+            // Try exact language but don't double check
+            if (!language.getCountry().equals("")) {
+                page = Page.getPageByLocale(this, new Locale(language.getLanguage()));
+                if (page != null)
+                    return page;
+            }
+        }
+
+        for (Locale language : languages) {
+            // Try from another country
+            for (Page current : Page.getPagesByPageRef(this)) {
+                if (current.language.getLanguage().equals(language.getLanguage()))
+                    return current;
+            }
+        }
+
+        // Return default
+        return this.getDefaultPage();
+    }
+    
+    public Page getDefaultPage() {
+        return Page.getDefaultPage(this);
     }
 
     @PrePersist
