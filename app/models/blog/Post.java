@@ -147,8 +147,10 @@ public class Post extends Model {
 
     public static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
         Post post = Post.getPostByLocale(postRef, language);
-        if (post == null)
+        if (post == null) {
             post = new Post(author, language, title, content);
+            post.postReference = postRef;
+        }
         else {
             post.content = content;
             post.title = title;

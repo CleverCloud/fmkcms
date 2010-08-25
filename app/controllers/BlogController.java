@@ -12,6 +12,7 @@ import play.mvc.Controller;
 /**
  *
  * @author clementnivolle
+ * @author keruspe
  */
 public class BlogController extends Controller {
 
