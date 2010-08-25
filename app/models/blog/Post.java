@@ -137,15 +137,15 @@ public class Post extends Model {
         return returnList;
     }
 
-    static Post getPostByLocale(PostRef postRef, Locale language) {
+    public static Post getPostByLocale(PostRef postRef, Locale language) {
         return Post.find("byPostRefereneceAndLanguage", postRef, language).first();
     }
 
-    static List<Post> getPostsByPostRef(PostRef postRef) {
+    public static List<Post> getPostsByPostRef(PostRef postRef) {
         return Post.find("byPostReference", postRef).fetch();
     }
 
-    static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
+    public static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
         Post post = Post.getPostByLocale(postRef, language);
         if (post == null)
             post = new Post(author, language, title, content);
@@ -161,7 +161,7 @@ public class Post extends Model {
         return post.save();
     }
 
-    static Post getDefaultPost(PostRef postRef) {
+    public static Post getDefaultPost(PostRef postRef) {
         return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
     }
 
