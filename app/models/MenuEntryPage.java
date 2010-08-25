@@ -1,5 +1,6 @@
 package models;
 
+import controllers.I18nController;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Entity;
@@ -15,7 +16,10 @@ public class MenuEntryPage extends MenuEntry{
     public String urlid;
 
     public String getTitle() {
-        return Page.getByUrlId(urlid).title;
+        PageRef pageRef = PageRef.getByUrlId(urlid);
+        if (pageRef == null)
+            return null;
+        return pageRef.getPage(I18nController.getBrowserLanguages()).title;
     }
 
     public String getLink() {

@@ -4,6 +4,7 @@ import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -60,14 +61,6 @@ public class Page extends Model {
         this.language = language;
     }
 
-    public static Page getByUrlId(String urlId) {
-        if (urlId == null)
-            return null;
-        
-        Page p = Page.find("urlId = ?", urlId).first();
-        return p;
-    }
-
     public Page publish() {
         this.published = true;
         return this.save();
@@ -108,7 +101,7 @@ public class Page extends Model {
     }
 
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
-        return Page.find("byPageRefereneceAndLanguage", pageRef, language).first();
+        return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
     }
 
     public static List<Page> getPagesByPageRef(PageRef pageRef) {

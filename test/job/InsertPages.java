@@ -28,15 +28,16 @@ public class InsertPages extends Job {
         if (lp != null) {
             for (Page page : lp) {
                 page.id = null;
+                page.pageReference.id = null;
                 Set<Tag> st = new TreeSet<Tag>();
                 for (Tag tag : page.pageReference.tags) {
                     st.add(Tag.findOrCreateByName(tag.name));
                 }
                 page.pageReference.tags = st;
-                page.pageReference.save();
+                page.pageReference = page.pageReference.save();
                 page.save();
             }
         }
     }
-    
+
 }

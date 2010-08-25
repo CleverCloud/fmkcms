@@ -138,7 +138,7 @@ public class Post extends Model {
     }
 
     public static Post getPostByLocale(PostRef postRef, Locale language) {
-        return Post.find("byPostRefereneceAndLanguage", postRef, language).first();
+        return Post.find("byPostReferenceAndLanguage", postRef, language).first();
     }
 
     public static List<Post> getPostsByPostRef(PostRef postRef) {
