@@ -2,7 +2,9 @@ package models;
 
 import controllers.UseCRUDFieldProvider;
 import crud.TagsField;
+import javax.persistence.Entity;
 import java.util.Locale;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
@@ -36,9 +38,9 @@ public class PageRef extends Model {
         return this.save();
     }
     
-    public static List<Page> findTaggedWith(String tag) {
-        return Page.find(
-                "select distinct p from Page p join p.tags as t where t.name = ?", tag).fetch();
+    public static List<PageRef> findTaggedWith(String ... tags) {
+        return PageRef.find(
+                "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
     }
     
     public PageRef addTranslation(String title, String content, Locale language) {

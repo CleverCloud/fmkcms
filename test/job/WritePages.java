@@ -28,6 +28,6 @@ public class WritePages extends Job {
 
         fw.write(gson.toJson(Page.findAll()));
         fw.flush();
-        
     }
+    
 }
