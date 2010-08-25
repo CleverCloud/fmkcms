@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import models.Tag;
 import play.Logger;
-import play.data.validation.Required;
 import play.db.jpa.Model;
 
 /**
@@ -71,10 +70,10 @@ public class PostRef extends Model {
         }
 
         // Return default
-        return this.getDefaultData();
+        return this.getDefaultPost();
     }
 
-    public Post getDefaultData() {
+    public Post getDefaultPost() {
         return Post.getDefaultPost(this);
     }
 
