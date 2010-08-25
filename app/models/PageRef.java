@@ -18,6 +18,7 @@ import play.db.jpa.Model;
  *
  * @author keruspe
  */
+@Entity
 public class PageRef extends Model {
 
     @Required
