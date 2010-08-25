@@ -1,6 +1,8 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -36,17 +38,23 @@ public class PageController extends Controller {
             notFound();
 
         if (request.headers.get("accept").value().contains("json")) {
-            renderJSON(pageRef);
+            renderJSON(page);
         }
 
-        render(pageRef);
+        render(page);
     }
 
     public static void pagesTag(String tagName) {
         Tag tag = Tag.findOrCreateByName(tagName);
         List<PageRef> listOfPageRefs = PageRef.findTaggedWith(tagName);
 
-        render(listOfPageRefs, tag);
+        List<Page> listOfPages = new ArrayList<Page>();
+        List<Locale> locales = I18nController.getBrowserLanguages();
+        for (PageRef pageRef : listOfPageRefs) {
+            listOfPages.add(pageRef.getPage(locales));
+        }
+
+        render(listOfPages, tag);
     }
 
     /*public static void searchPage(String q) {
