@@ -6,9 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import models.blog.User;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.IndexedEmbedded;
 import play.db.jpa.Model;
@@ -18,9 +16,6 @@ import play.db.jpa.Model;
  * @author keruspe
  */
 public class PageRef extends Model {
-
-    @ManyToOne
-    public User author;
 
     @IndexedEmbedded
     @ManyToMany(cascade = CascadeType.PERSIST)
