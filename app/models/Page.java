@@ -1,21 +1,15 @@
 package models;
 
 import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
-import java.util.List;
+import crud.BooleanField;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
+import javax.persistence.ManyToOne;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -45,20 +39,18 @@ public class Page extends Model {
     @Boost(3.5f)
     public String urlId;
 
-    @IndexedEmbedded
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @Boost(1.0f)
-    @UseCRUDFieldProvider(TagsField.class)
-    public Set<Tag> tags;
-
     @Required
     public Locale lang;
 
-    //@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    // TODO: Handle Map with CRUD
-    //public Map<Locale, Page> otherLanguages;
+    @Required
+    @UseCRUDFieldProvider(BooleanField.class)
+    public Boolean isDefaultLanguage = false;
+
+    @ManyToOne
+    public PageRef pageReference;
     
     @Required
+    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
 
     public static Page getByUrlId(String urlId) {
@@ -67,11 +59,6 @@ public class Page extends Model {
         
         Page p = Page.find("urlId = ?", urlId).first();
         return p;
-    }
-
-    public Page tagItWith(String name) {
-        this.tags.add(Tag.findOrCreateByName(name));
-        return this.save();
     }
 
     public Page publish() {
@@ -124,23 +111,5 @@ public class Page extends Model {
         this.lang = lang;
         this.save();
     }*/
-
-    public static List<Page> findTaggedWith(String tag) {
-        return Page.find(
-                "select distinct p from Page p join p.tags as t where t.name = ?", tag).fetch();
-    }
-
-    @PrePersist
-    public void tagsManagement() {
-        if (tags != null) {
-            Set<Tag> newTags = new TreeSet<Tag>();
-            for (Tag tag : this.tags) {
-                newTags.add(Tag.findOrCreateByName(tag.name));
-            }
-            this.tags = newTags;
-        }
-    }
-
-
-
+    
 }
