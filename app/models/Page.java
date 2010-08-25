@@ -2,6 +2,7 @@ package models;
 
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
+import java.util.List;
 import java.util.Locale;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
