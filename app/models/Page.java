@@ -25,7 +25,7 @@ import play.db.jpa.Model;
  * @author waxzce
  * @author keruspe
  */
-// TODO: avoid duplicate translations
+// TODO: avoid duplicate translations -> just need to abort persist
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
 @Indexed(index = "fmkpage")
@@ -228,7 +228,6 @@ public class Page extends Model {
                 page.title = this.title;
                 page.content = this.content;
                 page.save();
-                this.willBeSaved = false;
             }
         }
     }

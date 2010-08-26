@@ -25,7 +25,7 @@ import play.db.jpa.Model;
  *
  * @author keruspe
  */
-// TODO: avoid duplicate translations
+// TODO: avoid duplicate translations -> just need to abort persist
 // TODO: Why does hibernate still complains about duplicate comments ?
 // TODO: Remove defaultPost from PostRef when only one
 @Entity
@@ -278,7 +278,6 @@ public class Post extends Model {
                 post.postedAt = this.postedAt;
                 post.comments = this.comments;
                 post.save();
-                this.willBeSaved = false;
             }
         }
     }
