@@ -62,14 +62,8 @@ public class BlogController extends Controller {
     }
 
     public static void listTagged(String tag) {
-        List<PostRef> postRefs = PostRef.findTaggedWith(tag);
-        List<Locale> locales = I18nController.getBrowserLanguages();
-        List<Post> posts = new ArrayList<Post>();
-
-        for (PostRef postRef : postRefs) {
-            posts.add(postRef.getPost(locales));
-        }
-
+        List<Post> posts = Post.findTaggedWith(tag);
+        
         render(tag, posts);
     }
 

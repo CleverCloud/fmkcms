@@ -1,5 +1,6 @@
 package models.blog;
 
+import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import models.Tag;
 import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -93,6 +95,59 @@ public class Post extends Model {
         }
 
         return this.save();
+    }
+
+    public Post tagItWith(String name) {
+        this.postReference.tags.add(Tag.findOrCreateByName(name));
+        this.postReference.save();
+        return this;
+    }
+
+    public static List<Post> findTaggedWith(String ... tags) {
+        List<PostRef> postRefs = PostRef.find(
+                "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
+        
+        List<Post> posts = new ArrayList<Post>();
+        for (PostRef postRef : postRefs) {
+            posts.add(postRef.getPost(I18nController.getBrowserLanguages()));
+        }
+
+        return posts;
+    }
+
+    public Post addTranslation(User author, Locale language, String title, String content) {
+        if (this.language.equals(language)) {
+            this.author = author;
+            this.title = title;
+            this.content = content;
+            return this.save();
+        }
+
+        Post concurrent = Post.getPostByLocale(this.postReference, language);
+        if (concurrent != null) {
+            concurrent.author = author;
+            concurrent.title = title;
+            concurrent.content = content;
+            concurrent.save();
+        } else
+            Post.editOrCreate(this.postReference, author, language, title, content);
+
+        return this;
+    }
+
+    public Post removeTranslation(Locale language) {
+        if (this.language.equals(language)) {
+            Logger.error("Cannot self remove, please remove from another translation (the default one ?).", new Object[0]);
+            return this;
+        }
+        
+        Post post = Post.getPostByLocale(this.postReference, language);
+
+        if (post.isDefaultLanguage)
+            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
+
+        post.delete();
+        return this;
     }
 
     public Post setAsDefaultLanguage() {

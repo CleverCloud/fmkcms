@@ -31,19 +31,6 @@ public class PostRef extends Model {
     @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
-    public PostRef addTranslation(User author, Locale language, String title, String content) {
-        Post.editOrCreate(this, author, language, title, content);
-        return this;
-    }
-
-    public PostRef removeTranslation(Locale language) {
-        Post post = Post.getPostByLocale(this, language);
-        if (post.isDefaultLanguage)
-            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
-        post.delete();
-        return this;
-    }
-
     public Post getPost(List<Locale> languages) {
         Post post = null;
 
@@ -83,16 +70,6 @@ public class PostRef extends Model {
 
     public PostRef next() {
         return PostRef.find("postedAt > ? order by postedAt asc", postedAt).first();
-    }
-
-    public PostRef tagItWith(String name) {
-        this.tags.add(Tag.findOrCreateByName(name));
-        return this.save();
-    }
-
-    public static List<PostRef> findTaggedWith(String ... tags) {
-        return PostRef.find(
-                "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
     }
 
     @PrePersist
