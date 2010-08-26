@@ -25,7 +25,6 @@ import play.db.jpa.Model;
  *
  * @author keruspe
  */
-// TODO: avoid duplicate translations -> just need to abort persist
 // TODO: Why does hibernate still complains about duplicate comments ?
 // TODO: Remove defaultPost from PostRef when only one
 @Entity
@@ -255,7 +254,7 @@ public class Post extends Model {
     //
     @PrePersist
     @PreUpdate
-    public void prePersistManagement() {
+    public void prePersistManagement() throws Exception {
         if (this.postReference == null)
             this.postReference = new PostRef().save();
 
@@ -269,17 +268,8 @@ public class Post extends Model {
                 this.postReference.postedAt = this.postedAt;
                 this.postReference.save();
             }
-        } else {
-            Post post = Post.getPostByLocale(this.postReference, this.language);
-            if (post != null && (this.id == null || post.id != this.id)) {
-                post.author = this.author;
-                post.title = this.title;
-                post.content = this.content;
-                post.postedAt = this.postedAt;
-                post.comments = this.comments;
-                post.save();
-            }
-        }
+        } else if (Post.getPostByLocale(this.postReference, this.language) != null)
+            throw new Exception();
     }
 
 }

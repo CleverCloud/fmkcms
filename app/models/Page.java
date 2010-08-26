@@ -25,7 +25,6 @@ import play.db.jpa.Model;
  * @author waxzce
  * @author keruspe
  */
-// TODO: avoid duplicate translations -> just need to abort persist
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
 @Indexed(index = "fmkpage")
@@ -215,21 +214,14 @@ public class Page extends Model {
     //
     @PrePersist
     @PreUpdate
-    public void prePersistManagement() {
+    public void prePersistManagement() throws Exception {
         if (this.pageReference == null)
             this.pageReference = new PageRef().save();
 
         if (Page.getDefaultPage(this.pageReference) == null) // We are creating the first Page for the PageRef
             this.isDefaultLanguage = Boolean.TRUE;
-        else {
-            Page page = Page.getPageByLocale(this.pageReference, this.language);
-            if (page != null && (this.id == null || page.id != this.id)) {
-                page.published = this.published;
-                page.title = this.title;
-                page.content = this.content;
-                page.save();
-            }
-        }
+        else if (Page.getPageByLocale(this.pageReference, this.language) != null)
+            throw new Exception();
     }
     
 }
