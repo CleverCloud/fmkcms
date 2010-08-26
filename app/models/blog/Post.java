@@ -108,8 +108,9 @@ public class Post extends Model {
                 "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
         
         List<Post> posts = new ArrayList<Post>();
+        List<Locale> locales = I18nController.getBrowserLanguages();
         for (PostRef postRef : postRefs) {
-            posts.add(postRef.getPost(I18nController.getBrowserLanguages()));
+            posts.add(postRef.getPost(locales));
         }
 
         return posts;

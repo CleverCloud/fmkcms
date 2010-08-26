@@ -83,8 +83,9 @@ public class Page extends Model {
                 "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
         
         List<Page> pages = new ArrayList<Page>();
+        List<Locale> locales = I18nController.getBrowserLanguages();
         for (PageRef pageRef : pageRefs) {
-            pages.add(pageRef.getPage(I18nController.getBrowserLanguages()));
+            pages.add(pageRef.getPage(locales));
         }
         
         return pages;
