@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
@@ -24,10 +25,8 @@ import play.db.jpa.Model;
  * @author waxzce
  * @author keruspe
  */
-// TODO: avoid duplicate translations when changing PageRef
-// TODO: fix bug when creating 2nd Page with same PageRef
-// TODO: Why is @PrePersist only called the first time ?
-// TODO: Why does hibernate still complains about duplicate comments ?
+// TODO: avoid duplicate translations
+// TODO: Remove defaultPage from PageRef when only one
 @Entity
 @Indexed(index = "fmkpage")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
@@ -136,12 +135,10 @@ public class Page extends Model {
             defaultPage.save();
         }
 
-        if (! this.isDefaultLanguage) // Or we'll create a loop from the setter
-            this.isDefaultLanguage = Boolean.TRUE;
-
-        if (this.id == null) // We're creating it
+        if (this.isDefaultLanguage) // Or we'll create a loop from the setter
             return this;
 
+        this.isDefaultLanguage = Boolean.TRUE;
         return this.save();
     }
 
@@ -149,7 +146,7 @@ public class Page extends Model {
     // Setters
     //
     public void setPageReference(PageRef pageReference) {
-        if (pageReference != null && this.isDefaultLanguage)
+        if (pageReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage)
                 this.setAsDefaultLanguage();
 
         this.pageReference = pageReference;
@@ -217,13 +214,23 @@ public class Page extends Model {
     // Hooks
     //
     @PrePersist
+    @PreUpdate
     public void prePersistManagement() {
         if (this.pageReference == null)
             this.pageReference = new PageRef().save();
 
-        Page defaultPage = Page.getDefaultPage(this.pageReference);
-        if (defaultPage == null) // We are creating the first Page for the PageRef
+        if (Page.getDefaultPage(this.pageReference) == null) // We are creating the first Page for the PageRef
             this.isDefaultLanguage = Boolean.TRUE;
+        else {
+            Page page = Page.getPageByLocale(this.pageReference, this.language);
+            if (page != null && (this.id == null || page.id != this.id)) {
+                page.published = this.published;
+                page.title = this.title;
+                page.content = this.content;
+                page.save();
+                this.willBeSaved = false;
+            }
+        }
     }
     
 }

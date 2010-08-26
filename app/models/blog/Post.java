@@ -15,6 +15,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import models.Tag;
 import play.Logger;
 import play.data.validation.Required;
@@ -24,10 +25,9 @@ import play.db.jpa.Model;
  *
  * @author keruspe
  */
-// TODO: avoid duplicate translations when changing PostRef
-// TODO: fix bug when creating 2nd Post with same PostRef
-// TODO: Why is @PrePersist only called the first time ?
+// TODO: avoid duplicate translations
 // TODO: Why does hibernate still complains about duplicate comments ?
+// TODO: Remove defaultPost from PostRef when only one
 @Entity
 public class Post extends Model {
 
@@ -189,12 +189,10 @@ public class Post extends Model {
             defaultPost.save();
         }
 
-        if (! this.isDefaultLanguage) // Or we'll create a loop from the setter
-            this.isDefaultLanguage = Boolean.TRUE;
-
-        if (this.id == null) // We're creating it
+        if (this.isDefaultLanguage) // Or we'll create a loop from the setter
             return this;
 
+        this.isDefaultLanguage = Boolean.TRUE;
         return this.save();
     }
 
@@ -210,7 +208,7 @@ public class Post extends Model {
     }
 
     public void setPostReference(PostRef postReference) {
-        if (postReference != null && this.isDefaultLanguage)
+        if (postReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage)
                 this.setAsDefaultLanguage();
 
         this.postReference = postReference;
@@ -256,6 +254,7 @@ public class Post extends Model {
     // Hooks
     //
     @PrePersist
+    @PreUpdate
     public void prePersistManagement() {
         if (this.postReference == null)
             this.postReference = new PostRef().save();
@@ -263,12 +262,24 @@ public class Post extends Model {
         if (this.postedAt == null)
             this.postedAt = new Date();
 
-        Post defaultPost = Post.getDefaultPost(this.postReference);
-        if (defaultPost == null) { // We are creating the first Post for the PostRef
+        if (Post.getDefaultPost(this.postReference) == null) { // We are creating the first Post for the PostRef
             this.isDefaultLanguage = Boolean.TRUE;
-            this.postReference.author = this.author;
-            this.postReference.postedAt = this.postedAt;
-            this.postReference.save();
+            if (this.postReference.author == null || this.postReference.postedAt == null) {
+                this.postReference.author = this.author;
+                this.postReference.postedAt = this.postedAt;
+                this.postReference.save();
+            }
+        } else {
+            Post post = Post.getPostByLocale(this.postReference, this.language);
+            if (post != null && (this.id == null || post.id != this.id)) {
+                post.author = this.author;
+                post.title = this.title;
+                post.content = this.content;
+                post.postedAt = this.postedAt;
+                post.comments = this.comments;
+                post.save();
+                this.willBeSaved = false;
+            }
         }
     }
 
