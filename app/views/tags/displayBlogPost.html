@@ -16,7 +16,15 @@
                 &nbsp;|&nbsp; ${_post.comments.size() ?: 'no'}
                 comment${_post.comments.size().pluralize()}
                 #{if _post.comments}
-                    , latest by ${_post.comments[_post.comments.size()-1].author}
+                    #{if _post.comments[_post.comments.size()-1].user}
+                        , latest by ${_post.comments[_post.comments.size()-1].user}
+                    #{/if}
+                    #{elseif _post.comments[_post.comments.size()-1].pseudo}
+                        , latest by ${_post.comments[_post.comments.size()-1].pseudo}
+                    #{/elseif}
+                    #{else}
+                        , latest by ${_post.comments[_post.comments.size()-1].email}
+                    #{/else}
                 #{/if}
             </span>
         #{/if}
