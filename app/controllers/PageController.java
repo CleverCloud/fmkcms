@@ -1,13 +1,10 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import models.Page;
-import models.PageRef;
 import models.Tag;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -30,11 +27,7 @@ import play.mvc.With;
 public class PageController extends Controller {
 
     public static void page(String urlId) {
-        PageRef pageRef = PageRef.getByUrlId(urlId);
-        if (pageRef == null)
-            notFound();
-
-        Page page = pageRef.getPage(I18nController.getBrowserLanguages());
+        Page page = Page.getByUrlId(urlId);
         if (page == null || ! page.published)
             notFound();
 
@@ -47,13 +40,7 @@ public class PageController extends Controller {
 
     public static void pagesTag(String tagName) {
         Tag tag = Tag.findOrCreateByName(tagName);
-        List<PageRef> listOfPageRefs = PageRef.findTaggedWith(tagName);
-
-        List<Page> listOfPages = new ArrayList<Page>();
-        List<Locale> locales = I18nController.getBrowserLanguages();
-        for (PageRef pageRef : listOfPageRefs) {
-            listOfPages.add(pageRef.getPage(locales));
-        }
+        List<Page> listOfPages = Page.findTaggedWith(tagName);
 
         render(listOfPages, tag);
     }

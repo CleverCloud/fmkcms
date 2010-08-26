@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -33,33 +32,6 @@ public class PageRef extends Model {
     @Boost(1.0f)
     @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
-
-    public Page tagItWith(String name) {
-        this.tags.add(Tag.findOrCreateByName(name));
-        return this.save();
-    }
-    
-    public static List<PageRef> findTaggedWith(String ... tags) {
-        return PageRef.find(
-                "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
-    }
-    
-    public PageRef addTranslation(String title, String content, Locale language) {
-        Page.editOrCreate(this, title, content, language);
-        return this;
-    }
-
-    public PageRef removeTranslation(Locale language) {
-        Page page = Page.getPageByLocale(this, language);
-        if (page.isDefaultLanguage)
-            Logger.error("Cannot remove translation for default language for: " + page.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
-        page.delete();
-        return this;
-    }
-
-    public static PageRef getByUrlId(String urlId) {
-        return PageRef.find("byUrlId", urlId).first();
-    }
 
     public Page getPage(List<Locale> languages) {
         Page page = null;
