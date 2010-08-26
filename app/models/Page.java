@@ -72,6 +72,17 @@ public class Page extends Model {
         return this.save();
     }
 
+    public void setPageReference(PageRef pageReference) {
+        if (pageReference != null) {
+            if (this.isDefaultLanguage)
+                this.setAsDefaultLanguage();
+            else if (pageReference.getDefaultPage() == null)
+                this.isDefaultLanguage = Boolean.TRUE;
+        }
+
+        this.pageReference = pageReference;
+    }
+
     public Page tagItWith(String name) {
         this.pageReference.tags.add(Tag.findOrCreateByName(name));
         this.pageReference.save();
@@ -148,14 +159,11 @@ public class Page extends Model {
     }
 
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
-        if (isDefaultLanguage) {
-            this.isDefaultLanguage = Boolean.TRUE;
+        this.isDefaultLanguage = isDefaultLanguage;
+        if (this.isDefaultLanguage)
             this.setAsDefaultLanguage();
-        }
-        else if (this.isDefaultLanguage != null && this.isDefaultLanguage)
-            Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
-        else
-            this.isDefaultLanguage = isDefaultLanguage;
+        // TODO: prevent from removing default
+        //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
     }
 
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
