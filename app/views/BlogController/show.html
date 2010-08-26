@@ -9,7 +9,7 @@
             </a>
         </li>
     #{/if}
-    #{if postRef.next()}
+    #{if post.postReference.next()}
         <li id="next">
             <a href="@{BlogController.show(post.postReference.next().id)}">
                 ${post.postReference.next().getPost(controllers.I18nController.getBrowserLanguages()).title}
