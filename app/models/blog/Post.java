@@ -261,15 +261,19 @@ public class Post extends Model {
         if (this.postedAt == null)
             this.postedAt = new Date();
 
-        if (Post.getDefaultPost(this.postReference) == null) { // We are creating the first Post for the PostRef
+        Post post = Post.getDefaultPost(this.postReference);
+        if (post == null || (this.id != null && this.id == post.id)) { // We are creating the first Post for the PostRef
             this.isDefaultLanguage = Boolean.TRUE;
             if (this.postReference.author == null || this.postReference.postedAt == null) {
                 this.postReference.author = this.author;
                 this.postReference.postedAt = this.postedAt;
                 this.postReference.save();
             }
-        } else if (Post.getPostByLocale(this.postReference, this.language) != null)
-            throw new Exception();
+        } else {
+            post = Post.getPostByLocale(this.postReference, this.language);
+            if (post != null && (this.id ==null || this.id != post.id))
+                throw new Exception();
+        }
     }
 
 }

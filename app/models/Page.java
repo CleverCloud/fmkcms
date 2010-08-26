@@ -218,10 +218,14 @@ public class Page extends Model {
         if (this.pageReference == null)
             this.pageReference = new PageRef().save();
 
-        if (Page.getDefaultPage(this.pageReference) == null) // We are creating the first Page for the PageRef
+        Page page = Page.getDefaultPage(this.pageReference);
+        if (page == null || (this.id != null && this.id == page.id)) // We are creating the first Page for the PageRef
             this.isDefaultLanguage = Boolean.TRUE;
-        else if (Page.getPageByLocale(this.pageReference, this.language) != null)
-            throw new Exception();
+        else {
+            page = Page.getPageByLocale(this.pageReference, this.language);
+            if (page != null && (this.id ==null || this.id != page.id))
+                throw new Exception();
+        }
     }
     
 }
