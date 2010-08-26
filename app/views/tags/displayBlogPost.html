@@ -56,6 +56,15 @@
             <div class="comment">
                 <div class="comment-metadata">
                     <span class="comment-author">by ${comment.author},</span>
+                        #{if comment.user}
+                            by ${comment.user},
+                        #{/if}
+                        #{elseif comment.pseudo}
+                            by ${comment.pseudo},
+                        #{/elseif}
+                        #{else}
+                            by ${comment.email},
+                        #{/else}
                     <span class="comment-date">
                         ${comment.postedAt.format('dd MMM yy')}
                     </span>
