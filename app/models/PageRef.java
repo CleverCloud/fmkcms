@@ -22,7 +22,7 @@ import play.db.jpa.Model;
 @Entity
 public class PageRef extends Model {
 
-    // TODO: Decide whether we put that interface Page
+    // TODO: Decide whether we put that in Page
     @Required
     @Boost(3.5f)
     public String urlId;
@@ -33,6 +33,9 @@ public class PageRef extends Model {
     @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
+    //
+    // Accessing stuff
+    //
     public Page getPage(List<Locale> languages) {
         Page page = null;
 
@@ -66,6 +69,9 @@ public class PageRef extends Model {
         return Page.getDefaultPage(this);
     }
 
+    //
+    // Hooks
+    //
     @PrePersist
     public void tagsManagement() {
         if (tags != null) {

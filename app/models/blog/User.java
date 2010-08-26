@@ -14,6 +14,7 @@ import play.libs.Crypto;
  *
  * @author keruspe
  */
+// TODO: This will go abstract when test phase is over
 @Entity
 public class User extends Model {
 

@@ -60,29 +60,18 @@ public class Page extends Model {
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
 
+    //
+    // Constructor
+    //
     private Page(String title, String content, Locale language) {
         this.title = title;
         this.content = content;
         this.language = language;
     }
 
-    public Page publish() {
-        this.published = true;
-        return this.save();
-    }
-
-    public Page unPublish() {
-        this.published = false;
-        return this.save();
-    }
-
-    public void setPageReference(PageRef pageReference) {
-        if (pageReference != null && this.isDefaultLanguage)
-                this.setAsDefaultLanguage();
-
-        this.pageReference = pageReference;
-    }
-
+    //
+    // Tags handling
+    //
     public Page tagItWith(String name) {
         this.pageReference.tags.add(Tag.findOrCreateByName(name));
         this.pageReference.save();
@@ -92,16 +81,19 @@ public class Page extends Model {
     public static List<Page> findTaggedWith(String ... tags) {
         List<PageRef> pageRefs = PageRef.find(
                 "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
-        
+
         List<Page> pages = new ArrayList<Page>();
         List<Locale> locales = I18nController.getBrowserLanguages();
         for (PageRef pageRef : pageRefs) {
             pages.add(pageRef.getPage(locales));
         }
-        
+
         return pages;
     }
 
+    //
+    // I18n handling
+    //
     public Page addTranslation(String title, String content, Locale language) {
         if (language.equals(this.language)) {
             this.title = title;
@@ -135,11 +127,6 @@ public class Page extends Model {
         return this;
     }
 
-    public static Page getByUrlId(String urlId) {
-        PageRef pageRef = PageRef.find("byUrlId", urlId).first();
-        return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
-    }
-
     public Page setAsDefaultLanguage() {
         Page defaultPage = Page.getDefaultPage(this.pageReference);
         if (defaultPage != null) {
@@ -158,6 +145,16 @@ public class Page extends Model {
         return this.save();
     }
 
+    //
+    // Setters
+    //
+    public void setPageReference(PageRef pageReference) {
+        if (pageReference != null && this.isDefaultLanguage)
+                this.setAsDefaultLanguage();
+
+        this.pageReference = pageReference;
+    }
+
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
         this.isDefaultLanguage = isDefaultLanguage;
         if (this.isDefaultLanguage)
@@ -166,12 +163,37 @@ public class Page extends Model {
         //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
     }
 
+    //
+    // Accessing stuff
+    //
+    public static Page getByUrlId(String urlId) {
+        PageRef pageRef = PageRef.find("byUrlId", urlId).first();
+        return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
+    }
+
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
         return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
     }
 
     public static List<Page> getPagesByPageRef(PageRef pageRef) {
         return Page.find("byPageReference", pageRef).fetch();
+    }
+
+    public static Page getDefaultPage(PageRef pageRef) {
+        return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
+    }
+
+    //
+    // Managing stuff
+    //
+    public Page publish() {
+        this.published = true;
+        return this.save();
+    }
+
+    public Page unPublish() {
+        this.published = false;
+        return this.save();
     }
 
     public static Page editOrCreate(PageRef pageRef, String title, String content, Locale language) {
@@ -191,10 +213,9 @@ public class Page extends Model {
         return page.save();
     }
 
-    public static Page getDefaultPage(PageRef pageRef) {
-        return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
-    }
-
+    //
+    // Hooks
+    //
     @PrePersist
     public void prePersistManagement() {
         if (this.pageReference == null)

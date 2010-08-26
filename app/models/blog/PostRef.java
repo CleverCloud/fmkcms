@@ -31,6 +31,9 @@ public class PostRef extends Model {
     @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
+    //
+    // Accessing stuff
+    //
     public Post getPost(List<Locale> languages) {
         Post post = null;
 
@@ -72,6 +75,9 @@ public class PostRef extends Model {
         return PostRef.find("postedAt > ? order by postedAt asc", postedAt).first();
     }
 
+    //
+    // Hooks
+    //
     @PrePersist
     public void tagsManagement() {
         if (tags != null) {

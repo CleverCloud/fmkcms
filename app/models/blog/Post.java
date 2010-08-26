@@ -57,6 +57,9 @@ public class Post extends Model {
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     public List<Comment> comments;
 
+    //
+    // Constructor
+    //
     private Post(User author, Locale language, String title, String content) {
         this.author = author;
         this.language = language;
@@ -64,6 +67,9 @@ public class Post extends Model {
         this.content = content;
     }
 
+    //
+    // Comments handling
+    //
     public Post addComment(String email, String pseudo, String password, String content) {
         Comment comment = null;
         if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
@@ -101,6 +107,22 @@ public class Post extends Model {
         return this.save();
     }
 
+    public Post removeComment(String email, String content) {
+        return this.removeComment(email, content, false);
+    }
+
+    public List<Comment> getComments(String email) {
+        List<Comment> returnList = new ArrayList<Comment>();
+        for (Comment current : this.comments) {
+            if (current.email.equalsIgnoreCase(email))
+                returnList.add(current);
+        }
+        return returnList;
+    }
+
+    //
+    // Tags handling
+    //
     public Post tagItWith(String name) {
         this.postReference.tags.add(Tag.findOrCreateByName(name));
         this.postReference.save();
@@ -120,6 +142,9 @@ public class Post extends Model {
         return posts;
     }
 
+    //
+    // I18n handling
+    //
     public Post addTranslation(User author, Locale language, String title, String content) {
         if (this.language.equals(language)) {
             this.author = author;
@@ -173,6 +198,9 @@ public class Post extends Model {
         return this.save();
     }
 
+    //
+    // Setters
+    //
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
         this.isDefaultLanguage = isDefaultLanguage;
         if (this.isDefaultLanguage)
@@ -188,19 +216,9 @@ public class Post extends Model {
         this.postReference = postReference;
     }
 
-    public Post removeComment(String email, String content) {
-        return this.removeComment(email, content, false);
-    }
-
-    public List<Comment> getComments(String email) {
-        List<Comment> returnList = new ArrayList<Comment>();
-        for (Comment current : this.comments) {
-            if (current.email.equalsIgnoreCase(email))
-                returnList.add(current);
-        }
-        return returnList;
-    }
-
+    //
+    // Accessing stuff
+    //
     public static Post getPostByLocale(PostRef postRef, Locale language) {
         return Post.find("byPostReferenceAndLanguage", postRef, language).first();
     }
@@ -209,6 +227,13 @@ public class Post extends Model {
         return Post.find("byPostReference", postRef).fetch();
     }
 
+    public static Post getDefaultPost(PostRef postRef) {
+        return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
+    }
+
+    //
+    // Managing stuff
+    //
     public static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
         Post post = Post.getPostByLocale(postRef, language);
         if (post == null) {
@@ -227,10 +252,9 @@ public class Post extends Model {
         return post.save();
     }
 
-    public static Post getDefaultPost(PostRef postRef) {
-        return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
-    }
-
+    //
+    // Hooks
+    //
     @PrePersist
     public void prePersistManagement() {
         if (this.postReference == null)
