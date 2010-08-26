@@ -24,6 +24,10 @@ import play.db.jpa.Model;
  * @author waxzce
  * @author keruspe
  */
+// TODO: avoid duplicate translations when changing PageRef
+// TODO: fix bug when creating 2nd Page with same PageRef
+// TODO: Why is @PrePersist only called the first time ?
+// TODO: Why does hibernate still complains about duplicate comments ?
 @Entity
 @Indexed(index = "fmkpage")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")

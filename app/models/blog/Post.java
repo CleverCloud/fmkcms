@@ -24,6 +24,10 @@ import play.db.jpa.Model;
  *
  * @author keruspe
  */
+// TODO: avoid duplicate translations when changing PostRef
+// TODO: fix bug when creating 2nd Post with same PostRef
+// TODO: Why is @PrePersist only called the first time ?
+// TODO: Why does hibernate still complains about duplicate comments ?
 @Entity
 public class Post extends Model {
 
