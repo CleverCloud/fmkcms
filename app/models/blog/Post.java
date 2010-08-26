@@ -228,17 +228,15 @@ public class Post extends Model {
         if (this.postReference == null)
             this.postReference = new PostRef().save();
 
-        Post defaultPost = Post.getDefaultPost(this.postReference);
-        if (defaultPost == null) // We are creating the first Post for the PostRef
-            this.isDefaultLanguage = Boolean.TRUE;
-        
-        if (this.postedAt == null) {
+        if (this.postedAt == null)
             this.postedAt = new Date();
-            if (this.postReference.postedAt == null) {
-                this.postReference.author = this.author;
-                this.postReference.postedAt = this.postedAt;
-                this.postReference.save();
-            }
+
+        Post defaultPost = Post.getDefaultPost(this.postReference);
+        if (defaultPost == null) { // We are creating the first Post for the PostRef
+            this.isDefaultLanguage = Boolean.TRUE;
+            this.postReference.author = this.author;
+            this.postReference.postedAt = this.postedAt;
+            this.postReference.save();
         }
     }
 
