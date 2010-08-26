@@ -234,7 +234,7 @@ public class Post extends Model {
         
         if (this.postedAt == null) {
             this.postedAt = new Date();
-            if (this.isDefaultLanguage) {
+            if (this.postReference.postedAt == null) {
                 this.postReference.author = this.author;
                 this.postReference.postedAt = this.postedAt;
                 this.postReference.save();
