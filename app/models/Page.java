@@ -73,12 +73,8 @@ public class Page extends Model {
     }
 
     public void setPageReference(PageRef pageReference) {
-        if (pageReference != null) {
-            if (this.isDefaultLanguage)
+        if (pageReference != null && this.isDefaultLanguage)
                 this.setAsDefaultLanguage();
-            else if (pageReference.getDefaultPage() == null)
-                this.isDefaultLanguage = Boolean.TRUE;
-        }
 
         this.pageReference = pageReference;
     }

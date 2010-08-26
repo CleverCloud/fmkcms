@@ -178,12 +178,8 @@ public class Post extends Model {
     }
 
     public void setPostReference(PostRef postReference) {
-        if (postReference != null) {
-            if (this.isDefaultLanguage)
+        if (postReference != null && this.isDefaultLanguage)
                 this.setAsDefaultLanguage();
-            else if (postReference.getDefaultPost() == null)
-                this.isDefaultLanguage = Boolean.TRUE;
-        }
 
         this.postReference = postReference;
     }
