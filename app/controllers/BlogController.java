@@ -28,8 +28,12 @@ public class BlogController extends Controller {
 
     public static void show(Long id) {
         PostRef postRef = PostRef.findById(id);
+        if (postRef == null)
+            notFound();
+
         Post post = postRef.getPost(I18nController.getBrowserLanguages());
         String randomID = Codec.UUID();
+
         render(post, randomID);
     }
 
