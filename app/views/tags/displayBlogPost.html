@@ -55,7 +55,7 @@
         #{list items:_post.comments, as:'comment'}
             <div class="comment">
                 <div class="comment-metadata">
-                    <span class="comment-author">by ${comment.author},</span>
+                    <span class="comment-author">
                         #{if comment.user}
                             by ${comment.user},
                         #{/if}
@@ -65,6 +65,7 @@
                         #{else}
                             by ${comment.email},
                         #{/else}
+                    </span>
                     <span class="comment-date">
                         ${comment.postedAt.format('dd MMM yy')}
                     </span>
