@@ -23,6 +23,7 @@ import play.db.jpa.Model;
 @Entity
 public class PageRef extends Model {
 
+    // TODO: Decide whether we put that interface Page
     @Required
     @Boost(3.5f)
     public String urlId;
