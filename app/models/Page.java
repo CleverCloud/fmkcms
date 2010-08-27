@@ -3,9 +3,11 @@ package models;
 import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
+import crud.PageRefField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -52,6 +54,7 @@ public class Page extends Model {
 
     @Required
     @ManyToOne
+    @UseCRUDFieldProvider(PageRefField.class)
     public PageRef pageReference;
     
     @Required
