@@ -5,14 +5,17 @@
 package elasticsearch;
 
 import com.google.gson.Gson;
-import org.elasticsearch.action.index.IndexRequest;
+import java.io.File;
+import java.io.FileInputStream;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.io.stream.InputStreamStreamInput;
+import org.elasticsearch.common.io.stream.StreamInput;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.node.Node;
+import play.Play;
 import play.jobs.Job;
 
 /**
@@ -34,12 +37,14 @@ public class IndexJob extends Job<String> {
     @Override
     public String doJobWithResult() throws Exception {
         Gson gson = new Gson();
-        Settings s = ImmutableSettings.settingsBuilder().put("cluster.name", "fmkcms").build();
+        String separator = System.getProperties().getProperty("file.separator");
+        
+        File conffile = Play.getVirtualFile("conf" + separator + "elasticsearch.json").getRealFile();
+        //Settings s = ImmutableSettings.readSettingsFromStream(new InputStreamStreamInput(new FileInputStream(conffile)));
+        Settings s = ImmutableSettings.settingsBuilder().loadFromClasspath(conffile.getAbsolutePath()).build();
 
-        Client c = new TransportClient(s).addTransportAddress(new InetSocketTransportAddress("localhost", 9301));
-        System.out.println(s.get("cluster.name"));
+        Client c = new TransportClient(s).addTransportAddress(new InetSocketTransportAddress(Play.configuration.getProperty("elasticsearch.host"), Integer.parseInt(Play.configuration.getProperty("elasticsearch.port"))));
         String t = gson.toJson(indexable);
-        System.out.println(t);
 
         IndexResponse response = c.prepareIndex("fmkcms", indexname, id).setSource(t).execute().actionGet();
         c.close();

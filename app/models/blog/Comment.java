@@ -4,15 +4,15 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
+import mongo.MongoEntity;
 import play.data.validation.Required;
-import play.db.jpa.Model;
 
 /**
  *
  * @author keruspe
  */
 @Entity
-public class Comment extends Model {
+public class Comment extends MongoEntity {
 
     @Required
     public String email;
@@ -35,8 +35,8 @@ public class Comment extends Model {
     }
 
     public Comment(User user, String content) {
-        this.email = user.email;
-        this.pseudo = user.pseudo;
+        this.email = user.getEmail();
+        this.pseudo = user.getPseudo();
         this.user = user;
         this.content = content;
         this.postedAt = new Date();
