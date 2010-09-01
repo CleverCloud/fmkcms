@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 import play.Logger;
+import play.Play;
+import play.PlayConfiguration;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
