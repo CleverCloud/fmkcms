@@ -1,7 +1,7 @@
 package models.blog;
 
+import com.google.code.morphia.annotations.Entity;
 import java.util.Date;
-import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import mongo.MongoEntity;

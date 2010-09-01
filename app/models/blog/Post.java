@@ -1,15 +1,13 @@
 package models.blog;
 
+import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
-import controllers.UseCRUDFieldProvider;
-import crud.BooleanField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import javax.persistence.CascadeType;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;

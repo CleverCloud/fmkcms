@@ -4,7 +4,8 @@ package models;
  *
  * @author waxzce
  */
-import javax.persistence.*;
+import com.google.code.morphia.annotations.Entity;
+import javax.persistence.Column;
 import mongo.MongoEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 

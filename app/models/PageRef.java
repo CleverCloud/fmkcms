@@ -1,14 +1,11 @@
 package models;
 
-import controllers.UseCRUDFieldProvider;
-import javax.persistence.Entity;
+import com.google.code.morphia.annotations.Entity;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
 import mongo.MongoEntity;
 import play.data.validation.Required;
 
