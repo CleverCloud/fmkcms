@@ -8,11 +8,11 @@ import crud.PageRefField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+import javax.persistence.Id;
+import mongo.MongoEntity;
 import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
-import play.db.jpa.Model;
 
 /**
  *
@@ -21,7 +21,10 @@ import play.db.jpa.Model;
  */
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
-public class Page {
+public class Page implements MongoEntity<Page> {
+
+    @Id
+    private ObjectId id;
 
     @Required
     public String title;
@@ -194,6 +197,18 @@ public class Page {
             page.isDefaultLanguage = true;
 
         return page.save();
+    }
+    
+    public void delete() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Page save() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Page find() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     //
