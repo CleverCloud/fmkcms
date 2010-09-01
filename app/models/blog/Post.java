@@ -1,5 +1,6 @@
 package models.blog;
 
+import com.google.code.morphia.annotations.Reference;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -38,13 +38,13 @@ public class Post extends MongoEntity {
     @Required
     public String content;
 
-    @ManyToOne
+    @Reference
     public PostRef postReference;
 
     @Required
     public Locale language;
 
-    @ManyToOne
+    @Reference
     @Required
     public User author;
 
@@ -216,12 +216,12 @@ public class Post extends MongoEntity {
     // Accessing stuff
     //
     public static Post getPostByLocale(PostRef postRef, Locale language) {
-        //return Post.find("byPostReferenceAndLanguage", postRef, language).first();
+        //return Post.find(Post.class, "language", language.toString()).get();
         return null;
     }
 
     public static List<Post> getPostsByPostRef(PostRef postRef) {
-        //return Post.find("byPostReference", postRef).fetch();
+        //return Post.find(Post.class, "postReference", postRef.id.toStringMongod()).asList();
         return null;
     }
 

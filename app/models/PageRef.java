@@ -1,7 +1,6 @@
 package models;
 
 import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
 import javax.persistence.Entity;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +24,6 @@ public class PageRef extends MongoEntity {
     public String urlId;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
     //
@@ -36,13 +34,13 @@ public class PageRef extends MongoEntity {
 
         for (Locale language : languages) {
             // Try exact Locale
-            page = Page.getPageByLocale(this, language);
+            page = null; //Page.getPageByLocale(this, language);
             if (page != null)
                 return page;
 
             // Try exact language but don't double check
             if (!language.getCountry().equals("")) {
-                page = Page.getPageByLocale(this, new Locale(language.getLanguage()));
+                page = null; //Page.getPageByLocale(this, new Locale(language.getLanguage()));
                 if (page != null)
                     return page;
             }
@@ -67,7 +65,7 @@ public class PageRef extends MongoEntity {
     //
     // Hooks
     //
-    @PrePersist
+    /*@PrePersist
     public void tagsManagement() {
         if (tags != null) {
             Set<Tag> newTags = new TreeSet<Tag>();

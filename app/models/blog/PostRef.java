@@ -1,7 +1,5 @@
 package models.blog;
 
-import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

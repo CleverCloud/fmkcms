@@ -1,9 +1,6 @@
 package models;
 
 import com.google.code.morphia.annotations.Entity;
-import controllers.UseCRUDFieldProvider;
-import crud.BooleanField;
-import crud.PageRefField;
 import java.util.List;
 import java.util.Locale;
 import mongo.MongoEntity;
@@ -38,7 +35,7 @@ public class Page extends MongoEntity {
 
     @Required
     public Boolean published = false;
-/*
+
     //
     // Constructor
     //

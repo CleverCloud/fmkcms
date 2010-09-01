@@ -24,15 +24,14 @@ public class PageController extends Controller {
         }
 
         render(page);
- *
- */
     }
 
     public static void pagesTag(String tagName) {
-   /*     Tag tag = Tag.findOrCreateByName(tagName);
+        Tag tag = Tag.findOrCreateByName(tagName);
         List<Page> listOfPages = Page.findTaggedWith(tagName);
 
         render(listOfPages, tag);
+    }
 
     /*public static void searchPage(String q) {
         if (q == null) {

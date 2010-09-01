@@ -4,6 +4,7 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
+import com.google.code.morphia.query.Query;
 import org.bson.types.ObjectId;
 import play.Play;
 
@@ -26,7 +27,7 @@ public abstract class MongoEntity {
         return morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
     }
 
-    public <T> T save() {
+    public <T extends MongoEntity> T save() {
         getDs().save(this);
         return (T) getDs().get(this);
     }
@@ -34,9 +35,8 @@ public abstract class MongoEntity {
         getDs().delete(this);
     }
 
-    public static <T> T find(String field, String value) {
-        T classGetter = null;
-        return (T) getDs().find(classGetter.getClass(), field, value);
+    public static <T extends MongoEntity> Query<T> find(Class childrenClass, String field, String value) {
+        return getDs().find(childrenClass, field, value);
     }
 
 }
