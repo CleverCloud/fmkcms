@@ -1,8 +1,10 @@
 package models;
 
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import mongo.MongoEntity;
 import play.Logger;
 import play.data.validation.MaxSize;
@@ -28,13 +30,16 @@ public class Page extends MongoEntity {
     public Locale language;
 
     @Required
-    public Boolean isDefaultLanguage = false;
-
-    @Required
     public PageRef pageReference;
 
     @Required
     public Boolean published = false;
+
+    @Required
+    public String urlId;
+
+    @Embedded
+    public Set<Tag> tags;
 
     //
     // Constructor
@@ -98,9 +103,7 @@ public class Page extends MongoEntity {
 
         Page page = Page.getPageByLocale(this.pageReference, language);
 
-        if (page.isDefaultLanguage) {
-            Logger.error("Cannot remove translation for default language for: " + page.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
-        }
+        
 
         page.delete();
         return this;
@@ -112,16 +115,10 @@ public class Page extends MongoEntity {
             if (defaultPage.id.equals(this.id)) {
                 return this;
             }
-            defaultPage.isDefaultLanguage = false;
             defaultPage.save();
         }
 
-        if (this.isDefaultLanguage) // Or we'll create a loop from the setter
-        {
-            return this;
-        }
-
-        this.isDefaultLanguage = Boolean.TRUE;
+       
         return this.save();
     }
 
@@ -129,22 +126,12 @@ public class Page extends MongoEntity {
     // Setters
     //
     public void setPageReference(PageRef pageReference) {
-        if (pageReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage) {
-            this.setAsDefaultLanguage();
-        }
+        
 
         this.pageReference = pageReference;
     }
 
-    public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
-        this.isDefaultLanguage = isDefaultLanguage;
-        if (this.isDefaultLanguage) {
-            this.setAsDefaultLanguage();
-        }
-        // TODO: prevent from removing default
-        //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
-    }
-
+   
     //
     // Accessing stuff
     //
@@ -192,9 +179,7 @@ public class Page extends MongoEntity {
             page.content = content;
         }
 
-        if (Page.getDefaultPage(pageRef) == null) {
-            page.isDefaultLanguage = true;
-        }
+        
 
         return page.save();
     }

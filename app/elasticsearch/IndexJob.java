@@ -37,15 +37,8 @@ public class IndexJob extends Job<String> {
     @Override
     public String doJobWithResult() throws Exception {
         Gson gson = new Gson();
-        String separator = System.getProperties().getProperty("file.separator");
-        
-        File conffile = Play.getVirtualFile("conf" + separator + "elasticsearch.json").getRealFile();
-        //Settings s = ImmutableSettings.readSettingsFromStream(new InputStreamStreamInput(new FileInputStream(conffile)));
-        Settings s = ImmutableSettings.settingsBuilder().loadFromClasspath(conffile.getAbsolutePath()).build();
-
-        Client c = new TransportClient(s).addTransportAddress(new InetSocketTransportAddress(Play.configuration.getProperty("elasticsearch.host"), Integer.parseInt(Play.configuration.getProperty("elasticsearch.port"))));
+        Client c = new ElasticSearchClient();
         String t = gson.toJson(indexable);
-
         IndexResponse response = c.prepareIndex("fmkcms", indexname, id).setSource(t).execute().actionGet();
         c.close();
         return response.toString();
