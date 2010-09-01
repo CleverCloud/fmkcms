@@ -5,17 +5,8 @@
 package elasticsearch;
 
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.FileInputStream;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.io.stream.InputStreamStreamInput;
-import org.elasticsearch.common.io.stream.StreamInput;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import play.Play;
 import play.jobs.Job;
 
 /**
