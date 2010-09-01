@@ -1,6 +1,9 @@
 package models;
 
+import com.google.code.morphia.Datastore;
+import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Transient;
 import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.persistence.Id;
 import mongo.MongoEntity;
+import org.bson.types.ObjectId;
 import play.Logger;
 import play.Play;
 import play.PlayConfiguration;
@@ -25,27 +29,23 @@ import play.data.validation.Required;
 @Entity
 public class Page implements MongoEntity<Page> {
 
+    @Transient
+    private Morphia morphia;
     @Id
-    private ObjectId id;
-
+    public ObjectId id;
     @Required
     public String title;
-
     @Required
     @MaxSize(60000)
     public String content;
-
     @Required
     public Locale language;
-
     @Required
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
-
     @Required
     @UseCRUDFieldProvider(PageRefField.class)
     public PageRef pageReference;
-    
     @Required
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
@@ -68,7 +68,7 @@ public class Page implements MongoEntity<Page> {
         return this;
     }
 
-    public static List<Page> findTaggedWith(String ... tags) {
+    public static List<Page> findTaggedWith(String... tags) {
         List<PageRef> pageRefs = PageRef.find(
                 "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
 
@@ -96,9 +96,10 @@ public class Page implements MongoEntity<Page> {
             concurrent.title = title;
             concurrent.content = content;
             concurrent.save();
-        } else
+        } else {
             Page.editOrCreate(this.pageReference, title, content, language);
-        
+        }
+
         return this;
     }
 
@@ -109,9 +110,10 @@ public class Page implements MongoEntity<Page> {
         }
 
         Page page = Page.getPageByLocale(this.pageReference, language);
-        
-        if (page.isDefaultLanguage)
+
+        if (page.isDefaultLanguage) {
             Logger.error("Cannot remove translation for default language for: " + page.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
+        }
 
         page.delete();
         return this;
@@ -120,14 +122,17 @@ public class Page implements MongoEntity<Page> {
     public Page setAsDefaultLanguage() {
         Page defaultPage = Page.getDefaultPage(this.pageReference);
         if (defaultPage != null) {
-            if (defaultPage.id.equals(this.id))
+            if (defaultPage.id.equals(this.id)) {
                 return this;
+            }
             defaultPage.isDefaultLanguage = false;
             defaultPage.save();
         }
 
         if (this.isDefaultLanguage) // Or we'll create a loop from the setter
+        {
             return this;
+        }
 
         this.isDefaultLanguage = Boolean.TRUE;
         return this.save();
@@ -137,16 +142,18 @@ public class Page implements MongoEntity<Page> {
     // Setters
     //
     public void setPageReference(PageRef pageReference) {
-        if (pageReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage)
-                this.setAsDefaultLanguage();
+        if (pageReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage) {
+            this.setAsDefaultLanguage();
+        }
 
         this.pageReference = pageReference;
     }
 
     public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
         this.isDefaultLanguage = isDefaultLanguage;
-        if (this.isDefaultLanguage)
+        if (this.isDefaultLanguage) {
             this.setAsDefaultLanguage();
+        }
         // TODO: prevent from removing default
         //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
     }
@@ -189,46 +196,53 @@ public class Page implements MongoEntity<Page> {
         if (page == null) {
             page = new Page(title, content, language);
             page.pageReference = pageRef;
-        }
-        else {
+        } else {
             page.title = title;
             page.content = content;
         }
 
-        if(Page.getDefaultPage(pageRef) == null)
+        if (Page.getDefaultPage(pageRef) == null) {
             page.isDefaultLanguage = true;
+        }
 
         return page.save();
     }
-    
+
     public void delete() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.getDs().delete(this);
     }
 
     public Page save() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.getDs().save(this);
+        return this;
     }
 
-    public Page find() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private Datastore getDs() {
+        if (morphia == null) {
+            morphia = new Morphia();
+        }
+        return morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
     }
 
+    public Page findById(ObjectId id) {
+        return this.getDs().find(Page.class, "id", id).get();
+    }
     //
     // Hooks
     //
  /*
     public void prePersistManagement() throws Exception {
-        if (this.pageReference == null)
-            this.pageReference = new PageRef().save();
+    if (this.pageReference == null)
+    this.pageReference = new PageRef().save();
 
-        Page page = Page.getDefaultPage(this.pageReference);
-        if (page == null || (this.id != null && this.id == page.id)) // We are creating the first Page for the PageRef
-            this.isDefaultLanguage = Boolean.TRUE;
-        else {
-            page = Page.getPageByLocale(this.pageReference, this.language);
-            if (page != null && (this.id ==null || this.id != page.id))
-                throw new Exception();
-        }
+    Page page = Page.getDefaultPage(this.pageReference);
+    if (page == null || (this.id != null && this.id == page.id)) // We are creating the first Page for the PageRef
+    this.isDefaultLanguage = Boolean.TRUE;
+    else {
+    page = Page.getPageByLocale(this.pageReference, this.language);
+    if (page != null && (this.id ==null || this.id != page.id))
+    throw new Exception();
     }
- */
+    }
+     */
 }
