@@ -4,10 +4,7 @@
  */
 package job;
 
-import com.google.gson.Gson;
 import java.io.File;
-import java.io.FileWriter;
-import models.Page;
 import play.Play;
 import play.jobs.Job;
 
@@ -23,11 +20,11 @@ public class WritePages extends Job {
         f.delete();
         f.createNewFile();
 
-        FileWriter fw = new FileWriter(f);
+        /*FileWriter fw = new FileWriter(f);
         Gson gson = new Gson();
 
         fw.write(gson.toJson(Page.findAll()));
-        fw.flush();
+        fw.flush();*/
     }
     
 }

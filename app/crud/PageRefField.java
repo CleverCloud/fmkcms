@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package crud;
 
 import controllers.CRUDFieldProvider;
@@ -19,7 +15,8 @@ public class PageRefField {
 
     public static PageRef process(Map<String, String> value) {
         if (value.containsKey("idpr") && !(value.get("idpr") == null)) {
-            return PageRef.findById(Long.parseLong(value.get("idpr")));
+            //return PageRef.findById(Long.parseLong(value.get("idpr")));
+            return null;
         } else {
             PageRef pr = new PageRef();
             pr.urlId = value.get("urlid");

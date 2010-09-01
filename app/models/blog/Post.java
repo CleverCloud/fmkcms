@@ -17,9 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import models.Tag;
+import mongo.MongoEntity;
 import play.Logger;
 import play.data.validation.Required;
-import play.db.jpa.Model;
 
 /**
  *
@@ -28,7 +28,7 @@ import play.db.jpa.Model;
 // TODO: Why does hibernate still complains about duplicate comments ?
 // TODO: Remove defaultPost from PostRef when only one
 @Entity
-public class Post extends Model {
+public class Post extends MongoEntity<Post> {
 
     public Date postedAt;
     
@@ -71,7 +71,7 @@ public class Post extends Model {
     //
     public Post addComment(String email, String pseudo, String password, String content) {
         Comment comment = null;
-        if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
+        /*if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
             // If email is referrenced or pseudo is referrenced for another email, just do nothing.
             User user = User.connect(email, password);
             if (user == null) {
@@ -79,7 +79,7 @@ public class Post extends Model {
                 return this;
             } else
                 comment = new Comment(user, content).save();
-        } else
+        } else*/
             comment = new Comment(email, pseudo, content).save();
         this.comments.add(comment);
         return this.save();
@@ -129,7 +129,7 @@ public class Post extends Model {
     }
 
     public static List<Post> findTaggedWith(String ... tags) {
-        List<PostRef> postRefs = PostRef.find(
+/*        List<PostRef> postRefs = PostRef.find(
                 "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
         
         List<Post> posts = new ArrayList<Post>();
@@ -138,7 +138,8 @@ public class Post extends Model {
             posts.add(postRef.getPost(locales));
         }
 
-        return posts;
+        return posts;*/
+        return null;
     }
 
     //
@@ -217,15 +218,18 @@ public class Post extends Model {
     // Accessing stuff
     //
     public static Post getPostByLocale(PostRef postRef, Locale language) {
-        return Post.find("byPostReferenceAndLanguage", postRef, language).first();
+        //return Post.find("byPostReferenceAndLanguage", postRef, language).first();
+        return null;
     }
 
     public static List<Post> getPostsByPostRef(PostRef postRef) {
-        return Post.find("byPostReference", postRef).fetch();
+        //return Post.find("byPostReference", postRef).fetch();
+        return null;
     }
 
     public static Post getDefaultPost(PostRef postRef) {
-        return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
+        //return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
+        return null;
     }
 
     //

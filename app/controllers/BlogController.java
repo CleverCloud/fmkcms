@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import models.blog.Post;
 import models.blog.PostRef;
+import org.bson.types.ObjectId;
 import play.cache.Cache;
 import play.data.validation.Validation;
 import play.libs.Codec;
@@ -26,8 +27,8 @@ public class BlogController extends Controller {
         renderBinary(captcha);
     }
 
-    public static void show(Long id) {
-        PostRef postRef = PostRef.findById(id);
+    public static void show(ObjectId id) {
+        PostRef postRef = null; //PostRef.findById(id);
         if (postRef == null)
             notFound();
 
@@ -38,8 +39,8 @@ public class BlogController extends Controller {
     }
 
     public static void index() {
-        PostRef frontPostRef = PostRef.find("Order by postedAt desc").first();
-        List<PostRef> olderPostRefs = PostRef.find("Order by postedAt desc").from(1).fetch(10);
+        PostRef frontPostRef = null; //PostRef.find("Order by postedAt desc").first();
+        List<PostRef> olderPostRefs = null; // PostRef.find("Order by postedAt desc").from(1).fetch(10);
 
         List<Locale> locales = I18nController.getBrowserLanguages();
         Post frontPost = frontPostRef.getPost(locales);
@@ -52,7 +53,7 @@ public class BlogController extends Controller {
     }
 
     public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
-        Post post = Post.findById(postId);
+        Post post = null; //Post.findById(postId);
         if (post == null)
             return;
 
@@ -71,7 +72,8 @@ public class BlogController extends Controller {
         render(tag, posts);
     }
 
-    public static void jsondump() {
+    /*public static void jsondump() {
         renderJSON(new Gson().toJson(PostRef.all().fetch()));
-    }
+    }*/
+
 }

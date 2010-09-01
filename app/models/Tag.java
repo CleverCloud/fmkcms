@@ -5,19 +5,14 @@ package models;
  * @author waxzce
  */
 import javax.persistence.*;
+import mongo.MongoEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-
-import play.db.jpa.*;
 
 @Entity
-@Indexed()
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
-public class Tag extends Model implements Comparable<Tag> {
+public class Tag extends MongoEntity<Tag> implements Comparable<Tag> {
 
     @Column(unique=true)
-    @Field
     public String name;
 
     private Tag(String name) {
@@ -34,12 +29,13 @@ public class Tag extends Model implements Comparable<Tag> {
     }
 
     public static Tag findOrCreateByName(String name) {
-        name = name.trim();
+        /*name = name.trim();
         Tag tag = Tag.find("byName", name).first();
         if (tag == null) {
             tag = new Tag(name);
             tag.save();
         }
-        return tag;
+        return tag;*/
+        return null;
     }
 }

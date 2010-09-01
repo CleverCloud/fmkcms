@@ -1,9 +1,6 @@
 package models;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Transient;
 import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
@@ -11,12 +8,8 @@ import crud.PageRefField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import javax.persistence.Id;
 import mongo.MongoEntity;
-import org.bson.types.ObjectId;
 import play.Logger;
-import play.Play;
-import play.PlayConfiguration;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 
@@ -27,25 +20,26 @@ import play.data.validation.Required;
  */
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
-public class Page implements MongoEntity<Page> {
+public class Page extends MongoEntity<Page> {
 
-    @Transient
-    private Morphia morphia;
-    @Id
-    public ObjectId id;
     @Required
     public String title;
+
     @Required
     @MaxSize(60000)
     public String content;
+
     @Required
     public Locale language;
+
     @Required
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
+
     @Required
     @UseCRUDFieldProvider(PageRefField.class)
     public PageRef pageReference;
+
     @Required
     @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
@@ -69,7 +63,7 @@ public class Page implements MongoEntity<Page> {
     }
 
     public static List<Page> findTaggedWith(String... tags) {
-        List<PageRef> pageRefs = PageRef.find(
+        /*List<PageRef> pageRefs = PageRef.find(
                 "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
 
         List<Page> pages = new ArrayList<Page>();
@@ -78,7 +72,8 @@ public class Page implements MongoEntity<Page> {
             pages.add(pageRef.getPage(locales));
         }
 
-        return pages;
+        return pages;*/
+        return null;
     }
 
     //
@@ -162,20 +157,24 @@ public class Page implements MongoEntity<Page> {
     // Accessing stuff
     //
     public static Page getByUrlId(String urlId) {
-        PageRef pageRef = PageRef.find("byUrlId", urlId).first();
-        return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
+        //PageRef pageRef = PageRef.find("byUrlId", urlId).first();
+        //return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
+        return null;
     }
 
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
-        return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
+        //return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
+        return null;
     }
 
     public static List<Page> getPagesByPageRef(PageRef pageRef) {
-        return Page.find("byPageReference", pageRef).fetch();
+        //return Page.find("byPageReference", pageRef).fetch();
+        return null;
     }
 
     public static Page getDefaultPage(PageRef pageRef) {
-        return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
+        //return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
+        return null;
     }
 
     //
@@ -207,26 +206,7 @@ public class Page implements MongoEntity<Page> {
 
         return page.save();
     }
-
-    public void delete() {
-        this.getDs().delete(this);
-    }
-
-    public Page save() {
-        this.getDs().save(this);
-        return this;
-    }
-
-    private Datastore getDs() {
-        if (morphia == null) {
-            morphia = new Morphia();
-        }
-        return morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
-    }
-
-    public Page findById(ObjectId id) {
-        return this.getDs().find(Page.class, "id", id).get();
-    }
+    
     //
     // Hooks
     //

@@ -45,7 +45,7 @@ public class PageController extends Controller {
         render(listOfPages, tag);
     }
 
-    public static void searchPage(String q) {
+    /*public static void searchPage(String q) {
         if (q == null) {
             q = "search";
         }
@@ -78,6 +78,6 @@ public class PageController extends Controller {
         tx.commit();
 
         render(results, q);
-    }
+    }*/
     
 }

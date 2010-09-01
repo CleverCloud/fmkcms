@@ -12,15 +12,14 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import models.Tag;
-import play.Logger;
-import play.db.jpa.Model;
+import mongo.MongoEntity;
 
 /**
  *
  * @author keruspe
  */
 @Entity
-public class PostRef extends Model {
+public class PostRef extends MongoEntity<PostRef> {
 
     public Date postedAt;
 
@@ -68,11 +67,13 @@ public class PostRef extends Model {
     }
 
     public PostRef previous() {
-        return PostRef.find("postedAt < ? order by postedAt desc", postedAt).first();
+        //return PostRef.find("postedAt < ? order by postedAt desc", postedAt).first();
+        return null;
     }
 
     public PostRef next() {
-        return PostRef.find("postedAt > ? order by postedAt asc", postedAt).first();
+        //return PostRef.find("postedAt > ? order by postedAt asc", postedAt).first();
+        return null;
     }
 
     //
