@@ -18,7 +18,7 @@ import play.data.validation.Required;
  * @author keruspe
  */
 @Entity
-public class PageRef extends MongoEntity<PageRef> {
+public class PageRef extends MongoEntity {
 
     // TODO: Decide whether we put that in Page
     @Required

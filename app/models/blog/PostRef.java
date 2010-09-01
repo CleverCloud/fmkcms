@@ -19,7 +19,7 @@ import mongo.MongoEntity;
  * @author keruspe
  */
 @Entity
-public class PostRef extends MongoEntity<PostRef> {
+public class PostRef extends MongoEntity {
 
     public Date postedAt;
 

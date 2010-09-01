@@ -1,11 +1,9 @@
 package models;
 
 import com.google.code.morphia.annotations.Entity;
-import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
 import crud.PageRefField;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import mongo.MongoEntity;
@@ -20,7 +18,7 @@ import play.data.validation.Required;
  */
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
-public class Page extends MongoEntity<Page> {
+public class Page extends MongoEntity {
 
     @Required
     public String title;

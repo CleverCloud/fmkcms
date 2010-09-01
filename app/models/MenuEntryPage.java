@@ -10,7 +10,7 @@ import play.mvc.Router;
  * @author waxzce
  */
 @Entity
-public class MenuEntryPage extends MenuEntry{
+public class MenuEntryPage extends MenuEntry {
 
     public String urlid;
 

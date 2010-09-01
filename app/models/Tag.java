@@ -10,7 +10,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
-public class Tag extends MongoEntity<Tag> implements Comparable<Tag> {
+public class Tag extends MongoEntity implements Comparable<Tag> {
 
     @Column(unique=true)
     public String name;

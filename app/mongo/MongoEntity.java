@@ -11,27 +11,32 @@ import play.Play;
  *
  * @author keruspe
  */
-public abstract class MongoEntity<T> {
+public abstract class MongoEntity {
 
     @Id
     public ObjectId id;
 
     @Transient
-    private Morphia morphia;
+    private static Morphia morphia;
 
-    protected Datastore getDs() {
-        if (this.morphia == null) {
-            this.morphia = new Morphia();
+    protected static Datastore getDs() {
+        if (morphia == null) {
+            morphia = new Morphia();
         }
-        return this.morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
+        return morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
     }
 
-    public T save() {
-        this.getDs().save(this);
-        return (T) this.getDs().get(this);
+    public <T> T save() {
+        getDs().save(this);
+        return (T) getDs().get(this);
     }
     public void delete() {
-        this.getDs().delete(this);
+        getDs().delete(this);
+    }
+
+    public static <T> T find(String field, String value) {
+        T classGetter = null;
+        return (T) getDs().find(classGetter.getClass(), field, value);
     }
 
 }

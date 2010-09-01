@@ -12,7 +12,7 @@ import play.data.validation.Required;
  * @author keruspe
  */
 @Entity
-public class Comment extends MongoEntity<Comment> {
+public class Comment extends MongoEntity {
 
     @Required
     public String email;

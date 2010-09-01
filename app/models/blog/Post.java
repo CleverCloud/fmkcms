@@ -1,6 +1,5 @@
 package models.blog;
 
-import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import play.data.validation.Required;
 // TODO: Why does hibernate still complains about duplicate comments ?
 // TODO: Remove defaultPost from PostRef when only one
 @Entity
-public class Post extends MongoEntity<Post> {
+public class Post extends MongoEntity {
 
     public Date postedAt;
     
