@@ -1,5 +1,6 @@
 package models;
 
+import com.google.code.morphia.annotations.Entity;
 import controllers.I18nController;
 import controllers.UseCRUDFieldProvider;
 import crud.BooleanField;
@@ -7,16 +8,7 @@ import crud.PageRefField;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Boost;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
+
 import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
@@ -29,20 +21,13 @@ import play.db.jpa.Model;
  */
 // TODO: Remove defaultPage from PageRef when only one
 @Entity
-@Indexed(index = "fmkpage")
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
-public class Page extends Model {
+public class Page {
 
     @Required
-    @Field
-    @Boost(3.0f)
     public String title;
 
     @Required
-    @Lob
-    @Field
     @MaxSize(60000)
-    @Boost(0.5f)
     public String content;
 
     @Required
@@ -53,7 +38,6 @@ public class Page extends Model {
     public Boolean isDefaultLanguage = false;
 
     @Required
-    @ManyToOne
     @UseCRUDFieldProvider(PageRefField.class)
     public PageRef pageReference;
     
@@ -215,8 +199,7 @@ public class Page extends Model {
     //
     // Hooks
     //
-    @PrePersist
-    @PreUpdate
+ /*
     public void prePersistManagement() throws Exception {
         if (this.pageReference == null)
             this.pageReference = new PageRef().save();
@@ -230,5 +213,5 @@ public class Page extends Model {
                 throw new Exception();
         }
     }
-    
+ */
 }
