@@ -1,8 +1,6 @@
 package models.blog;
 
 import controllers.I18nController;
-import controllers.UseCRUDFieldProvider;
-import crud.BooleanField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +48,6 @@ public class Post extends Model {
     public User author;
 
     @Required
-    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
 
     @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)

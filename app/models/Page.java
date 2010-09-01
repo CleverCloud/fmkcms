@@ -4,19 +4,11 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Transient;
-import controllers.I18nController;
-import controllers.UseCRUDFieldProvider;
-import crud.BooleanField;
-import crud.PageRefField;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import javax.persistence.Id;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
-import play.Logger;
 import play.Play;
-import play.PlayConfiguration;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
 
@@ -41,15 +33,12 @@ public class Page implements MongoEntity<Page> {
     @Required
     public Locale language;
     @Required
-    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean isDefaultLanguage = false;
     @Required
-    @UseCRUDFieldProvider(PageRefField.class)
     public PageRef pageReference;
     @Required
-    @UseCRUDFieldProvider(BooleanField.class)
     public Boolean published = false;
-
+/*
     //
     // Constructor
     //
@@ -207,6 +196,7 @@ public class Page implements MongoEntity<Page> {
 
         return page.save();
     }
+    */
 
     public void delete() {
         this.getDs().delete(this);

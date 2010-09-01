@@ -1,18 +1,6 @@
 package models;
 
-import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
 import javax.persistence.Entity;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
-import org.hibernate.search.annotations.Boost;
-import org.hibernate.search.annotations.IndexedEmbedded;
-import play.data.validation.Required;
 import play.db.jpa.Model;
 
 /**
@@ -21,7 +9,7 @@ import play.db.jpa.Model;
  */
 @Entity
 public class PageRef extends Model {
-
+/*
     // TODO: Decide whether we put that in Page
     @Required
     @Boost(3.5f)
@@ -81,6 +69,6 @@ public class PageRef extends Model {
             }
             this.tags = newTags;
         }
-    }
+    }*/
 
 }

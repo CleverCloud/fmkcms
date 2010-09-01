@@ -6,18 +6,14 @@ package models;
  */
 import javax.persistence.*;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
 
 import play.db.jpa.*;
 
 @Entity
-@Indexed()
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, include = "all")
 public class Tag extends Model implements Comparable<Tag> {
 
     @Column(unique=true)
-    @Field
     public String name;
 
     private Tag(String name) {

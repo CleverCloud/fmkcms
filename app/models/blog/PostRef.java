@@ -1,7 +1,5 @@
 package models.blog;
 
-import controllers.UseCRUDFieldProvider;
-import crud.TagsField;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -12,7 +10,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import models.Tag;
-import play.Logger;
 import play.db.jpa.Model;
 
 /**
@@ -28,7 +25,6 @@ public class PostRef extends Model {
     public User author;
 
     @ManyToMany
-    @UseCRUDFieldProvider(TagsField.class)
     public Set<Tag> tags;
 
     //
