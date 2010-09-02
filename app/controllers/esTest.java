@@ -6,7 +6,9 @@ package controllers;
 
 import elasticsearch.IndexJob;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.concurrent.Future;
+import models.Page;
 import models.TestEntity;
 import play.mvc.Controller;
 
@@ -27,5 +29,14 @@ public class esTest extends Controller {
         }
         System.out.println("qsdfqsdf");
         renderText((Future<String>) request.args.get("task"));
+    }
+
+    public static void page() {
+        Page p = new Page();
+        p.content = "sdfgsdfgsdfg";
+        p.title = "mon titre";
+        p.language = new Locale("fr");
+        p = p.save();
+        renderJSON(p);
     }
 }

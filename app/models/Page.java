@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import elasticsearch.IndexJob;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -21,23 +22,17 @@ public class Page extends MongoEntity {
 
     @Required
     public String title;
-
     @Required
     @MaxSize(60000)
     public String content;
-
     @Required
     public Locale language;
-
     @Required
     public PageRef pageReference;
-
     @Required
     public Boolean published = false;
-
     @Required
     public String urlId;
-
     @Embedded
     public Set<Tag> tags;
 
@@ -63,12 +58,12 @@ public class Page extends MongoEntity {
 
     public static List<Page> findTaggedWith(String... tags) {
         /*List<PageRef> pageRefs = PageRef.find(
-                "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
+        "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
 
         List<Page> pages = new ArrayList<Page>();
         List<Locale> locales = I18nController.getBrowserLanguages();
         for (PageRef pageRef : pageRefs) {
-            pages.add(pageRef.getPage(locales));
+        pages.add(pageRef.getPage(locales));
         }
 
         return pages;*/
@@ -105,7 +100,7 @@ public class Page extends MongoEntity {
 
         Page page = Page.getPageByLocale(this.pageReference, language);
 
-        
+
 
         page.delete();
         return this;
@@ -120,7 +115,7 @@ public class Page extends MongoEntity {
             defaultPage.save();
         }
 
-       
+
         return this.save();
     }
 
@@ -128,12 +123,21 @@ public class Page extends MongoEntity {
     // Setters
     //
     public void setPageReference(PageRef pageReference) {
-        
+
 
         this.pageReference = pageReference;
     }
 
-   
+    public Page() {
+    }
+
+    @Override
+    public Page save() {
+        super.save();
+        new IndexJob(this, "page", this.id.toString()).now();
+        return this;
+    }
+
     //
     // Accessing stuff
     //
@@ -183,7 +187,6 @@ public class Page extends MongoEntity {
 
         return page.save();
     }
-    
     //
     // Hooks
     //
