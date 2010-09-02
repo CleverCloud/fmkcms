@@ -1,7 +1,10 @@
 package controllers;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import models.Page;
 import models.PageRef;
 import models.Tag;
@@ -37,8 +40,8 @@ public class PageController extends Controller {
         render(listOfPages, tag);
     }
 
-    public static void newPage() {
-        render();
+    public static void newPage(String urlId) {
+        render(urlId);
     }
 
     public static void doNewPage() {
@@ -54,10 +57,37 @@ public class PageController extends Controller {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
 
-            PageController.newPage();
+            PageController.newPage(null);
         } else {
             MongoEntity.getDs().save(page);
             PageController.page(page.pageReference.urlId);
+        }
+    }
+
+    public static void newPageRef() {
+        render();
+    }
+
+    public static void doNewPageRef() {
+        Set<Tag> tags = new TreeSet<Tag>();
+        for (String tag : Arrays.asList(params.get("pageRef.tags").split(","))) {
+            tags.add(Tag.findOrCreateByName(tag));
+        }
+
+        PageRef pageRef = new PageRef();
+        pageRef.urlId = params.get("pageRef.urlId");
+        pageRef.tags = tags;
+
+        validation.valid(pageRef);
+        if (Validation.hasErrors()) {
+
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+
+            PageController.newPageRef();
+        } else {
+            MongoEntity.getDs().save(pageRef);
+            PageController.newPage(pageRef.urlId);
         }
     }
 

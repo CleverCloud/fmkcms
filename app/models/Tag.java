@@ -7,7 +7,6 @@ package models;
 import com.google.code.morphia.annotations.Entity;
 import javax.persistence.Column;
 import mongo.MongoEntity;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 public class Tag extends MongoEntity implements Comparable<Tag> {
@@ -29,13 +28,12 @@ public class Tag extends MongoEntity implements Comparable<Tag> {
     }
 
     public static Tag findOrCreateByName(String name) {
-        /*name = name.trim();
-        Tag tag = Tag.find("byName", name).first();
+        name = name.trim();
+        Tag tag = MongoEntity.getDs().find(Tag.class, "name", name).get();
         if (tag == null) {
             tag = new Tag(name);
             tag.save();
         }
-        return tag;*/
-        return null;
+        return tag;
     }
 }

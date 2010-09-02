@@ -1,0 +1,31 @@
+#{extends 'main.html' /}
+#{set title:'New Page' /}
+
+#{form @PageController.doNewPageRef() , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'pageRef.urlId'}
+<p>
+    <label>&{field.name}</label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'pageRef.tags'}
+<p>
+    <label>&{field.name}</label>
+    %{
+        String tags = new String();
+        for (models.Tag tag : mongo.MongoEntity.getDs().find(models.Tag.class)) {
+            if ${field.value}.contains(tag)
+                tags += (tags.isEmpty() ? '' : ", " + tag.toString());
+        }
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+<input type="submit" value="ok" />
+
+#{/form}
