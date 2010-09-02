@@ -3,8 +3,6 @@ package models;
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
-import controllers.I18nController;
-import elasticsearch.IndexJob;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -57,7 +55,7 @@ public class Page extends MongoEntity {
         return this;
     }
 
-    public static List<Page> findTaggedWith(String... tags) {
+    public static List<Page> findTaggedWith(String ... tags) {
         /*List<PageRef> pageRefs = PageRef.find(
         "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
 
@@ -74,10 +72,11 @@ public class Page extends MongoEntity {
     //
     // I18n handling
     //
-    public Page addTranslation(String title, String content, Locale language) {
+    public Page addTranslation(String title, String content, Locale language, Boolean published) {
         if (language.equals(this.language)) {
             this.title = title;
             this.content = content;
+            this.published = published;
             return this.save();
         }
 
@@ -85,17 +84,17 @@ public class Page extends MongoEntity {
         if (concurrent != null) {
             concurrent.title = title;
             concurrent.content = content;
-            concurrent.save();
-        } else {
-            Page page = new Page();
-            page.pageReference = this.pageReference;
-            page.title = this.title;
-            page.content = this.content;
-            page.language = this.language;
-            page.save();
+            concurrent.published = published;
+            return concurrent.save();
         }
 
-        return this;
+        Page page = new Page();
+        page.pageReference = this.pageReference;
+        page.title = title;
+        page.content = content;
+        page.language = language;
+        page.published = published;
+        return page.save();
     }
 
     public Page removeTranslation(Locale language) {
@@ -112,7 +111,6 @@ public class Page extends MongoEntity {
     //
     // Accessing stuff
     //
-
     public static List<Page> getPagesByUrlId(String urlId) {
         return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).asList();
     }

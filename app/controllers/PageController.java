@@ -41,7 +41,7 @@ public class PageController extends Controller {
                             break;
                         }
                     }
-                    
+
                     if (page == null)
                         page = pages.get(0); // pick up first for now
                 }
@@ -69,27 +69,38 @@ public class PageController extends Controller {
     }
 
     public static void doNewPage() {
-        Page page = new Page();
-        page.pageReference = MongoEntity.getDs().find(PageRef.class, "urlId", params.get("page.pageReference")).get();
-        page.title = params.get("page.title");
-        page.content = params.get("page.content");
-        page.language = params.get("page.language", Locale.class);
-        page.published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
-        
-        validation.valid(page);
-        if (Validation.hasErrors()) {
+        String urlId = params.get("page.pageReference");
+        String title = params.get("page.title");
+        String content = params.get("page.content");
+        Locale language = params.get("page.language", Locale.class);
+        Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
+        Page page = Page.getPagesByUrlId(urlId).get(0);
+        if (page != null)
+            page = page.addTranslation(title, content, language, published);
+        else {
+            page = new Page();
+            page.pageReference = MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
+            page.title = title;
+            page.content = content;
+            page.language = language;
+            page.published = published;
 
-            PageController.newPage(null);
-        } else {
-            MongoEntity.getDs().save(page);
-            if (page.published)
-                PageController.page(page.pageReference.urlId);
-            else
-                PageController.page("index");
+            validation.valid(page);
+            if (Validation.hasErrors()) {
+
+                params.flash(); // add http parameters to the flash scope
+                Validation.keep(); // keep the errors for the next request
+
+                PageController.newPage(null);
+            } else
+                MongoEntity.getDs().save(page);
         }
+
+        if (page.published)
+            PageController.page(urlId);
+        else
+            PageController.page("index");
     }
 
     public static void newPageRef() {
@@ -97,7 +108,10 @@ public class PageController extends Controller {
     }
 
     public static void doNewPageRef() {
-        Set<Tag> tags = new TreeSet<Tag>();
+        String urlId = params.get("pageRef.urlId");
+        PageRef pageRef = PageRef.getPageRefByUrlId(urlId);
+        Set<Tag> tags = (pageRef == null) ? new TreeSet<Tag>() : pageRef.tags;
+
         String tagsString = params.get("pageRef.tags");
         if (!tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
@@ -105,8 +119,10 @@ public class PageController extends Controller {
             }
         }
 
-        PageRef pageRef = new PageRef();
-        pageRef.urlId = params.get("pageRef.urlId");
+        if (pageRef == null) {
+            pageRef = new PageRef();
+            pageRef.urlId = urlId;
+        }
         pageRef.tags = tags;
 
         validation.valid(pageRef);

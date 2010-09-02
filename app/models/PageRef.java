@@ -19,5 +19,12 @@ public class PageRef extends MongoEntity {
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
-    
+
+    //
+    // Accessing stuff
+    //
+    public static PageRef getPageRefByUrlId(String urlId) {
+        return MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
+    }
+
 }
