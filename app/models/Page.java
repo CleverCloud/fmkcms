@@ -120,16 +120,8 @@ public class Page extends MongoEntity {
     }
 
     //
-    // Setters
+    // Test stuff
     //
-    public void setPageReference(PageRef pageReference) {
-
-
-        this.pageReference = pageReference;
-    }
-
-    public Page() {
-    }
 
     @Override
     public Page save() {
