@@ -143,8 +143,8 @@ public class Page extends MongoEntity {
         return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).filter("language =", language).get();
     }
 
-    public static List<Page> getPagesByPageRef(PageRef pageRef) {
-        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
+    public static List<Page> getPagesByUrlId(String urlId) {
+        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).asList();
     }
 
     public static Page getDefaultPage(PageRef pageRef) {

@@ -44,7 +44,7 @@ public class PageRef extends MongoEntity {
 
         for (Locale language : languages) {
             // Try from another country
-            for (Page current : Page.getPagesByPageRef(this)) {
+            for (Page current : Page.getPagesByUrlId(this.urlId)) {
                 if (current.language.getLanguage().equals(language.getLanguage()))
                     return current;
             }

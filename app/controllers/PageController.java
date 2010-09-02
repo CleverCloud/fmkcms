@@ -22,8 +22,32 @@ import play.mvc.With;
 public class PageController extends Controller {
 
     public static void page(String urlId) {
-        Page page = Page.getByUrlId(urlId);
-        if (page == null || ! page.published)
+        List<Page> pages = Page.getPagesByUrlId(urlId);
+        Page page = null;
+
+        switch (pages.size()) {
+            case 0:
+                notFound();
+            case 1:
+                page = pages.get(0);
+                break;
+            default:
+                List<Locale> locales = I18nController.getBrowserLanguages();
+                for (Locale locale : locales) {
+                    // Try exact Locale
+                    for (Page candidat : pages) {
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
+                            page = candidat;
+                            break;
+                        }
+                    }
+                    
+                    if (page == null)
+                        page = pages.get(0); // pick up first for now
+                }
+        }
+
+        if (! page.published)
             notFound();
 
         if (request.headers.get("accept").value().contains("json")) {
@@ -50,6 +74,7 @@ public class PageController extends Controller {
         page.title = params.get("page.title");
         page.content = params.get("page.content");
         page.language = params.get("page.language", Locale.class);
+        page.published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
         
         validation.valid(page);
         if (Validation.hasErrors()) {
@@ -60,7 +85,10 @@ public class PageController extends Controller {
             PageController.newPage(null);
         } else {
             MongoEntity.getDs().save(page);
-            PageController.page(page.pageReference.urlId);
+            if (page.published)
+                PageController.page(page.pageReference.urlId);
+            else
+                PageController.page("index");
         }
     }
 
@@ -70,8 +98,11 @@ public class PageController extends Controller {
 
     public static void doNewPageRef() {
         Set<Tag> tags = new TreeSet<Tag>();
-        for (String tag : Arrays.asList(params.get("pageRef.tags").split(","))) {
-            tags.add(Tag.findOrCreateByName(tag));
+        String tagsString = params.get("pageRef.tags");
+        if (!tagsString.isEmpty()) {
+            for (String tag : Arrays.asList(tagsString.split(","))) {
+                tags.add(Tag.findOrCreateByName(tag));
+            }
         }
 
         PageRef pageRef = new PageRef();

@@ -56,6 +56,14 @@
 </p>
 #{/}
 
+#{field 'page.published'}
+<p>
+    <label>&{field.name}</label>
+    <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" %{if (field.value != null && field.value) {}%checked%{}}%/>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 <input type="submit" value="ok" />
 
 #{/form}
