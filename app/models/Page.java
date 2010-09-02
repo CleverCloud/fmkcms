@@ -44,6 +44,8 @@ public class Page extends MongoEntity {
     //
     // Constructor
     //
+    public Page() {}
+
     private Page(String title, String content, Locale language) {
         this.title = title;
         this.content = content;
@@ -178,8 +180,6 @@ public class Page extends MongoEntity {
             page.title = title;
             page.content = content;
         }
-
-        
 
         return page.save();
     }

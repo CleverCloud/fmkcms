@@ -20,7 +20,7 @@ public abstract class MongoEntity {
     @Transient
     private static Morphia morphia;
 
-    protected static Datastore getDs() {
+    public static Datastore getDs() {
         if (morphia == null) {
             morphia = new Morphia();
         }

@@ -1,8 +1,12 @@
 package controllers;
 
 import java.util.List;
+import java.util.Locale;
 import models.Page;
+import models.PageRef;
 import models.Tag;
+import mongo.MongoEntity;
+import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -33,8 +37,32 @@ public class PageController extends Controller {
         render(listOfPages, tag);
     }
 
-    /*public static void searchPage(String q) {
-        if (q == null) {
+    public static void newPage() {
+        render();
+    }
+
+    public static void doNewPage() {
+        Page page = new Page();
+        page.pageReference = params.get("page.pageReference", PageRef.class);
+        page.title = params.get("page.title");
+        page.content = params.get("page.content");
+        page.language = params.get("page.language", Locale.class);
+        
+        validation.valid(page);
+        if (Validation.hasErrors()) {
+
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+
+            PageController.newPage();
+        } else {
+            MongoEntity.getDs().save(page);
+            PageController.page(page.pageReference.urlId);
+        }
+    }
+
+    public static void searchPage(String q) {
+        /*if (q == null) {
             q = "search";
         }
 
@@ -65,8 +93,9 @@ public class PageController extends Controller {
         List<Page> results = hibQuery.list();
         tx.commit();
 
-        render(results, q);
-    }*/
+        render(results, q);*/
+        render();
+    }
     
     
 }

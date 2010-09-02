@@ -1,0 +1,60 @@
+#{extends 'main.html' /}
+#{set title:'New Page' /}
+
+#{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'page.pageReference'}
+<p>
+    <label>&{field.name}</label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+    %{
+        java.util.Set<String> urlIds = new TreeSet<String>();
+        /*for (models.PageRef pageRef : mongo.MongoEntity.getDs().find(models.PageRef.class)) {
+            urlIds.add(pageRef.urlId);
+        }*/
+    }%
+    #{list items:urlIds, as:'u'}
+        <option value="${u}" ${field.value?.toString().equals(u)? 'selected="true"'.raw() : ''}>${u}</option>
+    #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'page.title'}
+<p>
+    <label>&{field.name}</label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}">
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'page.content'}
+<p>
+    <label>&{field.name}</label>
+    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.value}</textarea>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'page.language'}
+<p>
+    <label>&{field.name}</label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+    %{
+        java.util.Set<String> locales = new java.util.TreeSet<String>();
+        for (java.util.Locale locale : java.util.Arrays.asList(java.util.Locale.getAvailableLocales())) {
+            locales.add(locale.toString());
+        }
+    }%
+    #{list items:locales, as:'l'}
+        <option value="${l}" ${field.value?.toString().equals(l) || (field.value == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+    #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+<input type="submit" value="ok" />
+
+#{/form}
