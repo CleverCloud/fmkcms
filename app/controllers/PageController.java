@@ -36,7 +36,7 @@ public class PageController extends Controller {
                 for (Locale locale : locales) {
                     // Try exact Locale
                     for (Page candidat : pages) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
+                        if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) && candidat.published) {
                             page = candidat;
                             break;
                         }
