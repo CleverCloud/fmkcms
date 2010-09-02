@@ -37,9 +37,6 @@ public class Page extends MongoEntity {
     @Required
     public Boolean published = false;
 
-    @Required
-    public String urlId;
-
     @Embedded
     public Set<Tag> tags;
 
@@ -143,6 +140,7 @@ public class Page extends MongoEntity {
     }
 
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
+        // TODO: FIXME pliz :D
         return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).filter("language =", language).get();
     }
 

@@ -46,7 +46,7 @@ public class PageController extends Controller {
 
     public static void doNewPage() {
         Page page = new Page();
-        page.pageReference = params.get("page.pageReference", PageRef.class);
+        page.pageReference = MongoEntity.getDs().find(PageRef.class, "urlId", params.get("page.pageReference")).get();
         page.title = params.get("page.title");
         page.content = params.get("page.content");
         page.language = params.get("page.language", Locale.class);
@@ -56,7 +56,7 @@ public class PageController extends Controller {
 
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-
+            System.out.println("Errors: " + Validation.errors().iterator().next().toString());
             PageController.newPage(null);
         } else {
             MongoEntity.getDs().save(page);
