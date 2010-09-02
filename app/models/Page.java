@@ -17,7 +17,6 @@ import play.data.validation.Required;
  * @author waxzce
  * @author keruspe
  */
-// TODO: Remove defaultPage from PageRef when only one
 @Entity
 public class Page extends MongoEntity {
 

@@ -22,8 +22,6 @@ import play.data.validation.Required;
  *
  * @author keruspe
  */
-// TODO: Why does hibernate still complains about duplicate comments ?
-// TODO: Remove defaultPost from PostRef when only one
 @Entity
 public class Post extends MongoEntity {
 
@@ -199,7 +197,6 @@ public class Post extends MongoEntity {
         this.isDefaultLanguage = isDefaultLanguage;
         if (this.isDefaultLanguage)
             this.setAsDefaultLanguage();
-        // TODO: prevent from removing default
         //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
     }
 

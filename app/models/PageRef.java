@@ -16,7 +16,6 @@ import play.data.validation.Required;
 @Entity
 public class PageRef extends MongoEntity {
 
-    // TODO: Decide whether we put that in Page
     @Required
     public String urlId;
 
