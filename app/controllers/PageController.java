@@ -75,7 +75,7 @@ public class PageController extends Controller {
         Locale language = params.get("page.language", Locale.class);
         Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
-        Page page = Page.getPagesByUrlId(urlId).get(0);
+        Page page = Page.getFirstPageByUrlId(urlId);
         if (page != null)
             page = page.addTranslation(title, content, language, published);
         else {

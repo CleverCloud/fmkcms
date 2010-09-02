@@ -30,7 +30,6 @@ public class Page extends MongoEntity {
     public Locale language;
 
     @Required
-    @Reference
     public PageRef pageReference;
 
     @Required
@@ -113,6 +112,10 @@ public class Page extends MongoEntity {
     //
     public static List<Page> getPagesByUrlId(String urlId) {
         return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).asList();
+    }
+
+    public static Page getFirstPageByUrlId(String urlId) {
+        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).get();
     }
 
     public static Page getPageByLocale(String urlId, Locale locale) {
