@@ -2,7 +2,6 @@ package models;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Reference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -55,6 +54,7 @@ public class Page extends MongoEntity {
     }
 
     public static List<Page> findTaggedWith(String ... tags) {
+        // TODO: Reimplement Tag searching
         /*List<PageRef> pageRefs = PageRef.find(
         "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
 
