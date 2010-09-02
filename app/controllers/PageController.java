@@ -110,7 +110,17 @@ public class PageController extends Controller {
     public static void doNewPageRef() {
         String urlId = params.get("pageRef.urlId");
         PageRef pageRef = PageRef.getPageRefByUrlId(urlId);
-        Set<Tag> tags = (pageRef == null) ? new TreeSet<Tag>() : pageRef.tags;
+        Set<Tag> tags = null;
+
+        if (pageRef != null)
+            tags = pageRef.tags;
+        else {
+            pageRef = new PageRef();
+            pageRef.urlId = urlId;
+        }
+
+        if (tags == null)
+            tags = new TreeSet<Tag>();
 
         String tagsString = params.get("pageRef.tags");
         if (!tagsString.isEmpty()) {
@@ -119,10 +129,6 @@ public class PageController extends Controller {
             }
         }
 
-        if (pageRef == null) {
-            pageRef = new PageRef();
-            pageRef.urlId = urlId;
-        }
         pageRef.tags = tags;
 
         validation.valid(pageRef);
