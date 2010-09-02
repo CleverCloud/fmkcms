@@ -31,7 +31,7 @@ public class PageRef extends MongoEntity {
 
         for (Locale language : languages) {
             // Try exact Locale
-            page = null; //Page.getPageByLocale(this, language);
+            page = Page.getPageByLocale(this, language);
             if (page != null)
                 return page;
 

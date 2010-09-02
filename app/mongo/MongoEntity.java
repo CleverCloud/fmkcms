@@ -35,8 +35,4 @@ public abstract class MongoEntity {
         getDs().delete(this);
     }
 
-    public static <T extends MongoEntity> Query<T> find(Class childrenClass, String field, String value) {
-        return getDs().find(childrenClass, field, value);
-    }
-
 }

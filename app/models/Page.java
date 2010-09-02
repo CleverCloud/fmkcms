@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import controllers.I18nController;
 import elasticsearch.IndexJob;
 import java.util.List;
 import java.util.Locale;
@@ -22,17 +23,23 @@ public class Page extends MongoEntity {
 
     @Required
     public String title;
+
     @Required
     @MaxSize(60000)
     public String content;
+
     @Required
     public Locale language;
+
     @Required
     public PageRef pageReference;
+
     @Required
     public Boolean published = false;
+
     @Required
     public String urlId;
+
     @Embedded
     public Set<Tag> tags;
 
@@ -100,8 +107,6 @@ public class Page extends MongoEntity {
 
         Page page = Page.getPageByLocale(this.pageReference, language);
 
-
-
         page.delete();
         return this;
     }
@@ -114,7 +119,6 @@ public class Page extends MongoEntity {
             }
             defaultPage.save();
         }
-
 
         return this.save();
     }
@@ -134,19 +138,16 @@ public class Page extends MongoEntity {
     // Accessing stuff
     //
     public static Page getByUrlId(String urlId) {
-        //PageRef pageRef = PageRef.find("byUrlId", urlId).first();
-        //return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
-        return null;
+        PageRef pageRef = MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
+        return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
     }
 
     public static Page getPageByLocale(PageRef pageRef, Locale language) {
-        //return Page.find("byPageReferenceAndLanguage", pageRef, language).first();
-        return null;
+        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).filter("language =", language).get();
     }
 
     public static List<Page> getPagesByPageRef(PageRef pageRef) {
-        //return Page.find("byPageReference", pageRef).fetch();
-        return null;
+        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
     }
 
     public static Page getDefaultPage(PageRef pageRef) {
