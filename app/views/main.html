@@ -17,8 +17,8 @@
             <ul>
                 <li>#{pageLink "index" /}</li>
                 <li>#{pageLink "another_page" /}</li>
-                <li><a href="@{PageController.pagestag("azerty")}">tag azerty</a></li>
-                <li><a href="/admin/">admin</a></li>
+                <li><a href="@{PageController.pagesTag("azerty")}">tag azerty</a></li>
+                <!--<li><a href="/admin/">admin</a></li>-->
             </ul>
             #{form @PageController.searchPage()}
             <label for="toFind"> Find : </label>

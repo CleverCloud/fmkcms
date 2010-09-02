@@ -5,13 +5,11 @@ package models;
  * @author waxzce
  */
 import com.google.code.morphia.annotations.Entity;
-import javax.persistence.Column;
 import mongo.MongoEntity;
 
 @Entity
 public class Tag extends MongoEntity implements Comparable<Tag> {
 
-    @Column(unique=true)
     public String name;
 
     private Tag(String name) {
@@ -28,6 +26,8 @@ public class Tag extends MongoEntity implements Comparable<Tag> {
     }
 
     public static Tag findOrCreateByName(String name) {
+        if (name.isEmpty())
+            return null;
         name = name.trim();
         Tag tag = MongoEntity.getDs().find(Tag.class, "name", name).get();
         if (tag == null) {

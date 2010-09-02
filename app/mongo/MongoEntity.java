@@ -4,7 +4,6 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
-import com.google.code.morphia.query.Query;
 import org.bson.types.ObjectId;
 import play.Play;
 
@@ -21,18 +20,18 @@ public abstract class MongoEntity {
     private static Morphia morphia;
 
     public static Datastore getDs() {
-        if (morphia == null) {
-            morphia = new Morphia();
-        }
-        return morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
+        if (MongoEntity.morphia == null)
+            MongoEntity.morphia = new Morphia();
+        return MongoEntity.morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
     }
 
     public <T extends MongoEntity> T save() {
-        getDs().save(this);
-        return (T) getDs().get(this);
+        MongoEntity.getDs().save(this);
+        return (T) MongoEntity.getDs().get(this);
     }
+    
     public void delete() {
-        getDs().delete(this);
+        MongoEntity.getDs().delete(this);
     }
 
 }

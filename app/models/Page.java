@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 import controllers.I18nController;
 import elasticsearch.IndexJob;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Page extends MongoEntity {
     public Locale language;
 
     @Required
+    @Reference
     public PageRef pageReference;
 
     @Required
@@ -44,18 +46,14 @@ public class Page extends MongoEntity {
     //
     public Page() {}
 
-    private Page(String title, String content, Locale language) {
-        this.title = title;
-        this.content = content;
-        this.language = language;
-    }
-
     //
     // Tags handling
     //
     public Page tagItWith(String name) {
-        this.pageReference.tags.add(Tag.findOrCreateByName(name));
-        this.pageReference.save();
+        if (name != null && !name.isEmpty()) {
+            this.pageReference.tags.add(Tag.findOrCreateByName(name));
+            this.pageReference.save();
+        }
         return this;
     }
 
@@ -83,13 +81,18 @@ public class Page extends MongoEntity {
             return this.save();
         }
 
-        Page concurrent = Page.getPageByLocale(this.pageReference, language);
+        Page concurrent = Page.getPageByLocale(this.pageReference.urlId, language);
         if (concurrent != null) {
             concurrent.title = title;
             concurrent.content = content;
             concurrent.save();
         } else {
-            Page.editOrCreate(this.pageReference, title, content, language);
+            Page page = new Page();
+            page.pageReference = this.pageReference;
+            page.title = this.title;
+            page.content = this.content;
+            page.language = this.language;
+            page.save();
         }
 
         return this;
@@ -97,59 +100,25 @@ public class Page extends MongoEntity {
 
     public Page removeTranslation(Locale language) {
         if (this.language.equals(language)) {
-            Logger.error("Cannot self remove, please remove from another translation (the default one ?).", new Object[0]);
+            Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);
             return this;
         }
 
-        Page page = Page.getPageByLocale(this.pageReference, language);
+        Page.getPageByLocale(this.pageReference.urlId, language).delete();
 
-        page.delete();
-        return this;
-    }
-
-    public Page setAsDefaultLanguage() {
-        Page defaultPage = Page.getDefaultPage(this.pageReference);
-        if (defaultPage != null) {
-            if (defaultPage.id.equals(this.id)) {
-                return this;
-            }
-            defaultPage.save();
-        }
-
-        return this.save();
-    }
-
-    //
-    // Test stuff
-    //
-
-    @Override
-    public Page save() {
-        super.save();
-        new IndexJob(this, "page", this.id.toString()).now();
         return this;
     }
 
     //
     // Accessing stuff
     //
-    public static Page getByUrlId(String urlId) {
-        PageRef pageRef = MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
-        return (pageRef == null) ? null : pageRef.getPage(I18nController.getBrowserLanguages());
-    }
-
-    public static Page getPageByLocale(PageRef pageRef, Locale language) {
-        // TODO: FIXME pliz :D
-        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).filter("language =", language).get();
-    }
 
     public static List<Page> getPagesByUrlId(String urlId) {
         return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).asList();
     }
 
-    public static Page getDefaultPage(PageRef pageRef) {
-        //return Page.find("byPageReferenceAndIsDefaultLanguage", pageRef, true).first();
-        return null;
+    public static Page getPageByLocale(String urlId, Locale locale) {
+        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).filter("language =", locale).get();
     }
 
     //
@@ -164,19 +133,7 @@ public class Page extends MongoEntity {
         this.published = false;
         return this.save();
     }
-
-    public static Page editOrCreate(PageRef pageRef, String title, String content, Locale language) {
-        Page page = Page.getPageByLocale(pageRef, language);
-        if (page == null) {
-            page = new Page(title, content, language);
-            page.pageReference = pageRef;
-        } else {
-            page.title = title;
-            page.content = content;
-        }
-
-        return page.save();
-    }
+    
     //
     // Hooks
     //

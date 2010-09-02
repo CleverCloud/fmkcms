@@ -12,7 +12,6 @@ public class Roles {
     public String name;
     public List<String> rights_names;
 
-
     @Override
     public String toString() {
         return (new Gson()).toJson(this);

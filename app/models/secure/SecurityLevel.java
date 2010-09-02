@@ -11,12 +11,10 @@ public class SecurityLevel {
 
     public String name;
     public List<String> controllers;
-
     
     @Override
     public String toString() {
         return (new Gson()).toJson(this);
     }
-
 
 }
