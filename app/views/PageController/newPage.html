@@ -9,9 +9,9 @@
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
     %{
         java.util.Set<String> urlIds = new TreeSet<String>();
-        for (models.PageRef pageRef : mongo.MongoEntity.getDs().find(models.PageRef.class)) {
+        /*for (models.PageRef pageRef : mongo.MongoEntity.getDs().find(models.PageRef.class)) {
             urlIds.add(pageRef.urlId);
-        }
+        }*/
     }%
     #{list items:urlIds, as:'u'}
         <option value="${u}" ${field.value?.toString().equals(u) || (field.value == null && urlId.equals(u)) ? 'selected="true"'.raw() : ''}>${u}</option>

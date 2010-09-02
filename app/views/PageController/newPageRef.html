@@ -16,10 +16,10 @@
     <label>&{field.name}</label>
     %{
         String tags = new String();
-        for (models.Tag tag : mongo.MongoEntity.getDs().find(models.Tag.class)) {
+        /*for (models.Tag tag : mongo.MongoEntity.getDs().find(models.Tag.class)) {
             if ${field.value}.contains(tag)
                 tags += (tags.isEmpty() ? '' : ", " + tag.toString());
-        }
+        }*/
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
