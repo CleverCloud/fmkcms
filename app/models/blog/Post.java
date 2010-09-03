@@ -2,19 +2,16 @@ package models.blog;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
+import controllers.I18nController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import models.Tag;
 import mongo.MongoEntity;
+import org.bson.types.ObjectId;
 import play.Logger;
 import play.data.validation.Required;
 
@@ -34,7 +31,6 @@ public class Post extends MongoEntity {
     @Required
     public String content;
 
-    @Reference
     public PostRef postReference;
 
     @Required
@@ -43,38 +39,30 @@ public class Post extends MongoEntity {
     @Reference
     @Required
     public User author;
-
-    @Required
-    public Boolean isDefaultLanguage = false;
-
-    @OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    
     public List<Comment> comments;
 
     //
     // Constructor
     //
-    private Post(User author, Locale language, String title, String content) {
+    private Post(PostRef postReference, User author, Locale language, String title, String content) {
+        this.postReference = postReference;
         this.author = author;
         this.language = language;
         this.title = title;
         this.content = content;
+        this.postedAt = new Date();
     }
 
     //
     // Comments handling
     //
     public Post addComment(String email, String pseudo, String password, String content) {
-        Comment comment = null;
-        /*if (User.findByEmail(email) != null || User.findByPseudo(pseudo) != null) {
-            // If email is referrenced or pseudo is referrenced for another email, just do nothing.
-            User user = User.connect(email, password);
-            if (user == null) {
-                Logger.error("Failed connection for existing user, aborting comment posting.", new Object[0]);
-                return this;
-            } else
-                comment = new Comment(user, content).save();
-        } else*/
-            comment = new Comment(email, pseudo, content).save();
+        Comment comment = new Comment();
+        comment.email = email;
+        comment.pseudo = pseudo;
+        comment.content = content;
+        comment.postedAt = new Date();
         this.comments.add(comment);
         return this.save();
     }
@@ -117,12 +105,15 @@ public class Post extends MongoEntity {
     // Tags handling
     //
     public Post tagItWith(String name) {
-        this.postReference.tags.add(Tag.findOrCreateByName(name));
-        this.postReference.save();
+        if (name != null && !name.isEmpty()) {
+            this.postReference.tags.add(Tag.findOrCreateByName(name));
+            this.postReference.save();
+        }
         return this;
     }
 
     public static List<Post> findTaggedWith(String ... tags) {
+        // TODO: Reimplement Tag searching
 /*        List<PostRef> postRefs = PostRef.find(
                 "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
         
@@ -147,129 +138,62 @@ public class Post extends MongoEntity {
             return this.save();
         }
 
-        Post concurrent = Post.getPostByLocale(this.postReference, language);
+        Post concurrent = Post.getPostByLocale(this.postReference.id, language);
         if (concurrent != null) {
             concurrent.author = author;
             concurrent.title = title;
             concurrent.content = content;
-            concurrent.save();
-        } else
-            Post.editOrCreate(this.postReference, author, language, title, content);
+            return concurrent.save();
+        }
 
-        return this;
+        return new Post(this.postReference, author, language, title, content).save();
     }
 
     public Post removeTranslation(Locale language) {
         if (this.language.equals(language)) {
-            Logger.error("Cannot self remove, please remove from another translation (the default one ?).", new Object[0]);
+            Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);
             return this;
         }
-        
-        Post post = Post.getPostByLocale(this.postReference, language);
 
-        if (post.isDefaultLanguage)
-            Logger.error("Cannot remove translation for default language for: " + post.title + ". Please change default language first, by using setAsDefaultLanguage() on another translation.", new Object[0]);
+        Post.getPostByLocale(this.postReference.id, language).delete();
 
-        post.delete();
         return this;
-    }
-
-    public Post setAsDefaultLanguage() {
-        Post defaultPost = Post.getDefaultPost(this.postReference);
-        if (defaultPost != null) {
-            if (defaultPost.id.equals(this.id))
-                return this;
-            defaultPost.isDefaultLanguage = false;
-            defaultPost.save();
-        }
-
-        if (this.isDefaultLanguage) // Or we'll create a loop from the setter
-            return this;
-
-        this.isDefaultLanguage = Boolean.TRUE;
-        return this.save();
-    }
-
-    //
-    // Setters
-    //
-    public void setIsDefaultLanguage(Boolean isDefaultLanguage) {
-        this.isDefaultLanguage = isDefaultLanguage;
-        if (this.isDefaultLanguage)
-            this.setAsDefaultLanguage();
-        //Logger.error(this.title + " is the default language, if you want to change that, please use setAsDefaultLanguage on the new default.", new Object[0]);
-    }
-
-    public void setPostReference(PostRef postReference) {
-        if (postReference != null && this.isDefaultLanguage != null && this.isDefaultLanguage)
-                this.setAsDefaultLanguage();
-
-        this.postReference = postReference;
     }
 
     //
     // Accessing stuff
     //
-    public static Post getPostByLocale(PostRef postRef, Locale language) {
-        //return Post.find(Post.class, "language", language.toString()).get();
-        return null;
+    public static Post getPostByLocale(ObjectId postRefId, Locale language) {
+        return MongoEntity.getDs().find(Post.class, "postReference.id", postRefId).filter("language =", language).get();
     }
 
-    public static List<Post> getPostsByPostRef(PostRef postRef) {
-        //return Post.find(Post.class, "postReference", postRef.id.toStringMongod()).asList();
-        return null;
+    public static List<Post> getPostsByPostRef(ObjectId postRefId) {
+        return MongoEntity.getDs().find(Post.class, "postReference.id", postRefId).asList();
     }
 
-    public static Post getDefaultPost(PostRef postRef) {
-        //return Post.find("byPostReferenceAndIsDefaultLanguage", postRef, true).first();
-        return null;
+    public static Post getFirstPostByPostRef(PostRef postRef) {
+        return MongoEntity.getDs().find(Post.class, "postReference.id", postRef.id).get();
     }
 
-    //
-    // Managing stuff
-    //
-    public static Post editOrCreate(PostRef postRef, User author, Locale language, String title, String content) {
-        Post post = Post.getPostByLocale(postRef, language);
-        if (post == null) {
-            post = new Post(author, language, title, content);
-            post.postReference = postRef;
-        }
-        else {
-            post.content = content;
-            post.title = title;
-            post.author = author;
-        }
-        
-        if(Post.getDefaultPost(postRef) == null)
-            post.isDefaultLanguage = true;
+    public static Post getPost(ObjectId postRefId) {
+        List<Post> posts = Post.getPostsByPostRef(postRefId);
 
-        return post.save();
-    }
+        switch (posts.size()) {
+            case 0:
+                return null;
+            case 1:
+                return posts.get(0);
+            default:
+                List<Locale> locales = I18nController.getBrowserLanguages();
+                for (Locale locale : locales) {
+                    // Try exact Locale
+                    for (Post candidat : posts) {
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
+                            return candidat;
+                    }
+                }
 
-    //
-    // Hooks
-    //
-    @PrePersist
-    @PreUpdate
-    public void prePersistManagement() throws Exception {
-        if (this.postReference == null)
-            this.postReference = new PostRef().save();
-
-        if (this.postedAt == null)
-            this.postedAt = new Date();
-
-        Post post = Post.getDefaultPost(this.postReference);
-        if (post == null || (this.id != null && this.id == post.id)) { // We are creating the first Post for the PostRef
-            this.isDefaultLanguage = Boolean.TRUE;
-            if (this.postReference.author == null || this.postReference.postedAt == null) {
-                this.postReference.author = this.author;
-                this.postReference.postedAt = this.postedAt;
-                this.postReference.save();
-            }
-        } else {
-            post = Post.getPostByLocale(this.postReference, this.language);
-            if (post != null && (this.id ==null || this.id != post.id))
-                throw new Exception();
+                return posts.get(0); // pick up first for now
         }
     }
 

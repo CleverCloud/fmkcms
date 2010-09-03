@@ -43,11 +43,10 @@ public class PageController extends Controller {
                             break;
                         }
                     }
-
-                    if (page == null) {
-                        page = pages.get(0); // pick up first for now
-                    }
                 }
+
+                if (page == null)
+                    page = pages.get(0); // pick up first for now
         }
 
         if (!page.published) {
@@ -62,10 +61,7 @@ public class PageController extends Controller {
     }
 
     public static void pagesTag(String tagName) {
-        Tag tag = Tag.findOrCreateByName(tagName);
-        List<Page> listOfPages = Page.findTaggedWith(tagName);
-
-        render(listOfPages, tag);
+        render(Page.findTaggedWith(tagName), Tag.findOrCreateByName(tagName));
     }
 
     public static void newPage(String urlId) {

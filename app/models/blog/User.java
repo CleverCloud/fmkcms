@@ -6,7 +6,7 @@ package models.blog;
  */
 public abstract class User {
 
-    public abstract String getPseudo();
-    public abstract String getEmail();
+    public String pseudo;
+    public String email;
 
 }
