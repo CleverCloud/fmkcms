@@ -3,6 +3,7 @@ package elasticsearch;
 import com.google.gson.Gson;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
+import play.Play;
 import play.jobs.Job;
 
 /**
@@ -26,7 +27,7 @@ public class IndexJob extends Job<String> {
         Gson gson = new Gson();
         Client c = new ElasticSearchClient();
         String t = gson.toJson(indexable);
-        IndexResponse response = c.prepareIndex("fmkcms", indexname, id).setSource(t).execute().actionGet();
+        IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
         c.close();
         return response.toString();
     }
