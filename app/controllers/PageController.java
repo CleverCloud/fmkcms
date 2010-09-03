@@ -1,10 +1,12 @@
 package controllers;
 
+import elasticsearch.SearchJob;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Future;
 import models.Page;
 import models.PageRef;
 import models.Tag;
@@ -42,13 +44,15 @@ public class PageController extends Controller {
                         }
                     }
 
-                    if (page == null)
+                    if (page == null) {
                         page = pages.get(0); // pick up first for now
+                    }
                 }
         }
 
-        if (! page.published)
+        if (!page.published) {
             notFound();
+        }
 
         if (request.headers.get("accept").value().contains("json")) {
             renderJSON(page);
@@ -76,9 +80,9 @@ public class PageController extends Controller {
         Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
         Page page = Page.getFirstPageByUrlId(urlId);
-        if (page != null)
+        if (page != null) {
             page = page.addTranslation(title, content, language, published);
-        else {
+        } else {
             page = new Page();
             page.pageReference = MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
             page.title = title;
@@ -93,14 +97,16 @@ public class PageController extends Controller {
                 Validation.keep(); // keep the errors for the next request
 
                 PageController.newPage(null);
-            } else
+            } else {
                 page.save();
+            }
         }
 
-        if (page.published)
+        if (page.published) {
             PageController.page(urlId);
-        else
+        } else {
             PageController.page("index");
+        }
     }
 
     public static void newPageRef() {
@@ -112,15 +118,16 @@ public class PageController extends Controller {
         PageRef pageRef = PageRef.getPageRefByUrlId(urlId);
         Set<Tag> tags = null;
 
-        if (pageRef != null)
+        if (pageRef != null) {
             tags = pageRef.tags;
-        else {
+        } else {
             pageRef = new PageRef();
             pageRef.urlId = urlId;
         }
 
-        if (tags == null)
+        if (tags == null) {
             tags = new TreeSet<Tag>();
+        }
 
         String tagsString = params.get("pageRef.tags");
         if (!tagsString.isEmpty()) {
@@ -145,18 +152,27 @@ public class PageController extends Controller {
     }
 
     public static void searchPage(String q) {
+        if (request.isNew) {
+
+            Future<String> task = new SearchJob(q).now();
+            request.args.put("task", task);
+            waitFor(task);
+        }
+        renderText((Future<String>) request.args.get("task"));
+
+
         // TODO: Reimplement Search
         /*if (q == null) {
-            q = "search";
+        q = "search";
         }
 
         EntityManager em = JPA.entityManagerFactory.createEntityManager();
 
         FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
         try {
-            fullTextEntityManager.createIndexer().startAndWait();
+        fullTextEntityManager.createIndexer().startAndWait();
         } catch (InterruptedException ex) {
-            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         org.hibernate.Session s = (org.hibernate.Session) JPA.em().getDelegate();
@@ -168,9 +184,9 @@ public class PageController extends Controller {
         MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
         org.apache.lucene.search.Query query = null;
         try {
-            query = parser.parse(q);
+        query = parser.parse(q);
         } catch (ParseException ex) {
-            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         org.hibernate.Query hibQuery = fullTextSession.createFullTextQuery(query, Page.class);
@@ -178,8 +194,6 @@ public class PageController extends Controller {
         tx.commit();
 
         render(results, q);*/
-        render();
+       // render();
     }
-    
-    
 }
