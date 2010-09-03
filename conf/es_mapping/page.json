@@ -1,9 +1,15 @@
 {
     "page" : {
         "properties" : {
-            "content" : {"type" : "string", "boost" : "1.0"},
-            "title" : {"type" : "string", "boost" : "3.0"},
-            "tags" : {"boost" : "2.0"}
+            "content" : {"type" : "string", "boost" : 1.0},
+            "title" : {"type" : "string", "boost" : 3.0},
+            "tags" : {
+                         "properties" : {
+                             "name" : {"type" : "string", "boost":2.0},
+                              "description" : {"type" : "string"}
+                      }
+
         }
     }
+}
 }

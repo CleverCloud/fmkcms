@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import elasticsearch.IndexJob;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -20,27 +21,23 @@ public class Page extends MongoEntity {
 
     @Required
     public String title;
-
     @Required
     @MaxSize(60000)
     public String content;
-
     @Required
     public Locale language;
-
     @Required
     public PageRef pageReference;
-
     @Required
     public Boolean published = false;
-
     @Embedded
     public Set<Tag> tags;
 
     //
     // Constructor
     //
-    public Page() {}
+    public Page() {
+    }
 
     //
     // Tags handling
@@ -53,7 +50,7 @@ public class Page extends MongoEntity {
         return this;
     }
 
-    public static List<Page> findTaggedWith(String ... tags) {
+    public static List<Page> findTaggedWith(String... tags) {
         // TODO: Reimplement Tag searching
         /*List<PageRef> pageRefs = PageRef.find(
         "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
@@ -134,7 +131,13 @@ public class Page extends MongoEntity {
         this.published = false;
         return this.save();
     }
-    
+
+    @Override
+    public Page save() {
+        super.save();
+        new IndexJob(this, "page", this.id.toStringMongod()).now();
+        return this;
+    }
     //
     // Hooks
     //

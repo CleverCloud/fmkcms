@@ -94,7 +94,7 @@ public class PageController extends Controller {
 
                 PageController.newPage(null);
             } else
-                MongoEntity.getDs().save(page);
+                page.save();
         }
 
         if (page.published)
