@@ -42,6 +42,14 @@ public class Page extends MongoEntity {
     //
     public Page() {}
 
+    private Page(PageRef pageReference, String title, String content, Locale language, Boolean published) {
+        this.pageReference = pageReference;
+        this.title = title;
+        this.content = content;
+        this.language = language;
+        this.published = published;
+    }
+
     //
     // Tags handling
     //
@@ -87,13 +95,7 @@ public class Page extends MongoEntity {
             return concurrent.save();
         }
 
-        Page page = new Page();
-        page.pageReference = this.pageReference;
-        page.title = title;
-        page.content = content;
-        page.language = language;
-        page.published = published;
-        return page.save();
+        return new Page(this.pageReference, title, content, language, published).save();
     }
 
     public Page removeTranslation(Locale language) {
@@ -134,23 +136,5 @@ public class Page extends MongoEntity {
         this.published = false;
         return this.save();
     }
-    
-    //
-    // Hooks
-    //
- /*
-    public void prePersistManagement() throws Exception {
-    if (this.pageReference == null)
-    this.pageReference = new PageRef().save();
 
-    Page page = Page.getDefaultPage(this.pageReference);
-    if (page == null || (this.id != null && this.id == page.id)) // We are creating the first Page for the PageRef
-    this.isDefaultLanguage = Boolean.TRUE;
-    else {
-    page = Page.getPageByLocale(this.pageReference, this.language);
-    if (page != null && (this.id ==null || this.id != page.id))
-    throw new Exception();
-    }
-    }
-     */
 }
