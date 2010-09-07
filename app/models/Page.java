@@ -3,13 +3,17 @@ package models;
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import elasticsearch.IndexJob;
+import elasticsearch.Searchable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import mongo.MongoEntity;
 import play.Logger;
 import play.data.validation.MaxSize;
 import play.data.validation.Required;
+import play.mvc.Router;
 
 /**
  *
@@ -17,7 +21,7 @@ import play.data.validation.Required;
  * @author keruspe
  */
 @Entity
-public class Page extends MongoEntity {
+public class Page extends MongoEntity implements Searchable {
 
     @Required
     public String title;
@@ -140,6 +144,20 @@ public class Page extends MongoEntity {
         new IndexJob(this, "page", this.id.toStringMongod()).now();
         return this;
     }
+
+    public String getPrintTitle() {
+        return title;
+    }
+
+    public String getPrintDesc() {
+        return content;
+    }
+
+    public String getPrintURL() {
+        Map<String, Object> argmap = new HashMap<String, Object>();
+        argmap.put("urlId", pageReference.urlId);
+        return Router.getFullUrl("PageController.page", argmap);
+    }
     //
     // Hooks
     //
@@ -147,5 +165,5 @@ public class Page extends MongoEntity {
     public void prePersistManagement() throws Exception {
     if (this.pageReference == null)
     this.pageReference = new PageRef().save();
-*/
+     */
 }

@@ -33,5 +33,6 @@ public abstract class MongoEntity {
     public void delete() {
         MongoEntity.getDs().delete(this);
     }
+    
 
 }

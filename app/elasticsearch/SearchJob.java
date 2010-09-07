@@ -40,7 +40,6 @@ public class SearchJob extends Job<String> {
         .actionGet();
 
 
-
         return new Gson().toJson(response);
     }
 
