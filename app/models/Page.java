@@ -147,5 +147,5 @@ public class Page extends MongoEntity {
     public void prePersistManagement() throws Exception {
     if (this.pageReference == null)
     this.pageReference = new PageRef().save();
-
+*/
 }
