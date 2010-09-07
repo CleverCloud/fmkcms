@@ -35,7 +35,7 @@ public class SearchJob extends Job<String> {
 
         SearchResponse response = c.prepareSearch(Play.configuration.getProperty("elasticsearch.indexname"))
         .setSearchType(SearchType.DEFAULT)
-        .setQuery(qsqb.buildAsBytes())
+        .setQuery(qsqb)
         .execute()
         .actionGet();
 

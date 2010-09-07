@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.Page;
 import models.PageRef;
 import models.Tag;
@@ -154,42 +157,39 @@ public class PageController extends Controller {
             request.args.put("task", task);
             waitFor(task);
         }
-        renderText((Future<String>) request.args.get("task"));
-
-
-        // TODO: Reimplement Search
-        /*if (q == null) {
-        q = "search";
-        }
-
-        EntityManager em = JPA.entityManagerFactory.createEntityManager();
-
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
         try {
-        fullTextEntityManager.createIndexer().startAndWait();
+            renderText(((Future<String>) request.args.get("task")).get());
+            // TODO: Reimplement Search
+            /*if (q == null) {
+            q = "search";
+            }
+            EntityManager em = JPA.entityManagerFactory.createEntityManager();
+            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+            try {
+            fullTextEntityManager.createIndexer().startAndWait();
+            } catch (InterruptedException ex) {
+            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            org.hibernate.Session s = (org.hibernate.Session) JPA.em().getDelegate();
+            FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(s);
+            Transaction tx = fullTextSession.beginTransaction();
+            String[] fields = new String[]{"title", "content", "pageReference.urlId", "tags.name"};
+            MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
+            org.apache.lucene.search.Query query = null;
+            try {
+            query = parser.parse(q);
+            } catch (ParseException ex) {
+            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            org.hibernate.Query hibQuery = fullTextSession.createFullTextQuery(query, Page.class);
+            List<Page> results = hibQuery.list();
+            tx.commit();
+            render(results, q);*/
+            // render();
         } catch (InterruptedException ex) {
-        Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        org.hibernate.Session s = (org.hibernate.Session) JPA.em().getDelegate();
-        FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(s);
-        Transaction tx = fullTextSession.beginTransaction();
-
-        String[] fields = new String[]{"title", "content", "pageReference.urlId", "tags.name"};
-
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
-        org.apache.lucene.search.Query query = null;
-        try {
-        query = parser.parse(q);
-        } catch (ParseException ex) {
-        Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        org.hibernate.Query hibQuery = fullTextSession.createFullTextQuery(query, Page.class);
-        List<Page> results = hibQuery.list();
-        tx.commit();
-
-        render(results, q);*/
-       // render();
     }
 }
