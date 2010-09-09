@@ -20,15 +20,12 @@ public class PostRef extends MongoEntity {
     //
     // Accessing stuff
     //
-    // TODO: Reimplement previous & next
     public PostRef previous() {
-        //return PostRef.find("postedAt < ? order by postedAt desc", postedAt).first();
-        return null;
+        return MongoEntity.getDs().find(PostRef.class, "postedAt <", this.postedAt).order("-postedAt").get();
     }
 
     public PostRef next() {
-        //return PostRef.find("postedAt > ? order by postedAt asc", postedAt).first();
-        return null;
+        return MongoEntity.getDs().find(PostRef.class, "postedAt >", this.postedAt).order("postedAt").get();
     }
     
 }
