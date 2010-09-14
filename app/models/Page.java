@@ -69,17 +69,7 @@ public class Page extends MongoEntity implements Searchable {
     }
 
     public static List<Page> findTaggedWith(String ... tags) {
-        // TODO: Reimplement Tag searching
-        /*List<PageRef> pageRefs = PageRef.find(
-        "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
-
-        List<Page> pages = new ArrayList<Page>();
-        List<Locale> locales = I18nController.getBrowserLanguages();
-        for (PageRef pageRef : pageRefs) {
-        pages.add(pageRef.getPage(locales));
-        }
-
-        return pages;*/
+        // TODO: waxzce, gogo elastic search !
         List<Page> p = MongoEntity.getDs().find(Page.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
         System.out.println(p.size());
         return p;
