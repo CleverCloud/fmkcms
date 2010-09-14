@@ -3,7 +3,7 @@
 
 #{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
 
-#{field 'page.pageReference'}
+#{field 'pageReference.urlId'}
 <p>
     <label>&{field.name}</label>
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
@@ -13,11 +13,36 @@
         while (itz.hasNext()) {
             urlIds.add(itz.next().urlId);
         }
+        urlIds.add("new");
     }%
     #{list items:urlIds, as:'u'}
-        <option value="${u}" ${field.value?.toString().equals(u) || (field.value == null && urlId.equals(u)) ? 'selected="true"'.raw() : ''}>${u}</option>
+        <option value="${u}" ${field.value?.toString().equals("new") ? 'selected="true"'.raw() : ''}>${u}</option>
     #{/list}
     </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'pageReference.newUrlId'}
+<p>
+    <label>&{field.name}</label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'pageReference.tags'}
+<p>
+    <label>&{field.name}</label>
+    %{
+        String tags = "";
+        if(field.value != null){
+        for (String tag : field.value) {
+            tags += (tags.isEmpty() ? "" : ", ") + tag;
+        }
+    }
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}

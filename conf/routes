@@ -6,8 +6,6 @@
 GET     /page/{urlId}                           PageController.page
 GET     /pages/tag/{tagName}                    PageController.pagesTag
 *       /pages/search                           PageController.searchPage
-GET     /newPageRef                             PageController.newPageRef
-POST    /doNewPageRef                           PageController.newPageRef
 GET     /newPage                                PageController.newPage
 POST    /doNewPage                              PageController.newPage
 GET     /captcha                                BlogController.captcha

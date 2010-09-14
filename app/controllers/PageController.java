@@ -13,17 +13,14 @@ import java.util.logging.Logger;
 import models.Page;
 import models.PageRef;
 import models.Tag;
-import mongo.MongoEntity;
 import play.data.validation.Validation;
 import play.mvc.Controller;
-import play.mvc.With;
 
 /**
  *
  * @author waxzce
  * @author keruspe
  */
-@With(CheckRights.class)
 public class PageController extends Controller {
 
     public static void page(String urlId) {
@@ -64,15 +61,31 @@ public class PageController extends Controller {
     }
 
     public static void pagesTag(String tagName) {
-        render(Page.findTaggedWith(tagName), Tag.findOrCreateByName(tagName));
+        Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
+        render(Page.findTaggedWith(tagName), tag);
     }
 
-    public static void newPage(String urlId) {
-        render(urlId);
+    public static void newPage() {
+        render();
     }
 
     public static void doNewPage() {
-        String urlId = params.get("page.pageReference");
+        String urlId = params.get("pageReference.urlId");
+        if (urlId.equals("new"))
+            urlId = params.get("pageReference.newUrlId");
+        PageRef pageRef = PageController.doNewPageRef(urlId, params.get("pageReference.tags"));
+
+        validation.valid(pageRef);
+        if (Validation.hasErrors()) {
+
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+
+            PageController.newPage();
+        } else {
+            pageRef.save();
+        }
+
         String title = params.get("page.title");
         String content = params.get("page.content");
         Locale language = params.get("page.language", Locale.class);
@@ -83,7 +96,7 @@ public class PageController extends Controller {
             page = page.addTranslation(title, content, language, published);
         } else {
             page = new Page();
-            page.pageReference = MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
+            page.pageReference = pageRef;
             page.title = title;
             page.content = content;
             page.language = language;
@@ -95,7 +108,7 @@ public class PageController extends Controller {
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
 
-                PageController.newPage(null);
+                PageController.newPage();
             } else {
                 page.save();
             }
@@ -108,12 +121,7 @@ public class PageController extends Controller {
         }
     }
 
-    public static void newPageRef() {
-        render();
-    }
-
-    public static void doNewPageRef() {
-        String urlId = params.get("pageRef.urlId");
+    private static PageRef doNewPageRef(String urlId, String tagsString) {
         PageRef pageRef = PageRef.getPageRefByUrlId(urlId);
         Set<Tag> tags = null;
 
@@ -128,7 +136,6 @@ public class PageController extends Controller {
             tags = new TreeSet<Tag>();
         }
 
-        String tagsString = params.get("pageRef.tags");
         if (!tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
                 tags.add(Tag.findOrCreateByName(tag));
@@ -137,17 +144,7 @@ public class PageController extends Controller {
 
         pageRef.tags = tags;
 
-        validation.valid(pageRef);
-        if (Validation.hasErrors()) {
-
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
-
-            PageController.newPageRef();
-        } else {
-            MongoEntity.getDs().save(pageRef);
-            PageController.newPage(pageRef.urlId);
-        }
+        return pageRef;
     }
 
     public static void searchPage(String q) {

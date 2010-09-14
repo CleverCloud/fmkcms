@@ -4,6 +4,7 @@ import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,15 +26,20 @@ public class Page extends MongoEntity implements Searchable {
 
     @Required
     public String title;
+
     @Required
     @MaxSize(60000)
     public String content;
+
     @Required
     public Locale language;
+
     @Required
     public PageRef pageReference;
+
     @Required
     public Boolean published = false;
+
     @Embedded
     public Set<Tag> tags;
 
@@ -62,7 +68,7 @@ public class Page extends MongoEntity implements Searchable {
         return this;
     }
 
-    public static List<Page> findTaggedWith(String... tags) {
+    public static List<Page> findTaggedWith(String ... tags) {
         // TODO: Reimplement Tag searching
         /*List<PageRef> pageRefs = PageRef.find(
         "select distinct p from PageRef p join p.tags as t where t.name in (:tags) group by p.id, p.urlId having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
@@ -74,7 +80,9 @@ public class Page extends MongoEntity implements Searchable {
         }
 
         return pages;*/
-        return null;
+        List<Page> p = MongoEntity.getDs().find(Page.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
+        System.out.println(p.size());
+        return p;
     }
 
     //
