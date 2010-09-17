@@ -5,7 +5,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
 import mongo.MongoEntity;
-import play.data.validation.Required;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -14,17 +14,14 @@ import play.data.validation.Required;
 @Entity
 public class PageRef extends MongoEntity {
 
-    @Required
-    public String urlId;
-
     @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 
     //
     // Accessing stuff
     //
-    public static PageRef getPageRefByUrlId(String urlId) {
-        return MongoEntity.getDs().find(PageRef.class, "urlId", urlId).get();
+    public static PageRef getPageRef(ObjectId id) {
+        return MongoEntity.getDs().find(PageRef.class, "id", id).get();
     }
 
 }

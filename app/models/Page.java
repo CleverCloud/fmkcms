@@ -4,6 +4,7 @@ import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,9 @@ import play.mvc.Router;
  */
 @Entity
 public class Page extends MongoEntity implements Searchable {
+
+    @Required
+    public String urlId;
 
     @Required
     public String title;
@@ -49,8 +53,9 @@ public class Page extends MongoEntity implements Searchable {
     public Page() {
     }
 
-    private Page(PageRef pageReference, String title, String content, Locale language, Boolean published) {
+    private Page(PageRef pageReference, String urlId, String title, String content, Locale language, Boolean published) {
         this.pageReference = pageReference;
+        this.urlId = urlId;
         this.title = title;
         this.content = content;
         this.language = language;
@@ -78,7 +83,7 @@ public class Page extends MongoEntity implements Searchable {
     //
     // I18n handling
     //
-    public Page addTranslation(String title, String content, Locale language, Boolean published) {
+    public Page addTranslation(String urlId, String title, String content, Locale language, Boolean published) {
         if (language.equals(this.language)) {
             this.title = title;
             this.content = content;
@@ -86,7 +91,7 @@ public class Page extends MongoEntity implements Searchable {
             return this.save();
         }
 
-        Page concurrent = Page.getPageByLocale(this.pageReference.urlId, language);
+        Page concurrent = Page.getPageByLocale(this.urlId, language);
         if (concurrent != null) {
             concurrent.title = title;
             concurrent.content = content;
@@ -94,7 +99,7 @@ public class Page extends MongoEntity implements Searchable {
             return concurrent.save();
         }
 
-        return new Page(this.pageReference, title, content, language, published).save();
+        return new Page(this.pageReference, urlId, title, content, language, published).save();
     }
 
     public Page removeTranslation(Locale language) {
@@ -103,7 +108,7 @@ public class Page extends MongoEntity implements Searchable {
             return this;
         }
 
-        Page.getPageByLocale(this.pageReference.urlId, language).delete();
+        Page.getPageByLocale(this.urlId, language).delete();
 
         return this;
     }
@@ -112,15 +117,17 @@ public class Page extends MongoEntity implements Searchable {
     // Accessing stuff
     //
     public static List<Page> getPagesByUrlId(String urlId) {
-        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).asList();
+        Page page = Page.getPageByUrlId(urlId);
+        return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference._id", page.pageReference.id).asList();
     }
 
-    public static Page getFirstPageByUrlId(String urlId) {
-        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).get();
+    public static Page getPageByUrlId(String urlId) {
+        return MongoEntity.getDs().find(Page.class, "urlId", urlId).get();
     }
 
     public static Page getPageByLocale(String urlId, Locale locale) {
-        return MongoEntity.getDs().find(Page.class, "pageReference.urlId", urlId).filter("language =", locale).get();
+        Page page = Page.getPageByUrlId(urlId);
+        return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference._id", page.pageReference.id).filter("language =", locale).get();
     }
 
     //
@@ -153,15 +160,8 @@ public class Page extends MongoEntity implements Searchable {
 
     public String getPrintURL() {
         Map<String, Object> argmap = new HashMap<String, Object>();
-        argmap.put("urlId", pageReference.urlId);
+        argmap.put("urlId", this.urlId);
         return Router.getFullUrl("PageController.page", argmap);
     }
-    //
-    // Hooks
-    //
- /*
-    public void prePersistManagement() throws Exception {
-    if (this.pageReference == null)
-    this.pageReference = new PageRef().save();
-     */
+
 }

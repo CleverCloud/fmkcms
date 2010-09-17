@@ -70,38 +70,35 @@ public class PageController extends Controller {
     }
 
     public static void doNewPage() {
-        String urlId = params.get("pageReference.urlId");
+        String urlId = params.get("linkTo.urlId");
         if (urlId.equals("new"))
-            urlId = params.get("pageReference.newUrlId");
-        PageRef pageRef = PageController.doNewPageRef(urlId, params.get("pageReference.tags"));
-
-        validation.valid(pageRef);
-        if (Validation.hasErrors()) {
-
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
-
-            PageController.newPage();
-        } else {
-            pageRef.save();
-        }
-
+            urlId = params.get("linkTo.newUrlId");
         String title = params.get("page.title");
         String content = params.get("page.content");
         Locale language = params.get("page.language", Locale.class);
         Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
-        Page page = Page.getFirstPageByUrlId(urlId);
+        Page page = Page.getPageByUrlId(urlId);
         if (page != null) {
-            page = page.addTranslation(title, content, language, published);
+            page = page.addTranslation(urlId, title, content, language, published);
         } else {
+            PageRef pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
+            validation.valid(pageRef);
+            if (Validation.hasErrors()) {
+
+                params.flash(); // add http parameters to the flash scope
+                Validation.keep(); // keep the errors for the next request
+
+                PageController.newPage();
+            }
+
             page = new Page();
-            page.pageReference = pageRef;
+            page.pageReference = pageRef.save();
+            page.urlId = urlId;
             page.title = title;
             page.content = content;
             page.language = language;
             page.published = published;
-
             validation.valid(page);
             if (Validation.hasErrors()) {
 
@@ -110,6 +107,7 @@ public class PageController extends Controller {
 
                 PageController.newPage();
             } else {
+                page.pageReference.delete(); // TODO: better handling of this (to avoid useless pageRefs)
                 page.save();
             }
         }
@@ -121,20 +119,9 @@ public class PageController extends Controller {
         }
     }
 
-    private static PageRef doNewPageRef(String urlId, String tagsString) {
-        PageRef pageRef = PageRef.getPageRefByUrlId(urlId);
-        Set<Tag> tags = null;
-
-        if (pageRef != null) {
-            tags = pageRef.tags;
-        } else {
-            pageRef = new PageRef();
-            pageRef.urlId = urlId;
-        }
-
-        if (tags == null) {
-            tags = new TreeSet<Tag>();
-        }
+    private static PageRef doNewPageRef(String tagsString) {
+        PageRef pageRef = new PageRef();
+        Set<Tag> tags = new TreeSet<Tag>();
 
         if (!tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
@@ -143,7 +130,6 @@ public class PageController extends Controller {
         }
 
         pageRef.tags = tags;
-
         return pageRef;
     }
 
@@ -170,7 +156,7 @@ public class PageController extends Controller {
             org.hibernate.Session s = (org.hibernate.Session) JPA.em().getDelegate();
             FullTextSession fullTextSession = org.hibernate.search.Search.getFullTextSession(s);
             Transaction tx = fullTextSession.beginTransaction();
-            String[] fields = new String[]{"title", "content", "pageReference.urlId", "tags.name"};
+            String[] fields = new String[]{"title", "content", "urlId", "tags.name"};
             MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_20, fields, new StandardAnalyzer(Version.LUCENE_20));
             org.apache.lucene.search.Query query = null;
             try {
