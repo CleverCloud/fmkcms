@@ -1,7 +1,12 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import models.Tag;
 import models.blog.Post;
+import models.blog.PostRef;
+import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import play.cache.Cache;
 import play.data.validation.Validation;
@@ -28,9 +33,8 @@ public class BlogController extends Controller {
     }
 
     public static void index() {
-        // TODO: index
-        /*PostRef frontPostRef = PostRef.find("Order by postedAt desc").first();
-        List<PostRef> olderPostRefs =  PostRef.find("Order by postedAt desc").from(1).fetch(10);
+        PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
+        List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
 
         List<Locale> locales = I18nController.getBrowserLanguages();
         Post frontPost = frontPostRef.getPost(locales);
@@ -39,7 +43,7 @@ public class BlogController extends Controller {
             olderPosts.add(postRef.getPost(locales));
         }
 
-        render(frontPost, olderPosts);*/
+        render(frontPost, olderPosts);
     }
 
     public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {

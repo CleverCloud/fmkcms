@@ -85,10 +85,8 @@ public class PageController extends Controller {
             PageRef pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
             validation.valid(pageRef);
             if (Validation.hasErrors()) {
-
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
-
                 PageController.newPage();
             }
 
@@ -101,15 +99,11 @@ public class PageController extends Controller {
             page.published = published;
             validation.valid(page);
             if (Validation.hasErrors()) {
-
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
-
                 PageController.newPage();
-            } else {
-                page.pageReference.delete(); // TODO: better handling of this (to avoid useless pageRefs)
+            } else
                 page.save();
-            }
         }
 
         if (page.published) {
