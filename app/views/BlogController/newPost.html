@@ -1,0 +1,78 @@
+#{extends 'main.html' /}
+#{set title:'New Page' /}
+
+#{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'linkTo.title'}
+<p>
+    <label>&{field.name}</label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+    %{
+        java.util.Set<String> titles = new TreeSet<String>();
+        Iterator<String> itz = mongo.MongoEntity.getDs().find(models.Post.class).iterator();
+        while (itz.hasNext()) {
+            titles.add(itz.next().title);
+        }
+        title.add("new");
+    }%
+    #{list items:titles, as:'t'}
+        <option value="${t}" ${field.value?.toString().equals("new") ? 'selected="true"'.raw() : ''}>${t}</option>
+    #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'postReference.tags'}
+<p>
+    <label>&{field.name}</label>
+    %{
+        String tags = "";
+        if(field.value != null){
+        for (String tag : field.value) {
+            tags += (tags.isEmpty() ? "" : ", ") + tag;
+        }
+    }
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'post.title'}
+<p>
+    <label>&{field.name}</label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'post.content'}
+<p>
+    <label>&{field.name}</label>
+    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.value}</textarea>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'page.language'}
+<p>
+    <label>&{field.name}</label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+    %{
+        java.util.Set<String> locales = new java.util.TreeSet<String>();
+        for (java.util.Locale locale : java.util.Arrays.asList(java.util.Locale.getAvailableLocales())) {
+            locales.add(locale.toString());
+        }
+    }%
+    #{list items:locales, as:'l'}
+        <option value="${l}" ${field.value?.toString().equals(l) || (field.value == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+    #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+<input type="submit" value="ok" />
+
+#{/form}
