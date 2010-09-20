@@ -9,6 +9,7 @@ GET     /pages/tag/{tagName}                    PageController.pagesTag
 GET     /newPage                                PageController.newPage
 POST    /doNewPage                              PageController.doNewPage
 GET     /captcha                                BlogController.captcha
+GET     /blog                                   BlogController.index
 GET     /newPost                                BlogController.newPost
 POST    /doNewPost                              BlogController.doNewPost
 GET     /posts/{<[0-9]+>id}                     BlogController.show
