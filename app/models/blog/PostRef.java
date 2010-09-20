@@ -31,7 +31,7 @@ public class PostRef extends MongoEntity {
     }
 
     public Post getPost(List<Locale> locales) {
-        List<Post> posts = Post.getPostsByPostRef(this.id);
+        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference._id", this.id).asList();
 
         switch (posts.size()) {
             case 0:

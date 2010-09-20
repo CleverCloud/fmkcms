@@ -7,8 +7,10 @@ GET     /page/{urlId}                           PageController.page
 GET     /pages/tag/{tagName}                    PageController.pagesTag
 *       /pages/search                           PageController.searchPage
 GET     /newPage                                PageController.newPage
-POST    /doNewPage                              PageController.newPage
+POST    /doNewPage                              PageController.doNewPage
 GET     /captcha                                BlogController.captcha
+GET     /newPost                                BlogController.newPost
+POST    /doNewPost                              BlogController.doNewPost
 GET     /posts/{<[0-9]+>id}                     BlogController.show
 GET     /posts/{tag}                            BlogController.listTagged
 POST    /posts/{postId}/comments                BlogController.postComment

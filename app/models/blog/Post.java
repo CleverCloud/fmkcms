@@ -37,7 +37,7 @@ public class Post extends MongoEntity {
     public Locale language;
 
     @Reference
-    @Required
+    //@Required // TODO: handle author
     public User author;
     
     public List<Comment> comments;
@@ -53,6 +53,8 @@ public class Post extends MongoEntity {
         this.content = content;
         this.postedAt = new Date();
     }
+
+    public Post() {}
 
     //
     // Comments handling
@@ -138,7 +140,7 @@ public class Post extends MongoEntity {
             return this.save();
         }
 
-        Post concurrent = Post.getPostByLocale(this.postReference.id, language);
+        Post concurrent = Post.getPostByLocale(this.title, language);
         if (concurrent != null) {
             concurrent.author = author;
             concurrent.title = title;
@@ -155,7 +157,7 @@ public class Post extends MongoEntity {
             return this;
         }
 
-        Post.getPostByLocale(this.postReference.id, language).delete();
+        Post.getPostByLocale(this.title, language).delete();
 
         return this;
     }
@@ -163,20 +165,22 @@ public class Post extends MongoEntity {
     //
     // Accessing stuff
     //
-    public static Post getPostByLocale(ObjectId postRefId, Locale language) {
-        return MongoEntity.getDs().find(Post.class, "postReference.id", postRefId).filter("language =", language).get();
+    public static Post getPostByLocale(String title, Locale language) {
+        Post post = Post.getPostByTitle(title);
+        return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).filter("language =", language).get();
     }
 
-    public static List<Post> getPostsByPostRef(ObjectId postRefId) {
-        return MongoEntity.getDs().find(Post.class, "postReference.id", postRefId).asList();
+    public static List<Post> getPostsByTitle(String title) {
+        Post post = Post.getPostByTitle(title);
+        return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).asList();
     }
 
-    public static Post getFirstPostByPostRef(PostRef postRef) {
-        return MongoEntity.getDs().find(Post.class, "postReference.id", postRef.id).get();
+    public static Post getPostByTitle(String title) {
+        return MongoEntity.getDs().find(Post.class, "title", title).get();
     }
 
     public static Post getPost(ObjectId postRefId) {
-        List<Post> posts = Post.getPostsByPostRef(postRefId);
+        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference._id", postRefId).asList();
 
         switch (posts.size()) {
             case 0:
