@@ -42,7 +42,7 @@ public class BlogController extends Controller {
         List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
 
         List<Locale> locales = I18nController.getBrowserLanguages();
-        Post frontPost = frontPostRef.getPost();
+        Post frontPost = (frontPostRef == null) ? null : frontPostRef.getPost();
         List<Post> olderPosts = new ArrayList<Post>();
         for(PostRef postRef : olderPostRefs) {
             olderPosts.add(postRef.getPost());
@@ -86,6 +86,7 @@ public class BlogController extends Controller {
         if (post != null) {
             post = post.addTranslation(null, language, title, content); // TODO: handle author
         } else {
+            System.out.println("Kikoo");
             PostRef postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, null); // TODO: handle author
             validation.valid(postRef);
             if (Validation.hasErrors()) {
@@ -99,13 +100,13 @@ public class BlogController extends Controller {
             post.content = content;
             post.title = title;
             post.postedAt = postedAt;
-            post.postReference = postRef;
+            post.postReference = postRef.save();
             post.language = language;
             validation.valid(post);
             if (Validation.hasErrors()) {
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
-                PageController.newPage();
+                BlogController.newPost();
             } else
                 post.save();
         }
