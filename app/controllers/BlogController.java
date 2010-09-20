@@ -47,8 +47,7 @@ public class BlogController extends Controller {
     }
 
     public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
-        // TODO: Adapt postComment
-        Post post = null; //Post.findById(postId);
+        Post post = MongoEntity.getDs().find(Post.class, "id", postId).get();
         if (post == null)
             return;
 
