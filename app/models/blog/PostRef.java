@@ -30,25 +30,8 @@ public class PostRef extends MongoEntity {
         return MongoEntity.getDs().find(PostRef.class, "postedAt >", this.postedAt).order("postedAt").get();
     }
 
-    public Post getPost(List<Locale> locales) {
-        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference._id", this.id).asList();
-
-        switch (posts.size()) {
-            case 0:
-                return null;
-            case 1:
-                return posts.get(0);
-            default:
-                for (Locale locale : locales) {
-                    // Try exact Locale
-                    for (Post candidat : posts) {
-                        if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))) {
-                            return candidat;
-                        }
-                    }
-                }
-        }
-        return posts.get(0);
+    public Post getPost() {
+        return Post.getPost(this.id);
     }
     
 }

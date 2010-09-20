@@ -42,10 +42,10 @@ public class BlogController extends Controller {
         List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
 
         List<Locale> locales = I18nController.getBrowserLanguages();
-        Post frontPost = frontPostRef.getPost(locales);
+        Post frontPost = frontPostRef.getPost();
         List<Post> olderPosts = new ArrayList<Post>();
         for(PostRef postRef : olderPostRefs) {
-            olderPosts.add(postRef.getPost(locales));
+            olderPosts.add(postRef.getPost());
         }
 
         render(frontPost, olderPosts);
