@@ -33,8 +33,9 @@ public class BlogController extends Controller {
         renderBinary(captcha);
     }
 
-    public static void show(ObjectId id) {
-        render(Post.getPost(id), Codec.UUID());
+    public static void show(String title) {
+        Post post = Post.getPostByTitle(title);
+        render(post, Codec.UUID());
     }
 
     public static void index() {
@@ -51,8 +52,8 @@ public class BlogController extends Controller {
         render(frontPost, olderPosts);
     }
 
-    public static void postComment(Long postId, String email, String pseudo, String password, String content, String code, String randomID) {
-        Post post = MongoEntity.getDs().find(Post.class, "id", postId).get();
+    public static void postComment(String title, String email, String pseudo, String password, String content, String code, String randomID) {
+        Post post = Post.getPostByTitle(title);
         if (post == null)
             return;
 
@@ -62,7 +63,7 @@ public class BlogController extends Controller {
 
         post.addComment(email, pseudo, password, content);
         Cache.delete(randomID);
-        BlogController.show(post.postReference.id);
+        BlogController.show(post.title);
     }
 
     public static void listTagged(String tag) {

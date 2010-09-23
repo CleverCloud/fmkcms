@@ -12,6 +12,6 @@ GET     /captcha                                BlogController.captcha
 GET     /blog                                   BlogController.index
 GET     /newPost                                BlogController.newPost
 POST    /doNewPost                              BlogController.doNewPost
-GET     /posts/{<[0-9]+>id}                     BlogController.show
+GET     /post/{title}                           BlogController.show
+POST    /post/{title}/comments                  BlogController.postComment
 GET     /posts/{tag}                            BlogController.listTagged
-POST    /posts/{postId}/comments                BlogController.postComment

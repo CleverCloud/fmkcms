@@ -1,20 +1,21 @@
 *{ Display a post in one of these modes: 'full', 'home' or 'teaser' }*
 
+*{ TODO: Debug me please :'( }*
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
-        <a href="@{BlogController.show(_post.postReference.id)}">${_post.title}</a>
+        <a href="@{BlogController.show(_post.title)}">${_post.title}</a>
     </h2>
     <div class="post-metadata">
         <span class="post-author">by ${_post.postReference.author}</span>,
         <span class="post-date">${_post.postReference.postedAt.format('dd MMM yy')}</span>
         #{if _post.author != _post.postReference.author}
             <span class="post-translator">translated by ${_post.author}</span>
-            <span class="post-translation-date">${_post.postedAt.format('MMM dd')}</span>
+            <span class="post-translation-date">${_post.postedAt.format('dd MMM yy')}</span>
         #{/if}
         #{if _as != 'full'}
             <span class="post-comments">
-                &nbsp;|&nbsp; ${_post.comments.size() ?: 'no'}
-                comment${_post.comments.size().pluralize()}
+                &nbsp;|&nbsp; ${_post.comments?.size() ?: 'no'}
+                comment${_post.comments?.size()?.pluralize()}
                 #{if _post.comments}
                     #{if _post.comments[_post.comments.size()-1].user}
                         , latest by ${_post.comments[_post.comments.size()-1].user}
@@ -32,7 +33,7 @@
             <span class="post-tags">
                 - Tagged
                 #{list items:_post.postReference.tags, as:'tag'}
-                    <a href="@{BlogController.listTagged(tag.name)}">${tag}</a>${tag.isLast ? '' : ', '}
+                    <a href="@{BlogController.listTagged(tag.name)}">${tag}</a>${tag_isLast ? '' : ', '}
                 #{/list}
             </span>
         #{/elseif}
@@ -48,8 +49,8 @@
 #{if _as == 'full'}
     <div class="comments">
         <h3>
-            ${_post.comments.size() ?: 'no'}
-            comment${_post.comments.size().pluralize()}
+            ${_post.comments?.size() ?: 'no'}
+            comment${_post.comments?.size()?.pluralize()}
         </h3>
 
         #{list items:_post.comments, as:'comment'}

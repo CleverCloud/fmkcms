@@ -65,6 +65,8 @@ public class Post extends MongoEntity {
         comment.pseudo = pseudo;
         comment.content = content;
         comment.postedAt = new Date();
+        if (this.comments == null)
+            this.comments = new ArrayList<Comment>();
         this.comments.add(comment);
         return this.save();
     }

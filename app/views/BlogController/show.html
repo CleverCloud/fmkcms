@@ -22,7 +22,7 @@
 
 <h3>Post a comment</h3>
 
-#{form @BlogController.postComment(post.id)}
+#{form @BlogController.postComment(post.title)}
 
     #{ifErrors}
         <p class="error">
