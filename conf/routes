@@ -2,7 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
 GET     /page/{urlId}                           PageController.page
 GET     /pages/tag/{tagName}                    PageController.pagesTag
 *       /pages/search                           PageController.searchPage

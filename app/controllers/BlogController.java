@@ -12,7 +12,6 @@ import models.blog.Post;
 import models.blog.PostRef;
 import models.blog.User;
 import mongo.MongoEntity;
-import org.bson.types.ObjectId;
 import play.cache.Cache;
 import play.data.validation.Validation;
 import play.libs.Codec;
@@ -25,6 +24,7 @@ import play.mvc.Controller;
  * @author clementnivolle
  * @author keruspe
  */
+@With(Secure.class)
 public class BlogController extends Controller {
 
     public static void captcha(String id) {

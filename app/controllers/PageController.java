@@ -15,12 +15,14 @@ import models.PageRef;
 import models.Tag;
 import play.data.validation.Validation;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  *
  * @author waxzce
  * @author keruspe
  */
+@With(Secure.class)
 @SuppressWarnings("unchecked")
 public class PageController extends Controller {
 
