@@ -21,6 +21,7 @@ import play.mvc.Controller;
  * @author waxzce
  * @author keruspe
  */
+@SuppressWarnings("unchecked")
 public class PageController extends Controller {
 
     public static void page(String urlId) {
@@ -136,7 +137,6 @@ public class PageController extends Controller {
         }
         try {
             renderText(((Future<String>) request.args.get("task")).get());
-            // TODO: Reimplement Search
             /*if (q == null) {
             q = "search";
             }

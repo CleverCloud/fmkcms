@@ -23,6 +23,7 @@ import play.mvc.Router;
  * @author keruspe
  */
 @Entity
+@SuppressWarnings("unchecked")
 public class Page extends MongoEntity implements Searchable {
 
     @Required

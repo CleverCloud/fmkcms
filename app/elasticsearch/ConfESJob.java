@@ -1,18 +1,12 @@
 package elasticsearch;
 
-import com.google.gson.Gson;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.admin.indices.status.IndicesStatusRequest;
 import org.elasticsearch.action.admin.indices.status.IndicesStatusResponse;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.action.admin.indices.mapping.put.PutMappingRequestBuilder;
-import org.elasticsearch.cluster.action.index.MappingUpdatedAction.MappingUpdatedRequest;
-import org.elasticsearch.common.compress.CompressedString;
-import org.elasticsearch.common.xcontent.builder.XContentBuilder;
 import play.Logger;
 import play.Play;
 import play.jobs.Every;
@@ -26,6 +20,7 @@ import play.vfs.VirtualFile;
  */
 @OnApplicationStart
 @Every("5d")
+@SuppressWarnings("unchecked")
 public class ConfESJob extends Job {
 
     static Client c;
@@ -80,7 +75,7 @@ public class ConfESJob extends Job {
         public void onFailure(Throwable thrwbl) {
             System.out.println("mapping fail");
             onResponse(null);
-            Logger.error("Elastic Search Failure : create %s index faillure server %s:%s", new String[]{Play.configuration.getProperty("elasticsearch.indexname"), Play.configuration.getProperty("elasticsearch.host"), Play.configuration.getProperty("elasticsearch.port")});
+            Logger.error("Elastic Search Failure : create %s index faillure server %s:%s", Play.configuration.getProperty("elasticsearch.indexname"), Play.configuration.getProperty("elasticsearch.host"), Play.configuration.getProperty("elasticsearch.port"));
         }
 
         private void addMapping(String nametype, String filename) {
