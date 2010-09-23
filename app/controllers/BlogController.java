@@ -87,7 +87,6 @@ public class BlogController extends Controller {
         if (post != null) {
             post = post.addTranslation(null, language, title, content); // TODO: handle author
         } else {
-            System.out.println("Kikoo");
             PostRef postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, null); // TODO: handle author
             validation.valid(postRef);
             if (Validation.hasErrors()) {

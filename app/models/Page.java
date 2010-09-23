@@ -76,7 +76,6 @@ public class Page extends MongoEntity implements Searchable {
     public static List<Page> findTaggedWith(String ... tags) {
         // TODO: waxzce, gogo elastic search !
         List<Page> p = MongoEntity.getDs().find(Page.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
-        System.out.println(p.size());
         return p;
     }
 
