@@ -11,6 +11,7 @@ import play.mvc.With;
  * @author waxzce
  */
 @With(CheckRights.class)
+@SuppressWarnings("unchecked")
 public class SecureManager extends Controller {
 
     public static void reloadPerms() throws InterruptedException, ExecutionException {
