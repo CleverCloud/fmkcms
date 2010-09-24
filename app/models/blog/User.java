@@ -2,6 +2,7 @@ package models.blog;
 
 import java.util.Locale;
 import mongo.MongoEntity;
+import play.data.validation.Required;
 
 /**
  *
@@ -9,15 +10,31 @@ import mongo.MongoEntity;
  */
 public abstract class User extends MongoEntity {
 
+    @Required
+    public String email;
     public String userName;
     public String firstName;
     public String lastName;
-    public String email;
     public Locale language;
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName + " <" + this.email + ">";
+        StringBuilder sb = new StringBuilder();
+        Boolean needLtGt = Boolean.FALSE;
+        if (this.firstName != null) {
+            sb.append(this.firstName).append(" ");
+            needLtGt = Boolean.TRUE;
+        }
+        if (this.lastName != null) {
+            sb.append(this.lastName).append(" ");
+            needLtGt = Boolean.TRUE;
+        }
+        if (needLtGt)
+            sb.append("<");
+        sb.append(this.email);
+        if(needLtGt)
+            sb.append(">");
+        return sb.toString();
     }
 
 }
