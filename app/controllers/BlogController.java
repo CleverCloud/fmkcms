@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
+import models.blog.BasicUser;
 import models.blog.Post;
 import models.blog.PostRef;
 import models.blog.User;
@@ -18,6 +19,7 @@ import play.libs.Codec;
 import play.libs.Images;
 import play.libs.Images.Captcha;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  *
@@ -80,14 +82,20 @@ public class BlogController extends Controller {
         String content = params.get("post.content");
         Locale language = params.get("post.language", Locale.class);
         Date postedAt = new Date();
-        /* TODO: handle author
-         User author = params.get("post.author"); */
+
+        User author = new BasicUser();
+        author.userName = session.get("username");
+        author.firstName = session.get("firstName");
+        author.lastName = session.get("lastName");
+        author.email = session.get("email");
+        author.language = new Locale(session.get("language"));
+        author.save();
 
         Post post = Post.getPostByTitle(otherTitle);
         if (post != null) {
-            post = post.addTranslation(null, language, title, content); // TODO: handle author
+            post = post.addTranslation(author, language, title, content);
         } else {
-            PostRef postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, null); // TODO: handle author
+            PostRef postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
             validation.valid(postRef);
             if (Validation.hasErrors()) {
                 params.flash(); // add http parameters to the flash scope
@@ -96,7 +104,7 @@ public class BlogController extends Controller {
             }
 
             post = new Post();
-            post.author = null; // TODO: handle author
+            post.author = author;
             post.content = content;
             post.title = title;
             post.postedAt = postedAt;

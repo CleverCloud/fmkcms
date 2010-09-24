@@ -37,7 +37,7 @@ public class Post extends MongoEntity {
     public Locale language;
 
     @Reference
-    //@Required // TODO: handle author
+    @Required
     public User author;
     
     public List<Comment> comments;

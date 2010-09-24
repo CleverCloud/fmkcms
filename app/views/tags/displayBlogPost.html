@@ -1,6 +1,5 @@
 *{ Display a post in one of these modes: 'full', 'home' or 'teaser' }*
 
-*{ TODO: Debug me please :'( }*
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
         <a href="@{BlogController.show(_post.title)}">${_post.title}</a>
