@@ -39,7 +39,7 @@ public class PageController extends Controller {
             default:
                 List<Locale> locales = I18nController.getLanguages();
                 for (Locale locale : locales) {
-                    // Try exact Locale
+                    // Try exact Locale or exact language no matter the country
                     for (Page candidat : pages) {
                         if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) && candidat.published) {
                             page = candidat;

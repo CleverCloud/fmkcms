@@ -193,7 +193,7 @@ public class Post extends MongoEntity {
             default:
                 List<Locale> locales = I18nController.getLanguages();
                 for (Locale locale : locales) {
-                    // Try exact Locale
+                    // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
                         if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
                             return candidat;
