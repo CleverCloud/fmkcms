@@ -48,17 +48,21 @@ public class PageController extends Controller {
                     }
                 }
 
-                if (page == null)
-                    page = pages.get(0); // pick up first for now
+                if (page == null || !page.published) {
+                    for (Page candidat : pages) {
+                        if (candidat.published) {
+                            page = candidat; // pick up first published for now
+                            break;
+                        }
+                    }
+                }
+
+                if (page == null || !page.published)
+                    notFound();
         }
 
-        if (!page.published) {
-            notFound();
-        }
-
-        if (request.headers.get("accept").value().contains("json")) {
+        if (request.headers.get("accept").value().contains("json"))
             renderJSON(page);
-        }
 
         render(page);
     }
