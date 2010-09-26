@@ -37,7 +37,7 @@ public class PageController extends Controller {
                 page = pages.get(0);
                 break;
             default:
-                List<Locale> locales = I18nController.getBrowserLanguages();
+                List<Locale> locales = I18nController.getLanguages();
                 for (Locale locale : locales) {
                     // Try exact Locale
                     for (Page candidat : pages) {
