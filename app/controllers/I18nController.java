@@ -16,6 +16,22 @@ public class I18nController extends Controller {
     public static List<Locale> getLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
 
+        String[] queryString = Http.Request.current().querystring.split("&");
+        for (int i = 0 ; i < queryString.length ; ++i) {
+            String[] current = queryString[i].split("=");
+            if (current.length != 2 || !current[0].equalsIgnoreCase("lang"))
+                continue;
+            String[] locale = current[1].split("-");
+            switch (locale.length) {
+                case 1:
+                    locales.add(new Locale(locale[0]));
+                    break;
+                default:
+                    locales.add(new Locale(locale[0], locale[1].substring(0, 2)));
+                    break;
+            }
+        }
+
         String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales");
         if (tld4locales != null && tld4locales.equalsIgnoreCase("true")) {
             String[] domainSplitted = Http.Request.current().domain.split("\\.");
