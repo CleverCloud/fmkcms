@@ -15,6 +15,17 @@ public class I18nController extends Controller {
 
     public static List<Locale> getLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
+        Locale tldLocale = I18nController.getTldLanguage();
+
+        locales.addAll(I18nController.getQueryStringLanguages());
+        if (tldLocale != null) locales.add(tldLocale);
+        locales.addAll(I18nController.getBrowserLanguages());
+
+        return locales;
+    }
+
+    public static List<Locale> getQueryStringLanguages() {
+        List<Locale> locales = new ArrayList<Locale>();
 
         String[] queryString = Http.Request.current().querystring.split("&");
         for (int i = 0 ; i < queryString.length ; ++i) {
@@ -32,20 +43,22 @@ public class I18nController extends Controller {
             }
         }
 
+        return locales;
+    }
+
+    public static Locale getTldLanguage() {
         String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales");
         if (tld4locales != null && tld4locales.equalsIgnoreCase("true")) {
             String[] domainSplitted = Http.Request.current().domain.split("\\.");
             String tld = domainSplitted[domainSplitted.length - 1];
+            /* test whether we're facing an IP or a domain name */
             try {
                 Integer.parseInt(tld);
-                /* test whether we're facing an IP or a domain name */
             } catch(NumberFormatException e) {
-                locales.add(new Locale(tld));
+                return new Locale(tld);
             }
         }
-
-        locales.addAll(I18nController.getBrowserLanguages());
-        return locales;
+        return null;
     }
 
     public static List<Locale> getBrowserLanguages() {
