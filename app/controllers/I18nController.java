@@ -16,7 +16,8 @@ public class I18nController extends Controller {
     public static List<Locale> getLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
 
-        if (Play.configuration.getProperty("fmkcms.tld4locales").equalsIgnoreCase("true")) {
+        String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales");
+        if (tld4locales != null && tld4locales.equalsIgnoreCase("true")) {
             String[] domainSplitted = Http.Request.current().domain.split("\\.");
             String tld = domainSplitted[domainSplitted.length - 1];
             try {
