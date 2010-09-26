@@ -1,8 +1,10 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import play.Play;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -48,17 +50,30 @@ public class I18nController extends Controller {
 
     public static Locale getTldLanguage() {
         String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales");
-        if (tld4locales != null && tld4locales.equalsIgnoreCase("true")) {
-            String[] domainSplitted = Http.Request.current().domain.split("\\.");
-            String tld = domainSplitted[domainSplitted.length - 1];
-            /* test whether we're facing an IP or a domain name */
-            try {
-                Integer.parseInt(tld);
-            } catch(NumberFormatException e) {
-                return new Locale(tld);
-            }
+
+        if (tld4locales == null || !tld4locales.equalsIgnoreCase("true"))
+            return null;
+
+        Map<String, Locale> tldLocales = new HashMap<String, Locale>();
+
+        // Add your tld specific locales here
+        tldLocales.put("com", Locale.ENGLISH);
+        tldLocales.put("org", Locale.ENGLISH);
+
+        String[] domainSplitted = Http.Request.current().domain.split("\\.");
+        String tld = domainSplitted[domainSplitted.length - 1];
+
+        Locale candidat = tldLocales.get(tld);
+        if (candidat != null)
+            return candidat;
+
+        /* test whether we're facing an IP or a domain name */
+        try {
+            Integer.parseInt(tld);
+            return null;
+        } catch(NumberFormatException e) {
+            return new Locale(tld);
         }
-        return null;
     }
 
     public static List<Locale> getBrowserLanguages() {
