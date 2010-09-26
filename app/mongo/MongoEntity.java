@@ -11,6 +11,7 @@ import play.Play;
  *
  * @author keruspe
  */
+@SuppressWarnings("unchecked")
 public abstract class MongoEntity {
 
     @Id
