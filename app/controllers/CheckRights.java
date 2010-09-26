@@ -11,6 +11,7 @@ import play.mvc.Controller;
  *
  * @author waxzce
  */
+@SuppressWarnings("unchecked")
 public class CheckRights extends Controller {
 
     @Before
