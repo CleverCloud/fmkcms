@@ -1,5 +1,6 @@
 package models.blog;
 
+import models.user.User;
 import com.google.code.morphia.annotations.Entity;
 import java.util.Date;
 import java.util.List;

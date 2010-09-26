@@ -1,4 +1,4 @@
-package models.blog;
+package models.user;
 
 import com.google.code.morphia.annotations.Entity;
 

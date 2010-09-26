@@ -1,4 +1,4 @@
-package models.blog;
+package models.user;
 
 import java.util.Locale;
 import mongo.MongoEntity;
