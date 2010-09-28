@@ -17,8 +17,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +35,30 @@ import play.mvc.Controller;
  */
 public class Feeds extends Controller {
 
-    public static void main() {
+    public static void main(String localestring) {
+        Locale locale = null;
+
+
+        List<String> s = Arrays.asList(localestring.split("_"));
+        switch (s.size()) {
+            case 1:
+                locale = new Locale(s.get(0));
+                break;
+            case 2:
+                List<String> ss = Arrays.asList(s.get(1).split("."));
+                switch (ss.size()) {
+                    case 0:
+                    case 1:
+                        locale = new Locale(s.get(0), s.get(1));
+                        break;
+                    case 2:
+                        locale = new Locale(s.get(0), ss.get(0), ss.get(1));
+                        break;
+                }
+                break;
+
+        }
+
         SyndFeed feed = new SyndFeedImpl();
         Properties p = new Properties();
         try {
@@ -48,10 +73,10 @@ public class Feeds extends Controller {
         feed.setDescription(p.getProperty("feed.description"));
         feed.setLink(request.getBase() + p.getProperty("feed.link"));
         feed.setTitle(p.getProperty("feed.title"));
-        feed.setLanguage(p.getProperty("feed.language"));
+        feed.setLanguage(locale.toString());
         feed.setPublishedDate(new Date());
 
-        List<Post> posts = MongoEntity.getDs().find(Post.class).order("-postedAt").asList();
+        List<Post> posts = Post.getLatestPostsByLocale(locale, 20, 0);
         List entries = new ArrayList();
         for (Post post : posts) {
             SyndEntry item = new SyndEntryImpl();
