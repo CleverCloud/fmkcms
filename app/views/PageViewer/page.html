@@ -6,6 +6,6 @@ ${page.content}
 #{/verbatim}
 <ul>
     #{list items:page.pageReference.tags, as:'tag'}
-    <li>#{a @PageController.pagesTag(tag.name)}${tag.name}#{/a}</li>
+    <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>
     #{/list}
 </ul>

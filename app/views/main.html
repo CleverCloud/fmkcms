@@ -17,10 +17,10 @@
             <ul>
                 <li>#{pageLink "index" /}</li>
                 <li>#{pageLink "another_page" /}</li>
-                <li><a href="@{PageController.pagesTag("azerty")}">tag azerty</a></li>
+                <li><a href="@{PageViewer.pagesTag("azerty")}">tag azerty</a></li>
                 <!--<li><a href="/admin/">admin</a></li>-->
             </ul>
-            #{form @PageController.searchPage()}
+            #{form @PageViewer.searchPage()}
             <label for="toFind"> Find : </label>
             <input type="text" name="toFind" id="toFind" /><br />
 

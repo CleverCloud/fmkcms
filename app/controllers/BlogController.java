@@ -1,9 +1,7 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,12 +10,8 @@ import models.user.BasicUser;
 import models.blog.Post;
 import models.blog.PostRef;
 import models.user.User;
-import mongo.MongoEntity;
 import play.cache.Cache;
 import play.data.validation.Validation;
-import play.libs.Codec;
-import play.libs.Images;
-import play.libs.Images.Captcha;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -28,30 +22,6 @@ import play.mvc.With;
  */
 @With(Secure.class)
 public class BlogController extends Controller {
-
-    public static void captcha(String id) {
-        Captcha captcha = Images.captcha();
-        Cache.set(id, captcha.getText(), "10min");
-        renderBinary(captcha);
-    }
-
-    public static void show(String title) {
-        Post post = Post.getPostByTitle(title);
-        render(post, Codec.UUID());
-    }
-
-    public static void index() {
-        PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
-        List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
-
-        Post frontPost = (frontPostRef == null) ? null : frontPostRef.getPost();
-        List<Post> olderPosts = new ArrayList<Post>();
-        for(PostRef postRef : olderPostRefs) {
-            olderPosts.add(postRef.getPost());
-        }
-
-        render(frontPost, olderPosts);
-    }
 
     public static void postComment(String title, String email, String pseudo, String password, String content, String code, String randomID) {
         Post post = Post.getPostByTitle(title);
@@ -64,11 +34,7 @@ public class BlogController extends Controller {
 
         post.addComment(email, pseudo, password, content);
         Cache.delete(randomID);
-        BlogController.show(post.title);
-    }
-
-    public static void listTagged(String tag) {
-        render(Tag.findOrCreateByName(tag), Post.findTaggedWith(tag));
+        BlogViewer.show(post.title);
     }
 
     public static void newPost() {
@@ -118,7 +84,7 @@ public class BlogController extends Controller {
                 post.save();
         }
 
-        BlogController.index();
+        BlogViewer.index();
     }
 
     private static PostRef doNewPostRef(String tagsString, Date postedAt, User author) {

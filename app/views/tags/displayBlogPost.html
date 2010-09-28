@@ -2,7 +2,7 @@
 
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
-        <a href="@{BlogController.show(_post.title)}">${_post.title}</a>
+        <a href="@{BlogViewer.show(_post.title)}">${_post.title}</a>
     </h2>
     <div class="post-metadata">
         <span class="post-author">by ${_post.postReference.author}</span>,
@@ -32,7 +32,7 @@
             <span class="post-tags">
                 - Tagged
                 #{list items:_post.postReference.tags, as:'tag'}
-                    <a href="@{BlogController.listTagged(tag.name)}">${tag}</a>${tag_isLast ? '' : ', '}
+                    <a href="@{BlogViewer.listTagged(tag.name)}">${tag}</a>${tag_isLast ? '' : ', '}
                 #{/list}
             </span>
         #{/elseif}
