@@ -28,6 +28,7 @@ import models.blog.Post;
 import mongo.MongoEntity;
 import play.Play;
 import play.mvc.Controller;
+import utils.LangProperties;
 
 /**
  *
@@ -60,19 +61,19 @@ public class Feeds extends Controller {
         }
 
         SyndFeed feed = new SyndFeedImpl();
-        Properties p = new Properties();
+        LangProperties p = new LangProperties();
         try {
 
             p.load(new FileReader(Play.getVirtualFile("conf/feed.properties").getRealFile()));
         } catch (IOException ex) {
             Logger.getLogger(Feeds.class.getName()).log(Level.SEVERE, null, ex);
         }
-        feed.setAuthor(p.getProperty("feed.author"));
+        feed.setAuthor(p.getProperty("feed.author", locale));
         feed.setFeedType("rss_2.0");
-        feed.setCopyright(p.getProperty("feed.copyright"));
-        feed.setDescription(p.getProperty("feed.description"));
-        feed.setLink(request.getBase() + p.getProperty("feed.link"));
-        feed.setTitle(p.getProperty("feed.title"));
+        feed.setCopyright(p.getProperty("feed.copyright", locale));
+        feed.setDescription(p.getProperty("feed.description", locale));
+        feed.setLink(request.getBase() + p.getProperty("feed.link", locale));
+        feed.setTitle(p.getProperty("feed.title", locale));
         feed.setLanguage(locale.toString());
         feed.setPublishedDate(new Date());
 
