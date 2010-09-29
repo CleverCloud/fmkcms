@@ -16,7 +16,7 @@
         titles.add("new");
     }%
     #{list items:titles, as:'t'}
-        <option value="${t}" ${field.value?.toString().equals("new") ? 'selected="true"'.raw() : ''}>${t}</option>
+        <option value="${t}" ${t.equals("new") ? 'selected="true"'.raw() : ''}>${t}</option>
     #{/list}
     </select>
     <span class="error">${field.error}</span>

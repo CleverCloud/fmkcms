@@ -16,7 +16,7 @@
         urlIds.add("new");
     }%
     #{list items:urlIds, as:'u'}
-        <option value="${u}" ${field.value?.toString().equals("new") ? 'selected="true"'.raw() : ''}>${u}</option>
+        <option value="${u}" ${u.equals("new") ? 'selected="true"'.raw() : ''}>${u}</option>
     #{/list}
     </select>
     <span class="error">${field.error}</span>
