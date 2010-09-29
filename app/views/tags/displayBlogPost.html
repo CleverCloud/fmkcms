@@ -16,7 +16,7 @@
                 &nbsp;|&nbsp; ${_post.comments?.size() ?: 'no'}
                 comment${_post.comments?.size()?.pluralize()}
                 #{if _post.comments}
-                    , latest by ${_post.comments[_post.comments.size()-1].user}
+                    , latest by ${_post.comments[_post.comments.size()-1].user.raw()}
                 #{/if}
             </span>
         #{/if}
@@ -48,7 +48,7 @@
             <div class="comment">
                 <div class="comment-metadata">
                     <span class="comment-author">
-                        by ${comment.user},
+                        by ${comment.user.raw()},
                     </span>
                     <span class="comment-date">
                         ${comment.postedAt.format('dd MMM yy')}

@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
+import models.blog.Comment;
 import models.blog.Post;
 import models.blog.PostRef;
 import models.user.GAppUser;
@@ -40,41 +41,45 @@ public class BlogController extends Controller {
         Locale language = params.get("post.language", Locale.class);
         Date postedAt = new Date();
 
-        GAppUser author = new GAppUser();
-        author.openId = session.get("username");
-        author.firstName = session.get("firstName");
-        author.lastName = session.get("lastName");
-        author.userName = author.firstName + " " + author.lastName;
-        author.email = session.get("email");
-        author.language = new Locale(session.get("language"));
-        author.save();
+        String openId = session.get("username");
+        GAppUser author = GAppUser.getByOpenId(openId);
+        if (author == null) {
+            author = new GAppUser();
+            author.openId = openId;
+            author.firstName = session.get("firstName");
+            author.lastName = session.get("lastName");
+            author.userName = author.firstName + " " + author.lastName;
+            author.email = session.get("email");
+            author.language = new Locale(session.get("language"));
 
-        Post post = Post.getPostByTitle(otherTitle);
-        if (post != null) {
-            post = post.addTranslation(author, language, title, content);
-        } else {
-            PostRef postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
-            validation.valid(postRef);
+            validation.valid(author);
             if (Validation.hasErrors()) {
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
                 BlogController.newPost();
             }
+            author.save();
+        }
 
+        Post post = Post.getPostByTitle(otherTitle);
+        if (post != null) {
+            post = post.addTranslation(author, language, title, content);
+        } else {
             post = new Post();
+            post.postReference = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
             post.author = author;
             post.content = content;
             post.title = title;
             post.postedAt = postedAt;
-            post.postReference = postRef.save();
             post.language = language;
+
             validation.valid(post);
             if (Validation.hasErrors()) {
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
                 BlogController.newPost();
-            } else
-                post.save();
+            }
+            post.save();
         }
 
         BlogViewer.index();
@@ -83,17 +88,28 @@ public class BlogController extends Controller {
     private static PostRef doNewPostRef(String tagsString, Date postedAt, User author) {
         PostRef postRef = new PostRef();
         Set<Tag> tags = new TreeSet<Tag>();
+        Tag t = null;
 
         if (!tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
-                tags.add(Tag.findOrCreateByName(tag));
+                t = Tag.findOrCreateByName(tag);
+                if (!tags.contains(t))
+                    tags.add(t);
             }
         }
 
         postRef.tags = tags;
         postRef.author = author;
         postRef.postedAt = postedAt;
-        return postRef;
+
+        validation.valid(postRef);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogController.newPost();
+        }
+
+        return postRef.save();
     }
 
     public static void postComment(String title, String content, String code, String randomID) {
@@ -106,10 +122,38 @@ public class BlogController extends Controller {
             render("BlogController/show.html", post, randomID);
 
         GAppUser user = GAppUser.getByOpenId(session.get("username"));
-        if (user == null)
-            BlogViewer.show(title);
+        if (user == null) {
+            user = new GAppUser();
+            user.openId = session.get("username");
+            user.firstName = session.get("firstName");
+            user.lastName = session.get("lastName");
+            user.userName = user.firstName + " " + user.lastName;
+            user.email = session.get("email");
+            user.language = new Locale(session.get("language"));
 
-        post.addComment(user, content);
+            validation.valid(user);
+            if (Validation.hasErrors()) {
+                params.flash(); // add http parameters to the flash scope
+                Validation.keep(); // keep the errors for the next request
+                BlogController.show(title);
+            }
+            user.save();
+        }
+
+        Comment comment = new Comment();
+        comment.content = content;
+        comment.user = user.save();
+        comment.postedAt = new Date();
+
+        validation.valid(comment);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogViewer.show(title);
+        }
+        comment.save();
+
+        post.addComment(comment);
         Cache.delete(randomID);
         BlogViewer.show(post.title);
     }

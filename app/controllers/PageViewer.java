@@ -31,13 +31,18 @@ public class PageViewer extends Controller {
             default:
                 List<Locale> locales = I18nController.getLanguages();
                 for (Locale locale : locales) {
+                    System.out.println(locale);
                     // Try exact Locale or exact language no matter the country
                     for (Page candidat : pages) {
+                        System.out.println("Check " + locale + " vs " + candidat.language + " or " + candidat.language.getLanguage() + " and " + candidat.published);
                         if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) && candidat.published) {
+                            System.out.println("Ok");
                             page = candidat;
                             break;
                         }
                     }
+                    if (page != null)
+                        break;
                 }
 
                 if (page == null || !page.published) {

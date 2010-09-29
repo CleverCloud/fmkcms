@@ -1,8 +1,10 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import models.Tag;
+import models.blog.Comment;
 import models.blog.Post;
 import models.blog.PostRef;
 import models.user.CommentUser;
@@ -63,9 +65,28 @@ public class BlogViewer extends Controller {
         user.email = email;
         user.userName = userName;
         user.webSite = webSite;
-        user.save();
 
-        post.addComment(user, content);
+        validation.valid(user);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogViewer.show(title);
+        }
+
+        Comment comment = new Comment();
+        comment.content = content;
+        comment.user = user.save();
+        comment.postedAt = new Date();
+
+        validation.valid(comment);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogViewer.show(title);
+        }
+        comment.save();
+
+        post.addComment(comment);
         Cache.delete(randomID);
         BlogViewer.show(post.title);
     }

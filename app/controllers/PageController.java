@@ -36,35 +36,27 @@ public class PageController extends Controller {
         if (page != null) {
             page = page.addTranslation(urlId, title, content, language, published);
         } else {
-            PageRef pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
-            validation.valid(pageRef);
-            if (Validation.hasErrors()) {
-                params.flash(); // add http parameters to the flash scope
-                Validation.keep(); // keep the errors for the next request
-                PageController.newPage();
-            }
-
             page = new Page();
-            page.pageReference = pageRef.save();
+            page.pageReference = PageController.doNewPageRef(params.get("pageReference.tags"));
             page.urlId = urlId;
             page.title = title;
             page.content = content;
             page.language = language;
             page.published = published;
+
             validation.valid(page);
             if (Validation.hasErrors()) {
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
                 PageController.newPage();
-            } else
-                page.save();
+            }
+            page.save();
         }
 
-        if (page.published) {
+        if (page.published)
             PageViewer.page(urlId);
-        } else {
+        else
             PageViewer.page("index");
-        }
     }
 
     private static PageRef doNewPageRef(String tagsString) {
@@ -78,7 +70,14 @@ public class PageController extends Controller {
         }
 
         pageRef.tags = tags;
-        return pageRef;
+        validation.valid(pageRef);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            PageController.newPage();
+        }
+
+        return pageRef.save();
     }
 
 }
