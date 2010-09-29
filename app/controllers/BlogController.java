@@ -117,7 +117,7 @@ public class BlogController extends Controller {
         if (post == null)
             return;
 
-        validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
+        validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
         if (Validation.hasErrors())
             render("BlogController/show.html", post, randomID);
 

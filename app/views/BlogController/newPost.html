@@ -16,7 +16,7 @@
         titles.add("new");
     }%
     #{list items:titles, as:'t'}
-        <option value="${t}" ${t.equals("new") ? 'selected="true"'.raw() : ''}>${t}</option>
+        <option value="${t}" ${((field.flash == null && t.equals("new")) || field.flash.toString().equals(t)) ? 'selected="true"'.raw() : ''}>${t}</option>
     #{/list}
     </select>
     <span class="error">${field.error}</span>
@@ -34,7 +34,7 @@
         }
     }
     }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}
@@ -42,7 +42,7 @@
 #{field 'post.title'}
 <p>
     <label>&{field.name}</label>
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.value}" class="${field.errorClass}" />
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}
@@ -50,7 +50,7 @@
 #{field 'post.content'}
 <p>
     <label>&{field.name}</label>
-    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.value}</textarea>
+    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
     <span class="error">${field.error}</span>
 </p>
 #{/}
@@ -66,7 +66,7 @@
         }
     }%
     #{list items:locales, as:'l'}
-        <option value="${l}" ${field.value?.toString().equals(l) || (field.value == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+        <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
     #{/list}
     </select>
     <span class="error">${field.error}</span>

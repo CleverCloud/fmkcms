@@ -24,7 +24,7 @@ public class BlogViewer extends Controller {
 
     public static void captcha(String id) {
         Captcha captcha = Images.captcha();
-        Cache.set(id, captcha.getText(), "10min");
+        Cache.set(id, captcha.getText().toLowerCase(), "10min");
         renderBinary(captcha);
     }
 
@@ -57,7 +57,7 @@ public class BlogViewer extends Controller {
         if (post == null)
             return;
 
-        validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
+        validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
         if (Validation.hasErrors())
             render("BlogViewer/show.html", post, randomID);
 
