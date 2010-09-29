@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package utils;
 
 import java.util.Locale;
@@ -14,12 +10,11 @@ import java.util.Properties;
 public class LangProperties extends Properties {
 
     public String getProperty(String key, Locale locale) {
-        if (this.containsKey(key + "." + locale.toString())) {
+        if (this.containsKey(key + "." + locale.toString()))
             return this.getProperty(key + "." + locale.toString());
-        }
-        if (this.containsKey(key + "." + locale.getLanguage())) {
+        if (this.containsKey(key + "." + locale.getLanguage()))
             return this.getProperty(key + "." + locale.getLanguage());
-        }
         return this.getProperty(key);
     }
+
 }

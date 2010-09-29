@@ -24,17 +24,22 @@ import play.data.validation.Required;
 public class Post extends MongoEntity {
 
     public Date postedAt;
+
     @Required
     public String title;
+
     @Lob
     @Required
     public String content;
     public PostRef postReference;
+
     @Required
     public Locale language;
+
     @Reference
     @Required
     public User author;
+
     public List<Comment> comments;
 
     //
@@ -49,8 +54,7 @@ public class Post extends MongoEntity {
         this.postedAt = new Date();
     }
 
-    public Post() {
-    }
+    public Post() {}
 
     //
     // Comments handling
@@ -61,10 +65,8 @@ public class Post extends MongoEntity {
         comment.pseudo = pseudo;
         comment.content = content;
         comment.postedAt = new Date();
-        if (this.comments == null) {
+        if (this.comments == null)
             this.comments = new ArrayList<Comment>();
-
-        }
         this.comments.add(comment);
         return this.save();
     }
@@ -76,19 +78,14 @@ public class Post extends MongoEntity {
         while (iterator.hasPrevious()) {
             current = iterator.previous();
             // Continue if it's not the one we're looking for
-            if (!(current.email.equalsIgnoreCase(email) && current.content.equalsIgnoreCase(content))) {
+            if (!(current.email.equalsIgnoreCase(email) && current.content.equalsIgnoreCase(content)))
                 continue;
-
-
-            }
             iterator.remove();
             current.delete();
 
             // Quit if we only want to remove one occurence of the comment
-            if (!removeAll) {
+            if (!removeAll)
                 break;
-
-            }
         }
 
         return this.save();
@@ -101,10 +98,8 @@ public class Post extends MongoEntity {
     public List<Comment> getComments(String email) {
         List<Comment> returnList = new ArrayList<Comment>();
         for (Comment current : this.comments) {
-            if (current.email.equalsIgnoreCase(email)) {
+            if (current.email.equalsIgnoreCase(email))
                 returnList.add(current);
-
-            }
         }
         return returnList;
     }
@@ -120,7 +115,7 @@ public class Post extends MongoEntity {
         return this;
     }
 
-    public static List<Post> findTaggedWith(String... tags) {
+    public static List<Post> findTaggedWith(String ... tags) {
         // TODO: waxzce, gogo elastic search !
 /*        List<PostRef> postRefs = PostRef.find(
         "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
@@ -186,18 +181,12 @@ public class Post extends MongoEntity {
     }
 
     public static List<Post> getLatestPostsByLocale(Locale locale, Integer number, Integer page) {
-        if (number == null) {
+        if (number == null)
             number = 10;
-        }
-        if (page == null) {
-            page = 0;
-        }
-        List<Post> posts = MongoEntity.getDs().find(Post.class, "language", locale).order("-postedAt").offset(page * number).limit(number).asList();
-        if (posts == null) {
-            return new ArrayList<Post>();
-        } else {
-            return posts;
-        }
+        if (page == null)
+            page = 1;
+        List<Post> posts = MongoEntity.getDs().find(Post.class, "language", locale).order("-postedAt").offset((page - 1) * number).limit(number).asList();
+        return (posts == null) ? new ArrayList<Post>() : posts;
     }
 
     public static Post getPost(ObjectId postRefId) {
@@ -213,14 +202,13 @@ public class Post extends MongoEntity {
                 for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
                             return candidat;
-
-                        }
                     }
                 }
 
                 return posts.get(0); // pick up first for now
         }
     }
+
 }
