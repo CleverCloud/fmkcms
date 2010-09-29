@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import javax.persistence.Lob;
 import mongo.MongoEntity;
 import play.Logger;
-import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.mvc.Router;
 
@@ -33,7 +33,7 @@ public class Page extends MongoEntity implements Searchable {
     public String title;
 
     @Required
-    @MaxSize(60000)
+    @Lob
     public String content;
 
     @Required
@@ -83,25 +83,6 @@ public class Page extends MongoEntity implements Searchable {
     //
     // I18n handling
     //
-    public Page addTranslation(String urlId, String title, String content, Locale language, Boolean published) {
-        if (language.equals(this.language)) {
-            this.title = title;
-            this.content = content;
-            this.published = published;
-            return this.save();
-        }
-
-        Page concurrent = Page.getPageByLocale(this.urlId, language);
-        if (concurrent != null) {
-            concurrent.title = title;
-            concurrent.content = content;
-            concurrent.published = published;
-            return concurrent.save();
-        }
-
-        return new Page(this.pageReference, urlId, title, content, language, published).save();
-    }
-
     public Page removeTranslation(Locale language) {
         if (this.language.equals(language)) {
             Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);

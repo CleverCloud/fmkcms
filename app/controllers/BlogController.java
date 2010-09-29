@@ -54,46 +54,34 @@ public class BlogController extends Controller {
 
             validation.valid(author);
             if (Validation.hasErrors()) {
-                /*
-                 * TODO fix the comportment : form do not resolve the problem
-                 *
-                 */
-
-
-                params.flash(); // add http parameters to the flash scope
-                Validation.keep(); // keep the errors for the next request
-                BlogController.newPost();
+                unauthorized("Could not authenticate you");
             }
             author.save();
         }
 
         Post post = Post.getPostByTitle(otherTitle);
-        if (post != null) {
-            /* TODO
-             * add validation
-             *  -> same at page
-             */
+        PostRef postRef = null;
+        if (post != null)
+            postRef = post.postReference;
+        else
+            postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
 
+        post = new Post();
+        post.postReference = postRef;
+        post.author = author;
+        post.content = content;
+        post.title = title;
+        post.postedAt = postedAt;
+        post.language = language;
 
-            post = post.addTranslation(author, language, title, content);
-        } else {
-            post = new Post();
-            post.postReference = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
-            post.author = author;
-            post.content = content;
-            post.title = title;
-            post.postedAt = postedAt;
-            post.language = language;
-
-            validation.valid(post);
-            if (Validation.hasErrors()) {
-                params.flash(); // add http parameters to the flash scope
-                Validation.keep(); // keep the errors for the next request
-                BlogController.newPost();
-            }
-            post.postReference.save();
-            post.save();
+        validation.valid(post);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogController.newPost();
         }
+        post.postReference.save();
+        post.save();
 
         BlogViewer.index();
     }
@@ -146,9 +134,7 @@ public class BlogController extends Controller {
 
             validation.valid(user);
             if (Validation.hasErrors()) {
-                params.flash(); // add http parameters to the flash scope
-                Validation.keep(); // keep the errors for the next request
-                BlogController.show(title);
+                unauthorized("Could not authenticate you");
             }
             user.save();
         }

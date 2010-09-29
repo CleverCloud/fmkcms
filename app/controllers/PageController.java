@@ -33,26 +33,28 @@ public class PageController extends Controller {
         Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
         Page page = Page.getPageByUrlId(urlId);
-        if (page != null) {
-            page = page.addTranslation(urlId, title, content, language, published);
-        } else {
-            page = new Page();
-            page.pageReference = PageController.doNewPageRef(params.get("pageReference.tags"));
-            page.urlId = urlId;
-            page.title = title;
-            page.content = content;
-            page.language = language;
-            page.published = published;
+        PageRef pageRef = null;
+        if (page != null)
+            pageRef = page.pageReference;
+        else
+            pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
 
-            validation.valid(page);
-            if (Validation.hasErrors()) {
-                params.flash(); // add http parameters to the flash scope
-                Validation.keep(); // keep the errors for the next request
-                PageController.newPage();
-            }
-            page.pageReference.save();
-            page.save();
+        page = new Page();
+        page.pageReference = pageRef;
+        page.urlId = urlId;
+        page.title = title;
+        page.content = content;
+        page.language = language;
+        page.published = published;
+
+        validation.valid(page);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            PageController.newPage();
         }
+        page.pageReference.save();
+        page.save();
 
         if (page.published)
             PageViewer.page(urlId);

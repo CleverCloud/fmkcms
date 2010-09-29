@@ -128,25 +128,6 @@ public class Post extends MongoEntity {
     //
     // I18n handling
     //
-    public Post addTranslation(User author, Locale language, String title, String content) {
-        if (this.language.equals(language)) {
-            this.author = author;
-            this.title = title;
-            this.content = content;
-            return this.save();
-        }
-
-        Post concurrent = Post.getPostByLocale(this.title, language);
-        if (concurrent != null) {
-            concurrent.author = author;
-            concurrent.title = title;
-            concurrent.content = content;
-            return concurrent.save();
-        }
-
-        return new Post(this.postReference, author, language, title, content).save();
-    }
-
     public Post removeTranslation(Locale language) {
         if (this.language.equals(language)) {
             Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);
