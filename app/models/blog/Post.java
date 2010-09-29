@@ -59,26 +59,26 @@ public class Post extends MongoEntity {
     //
     // Comments handling
     //
-    public Post addComment(String email, String pseudo, String password, String content) {
+    public Post addComment(User user, String content) {
         Comment comment = new Comment();
-        comment.email = email;
-        comment.pseudo = pseudo;
         comment.content = content;
+        comment.user = user;
         comment.postedAt = new Date();
+        comment.save();
         if (this.comments == null)
             this.comments = new ArrayList<Comment>();
         this.comments.add(comment);
         return this.save();
     }
 
-    public Post removeComment(String email, String content, Boolean removeAll) {
+    public Post removeComment(String userName, String content, Boolean removeAll) {
         // We want to get through it the reverse way to delete most recent comment first (duplicates)
         ListIterator<Comment> iterator = this.comments.listIterator(this.comments.size());
         Comment current = null;
         while (iterator.hasPrevious()) {
             current = iterator.previous();
             // Continue if it's not the one we're looking for
-            if (!(current.email.equalsIgnoreCase(email) && current.content.equalsIgnoreCase(content)))
+            if (!(current.user.userName.equalsIgnoreCase(userName) && current.content.equalsIgnoreCase(content)))
                 continue;
             iterator.remove();
             current.delete();
@@ -91,14 +91,14 @@ public class Post extends MongoEntity {
         return this.save();
     }
 
-    public Post removeComment(String email, String content) {
-        return this.removeComment(email, content, false);
+    public Post removeComment(String userName, String content) {
+        return this.removeComment(userName, content, false);
     }
 
-    public List<Comment> getComments(String email) {
+    public List<Comment> getComments(String userName) {
         List<Comment> returnList = new ArrayList<Comment>();
         for (Comment current : this.comments) {
-            if (current.email.equalsIgnoreCase(email))
+            if (current.user.userName.equalsIgnoreCase(userName))
                 returnList.add(current);
         }
         return returnList;

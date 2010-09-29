@@ -4,14 +4,14 @@
 <ul id="pagination">
     #{if post.postReference.previous()}
         <li id="previous">
-            <a href="@{BlogViewer.show(post.postReference.previous().id)}">
+            <a href="@{BlogController.show(post.postReference.previous().id)}">
                 ${models.blog.Post.getPost(post.postReference.previous().id).title}
             </a>
         </li>
     #{/if}
     #{if post.postReference.next()}
         <li id="next">
-            <a href="@{BlogViewer.show(post.postReference.next().id)}">
+            <a href="@{BlogController.show(post.postReference.next().id)}">
                 ${models.blog.Post.getPost(post.postReference.next().id).title}
             </a>
         </li>
@@ -22,7 +22,7 @@
 
 <h3>Post a comment</h3>
 
-#{form @BlogViewer.postComment(post.title)}
+#{form @BlogController.postComment(post.title)}
 
     #{ifErrors}
         <p class="error">
@@ -30,18 +30,6 @@
         </p>
     #{/ifErrors}
 
-    <p>
-        <label for="email">Your email: </label>
-        <input type="text" name="email" id="email" value="${params.email}" />
-    </p>
-    <p>
-        <label for="pseudo">Your user name: </label>
-        <input type="text" name="userName" id="pseudo" value="${params.userName}" />
-    </p>
-    <p>
-        <label for="webSite">Your web site: </label>
-        <input type="text" name="webSite" id="webSite" value="${params.webSite}" />
-    </p>
     <p>
         <label for="content">Your message: </label>
         <textarea name="content" id="content" cols="100" rows="5">${params.content}</textarea>

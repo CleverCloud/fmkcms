@@ -15,11 +15,6 @@ import play.data.validation.Required;
 @Entity
 public class Comment extends MongoEntity {
 
-    @Required
-    public String email;
-
-    public String pseudo;
-
     @Reference
     public User user;
 

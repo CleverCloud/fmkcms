@@ -6,12 +6,13 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
-import models.user.BasicUser;
 import models.blog.Post;
 import models.blog.PostRef;
+import models.user.GAppUser;
 import models.user.User;
 import play.cache.Cache;
 import play.data.validation.Validation;
+import play.libs.Codec;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -23,18 +24,9 @@ import play.mvc.With;
 @With(Secure.class)
 public class BlogController extends Controller {
 
-    public static void postComment(String title, String email, String pseudo, String password, String content, String code, String randomID) {
+    public static void show(String title) {
         Post post = Post.getPostByTitle(title);
-        if (post == null)
-            return;
-
-        validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
-        if (Validation.hasErrors())
-            render("BlogController/show.html", post, randomID);
-
-        post.addComment(email, pseudo, password, content);
-        Cache.delete(randomID);
-        BlogViewer.show(post.title);
+        render(post, Codec.UUID());
     }
 
     public static void newPost() {
@@ -48,10 +40,11 @@ public class BlogController extends Controller {
         Locale language = params.get("post.language", Locale.class);
         Date postedAt = new Date();
 
-        User author = new BasicUser();
-        author.userName = session.get("username");
+        GAppUser author = new GAppUser();
+        author.openId = session.get("username");
         author.firstName = session.get("firstName");
         author.lastName = session.get("lastName");
+        author.userName = author.firstName + " " + author.lastName;
         author.email = session.get("email");
         author.language = new Locale(session.get("language"));
         author.save();
@@ -101,6 +94,24 @@ public class BlogController extends Controller {
         postRef.author = author;
         postRef.postedAt = postedAt;
         return postRef;
+    }
+
+    public static void postComment(String title, String content, String code, String randomID) {
+        Post post = Post.getPostByTitle(title);
+        if (post == null)
+            return;
+
+        validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
+        if (Validation.hasErrors())
+            render("BlogController/show.html", post, randomID);
+
+        GAppUser user = GAppUser.getByOpenId(session.get("username"));
+        if (user == null)
+            BlogViewer.show(title);
+
+        post.addComment(user, content);
+        Cache.delete(randomID);
+        BlogViewer.show(post.title);
     }
 
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import models.Tag;
 import models.blog.Post;
 import models.blog.PostRef;
+import models.user.CommentUser;
 import mongo.MongoEntity;
 import play.cache.Cache;
+import play.data.validation.Validation;
 import play.libs.Codec;
 import play.libs.Images;
 import play.libs.Images.Captcha;
@@ -25,6 +27,8 @@ public class BlogViewer extends Controller {
     }
 
     public static void show(String title) {
+        if (session.get("username") != null)
+            BlogController.show(title);
         Post post = Post.getPostByTitle(title);
         render(post, Codec.UUID());
     }
@@ -44,6 +48,26 @@ public class BlogViewer extends Controller {
 
     public static void listTagged(String tag) {
         render(Tag.findOrCreateByName(tag), Post.findTaggedWith(tag));
+    }
+
+    public static void postComment(String title, String email, String userName, String webSite, String content, String code, String randomID) {
+        Post post = Post.getPostByTitle(title);
+        if (post == null)
+            return;
+
+        validation.equals(code, Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
+        if (Validation.hasErrors())
+            render("BlogViewer/show.html", post, randomID);
+
+        CommentUser user = new CommentUser();
+        user.email = email;
+        user.userName = userName;
+        user.webSite = webSite;
+        user.save();
+
+        post.addComment(user, content);
+        Cache.delete(randomID);
+        BlogViewer.show(post.title);
     }
 
 }

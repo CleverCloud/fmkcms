@@ -16,15 +16,7 @@
                 &nbsp;|&nbsp; ${_post.comments?.size() ?: 'no'}
                 comment${_post.comments?.size()?.pluralize()}
                 #{if _post.comments}
-                    #{if _post.comments[_post.comments.size()-1].user}
-                        , latest by ${_post.comments[_post.comments.size()-1].user}
-                    #{/if}
-                    #{elseif _post.comments[_post.comments.size()-1].pseudo}
-                        , latest by ${_post.comments[_post.comments.size()-1].pseudo}
-                    #{/elseif}
-                    #{else}
-                        , latest by ${_post.comments[_post.comments.size()-1].email}
-                    #{/else}
+                    , latest by ${_post.comments[_post.comments.size()-1].user}
                 #{/if}
             </span>
         #{/if}
@@ -56,15 +48,7 @@
             <div class="comment">
                 <div class="comment-metadata">
                     <span class="comment-author">
-                        #{if comment.user}
-                            by ${comment.user},
-                        #{/if}
-                        #{elseif comment.pseudo}
-                            by ${comment.pseudo},
-                        #{/elseif}
-                        #{else}
-                            by ${comment.email},
-                        #{/else}
+                        by ${comment.user},
                     </span>
                     <span class="comment-date">
                         ${comment.postedAt.format('dd MMM yy')}
