@@ -54,6 +54,12 @@ public class BlogController extends Controller {
 
             validation.valid(author);
             if (Validation.hasErrors()) {
+                /*
+                 * TODO fix the comportment : form do not resolve the problem
+                 *
+                 */
+
+
                 params.flash(); // add http parameters to the flash scope
                 Validation.keep(); // keep the errors for the next request
                 BlogController.newPost();
@@ -63,6 +69,12 @@ public class BlogController extends Controller {
 
         Post post = Post.getPostByTitle(otherTitle);
         if (post != null) {
+            /* TODO
+             * add validation
+             *  -> same at page
+             */
+
+
             post = post.addTranslation(author, language, title, content);
         } else {
             post = new Post();
