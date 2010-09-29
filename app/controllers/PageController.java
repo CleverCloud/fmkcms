@@ -50,6 +50,7 @@ public class PageController extends Controller {
                 Validation.keep(); // keep the errors for the next request
                 PageController.newPage();
             }
+            page.pageReference.save();
             page.save();
         }
 
@@ -77,7 +78,7 @@ public class PageController extends Controller {
             PageController.newPage();
         }
 
-        return pageRef.save();
+        return pageRef;
     }
 
 }

@@ -79,6 +79,7 @@ public class BlogController extends Controller {
                 Validation.keep(); // keep the errors for the next request
                 BlogController.newPost();
             }
+            post.postReference.save();
             post.save();
         }
 
@@ -109,7 +110,7 @@ public class BlogController extends Controller {
             BlogController.newPost();
         }
 
-        return postRef.save();
+        return postRef;
     }
 
     public static void postComment(String title, String content, String code, String randomID) {

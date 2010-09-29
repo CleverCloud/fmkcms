@@ -11,6 +11,7 @@ GET     /captcha                                BlogViewer.captcha
 GET     /blog                                   BlogViewer.index
 GET     /post/{title}                           BlogViewer.show
 GET     /posts/{tag}                            BlogViewer.listTagged
+GET     /posts/auth/{title}                     BlogController.show
 GET     /newPost                                BlogController.newPost
 POST    /doNewPost                              BlogController.doNewPost
 POST    /post/{title}/comments                  BlogController.postComment
