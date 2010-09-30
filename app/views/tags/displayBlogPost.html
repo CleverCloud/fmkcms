@@ -8,7 +8,7 @@
         <span class="post-author">by ${_post.postReference.author}</span>,
         <span class="post-date">${_post.postReference.postedAt.format('dd MMM yy')}</span>
         #{if _post.author != _post.postReference.author}
-            <span class="post-translator">translated by ${_post.author}</span>
+            <span class="post-translator">, translated by ${_post.author}</span>
             <span class="post-translation-date">${_post.postedAt.format('dd MMM yy')}</span>
         #{/if}
         #{if _as != 'full'}
