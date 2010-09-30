@@ -4,6 +4,11 @@
 #{verbatim}
 ${page.content}
 #{/verbatim}
+
+<div class="translateMe">
+    <a href="@{PageController.newPage(page.urlId)}">Translate me !</a>
+</div>
+
 <ul>
     #{list items:page.pageReference.tags, as:'tag'}
     <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>

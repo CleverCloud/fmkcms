@@ -147,6 +147,10 @@ public class Post extends MongoEntity {
         return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).filter("language =", language).get();
     }
 
+    public static List<Post> getPostsByPostRef(PostRef postReference) {
+        return MongoEntity.getDs().find(Post.class, "postReference._id", postReference.id).asList();
+    }
+
     public static List<Post> getPostsByTitle(String title) {
         Post post = Post.getPostByTitle(title);
         return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).asList();
@@ -163,28 +167,6 @@ public class Post extends MongoEntity {
             page = 1;
         List<Post> posts = MongoEntity.getDs().find(Post.class, "language", locale).order("-postedAt").offset((page - 1) * number).limit(number).asList();
         return (posts == null) ? new ArrayList<Post>() : posts;
-    }
-
-    public static Post getPost(ObjectId postRefId) {
-        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference._id", postRefId).asList();
-
-        switch (posts.size()) {
-            case 0:
-                return null;
-            case 1:
-                return posts.get(0);
-            default:
-                List<Locale> locales = I18nController.getLanguages();
-                for (Locale locale : locales) {
-                    // Try exact Locale or exact language no matter the country
-                    for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
-                            return candidat;
-                    }
-                }
-
-                return posts.get(0); // pick up first for now
-        }
     }
 
 }

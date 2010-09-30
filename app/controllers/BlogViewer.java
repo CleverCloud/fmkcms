@@ -3,6 +3,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import models.Tag;
 import models.blog.Comment;
 import models.blog.Post;
@@ -29,9 +30,38 @@ public class BlogViewer extends Controller {
     }
 
     public static void show(String title) {
+        List<Post> posts = Post.getPostsByTitle(title);
+        Post post = null;
+
+        switch (posts.size()) {
+            case 0:
+                notFound();
+            case 1:
+                post = posts.get(0);
+                break;
+            default:
+                List<Locale> locales = I18nController.getLanguages();
+                for (Locale locale : locales) {
+                    // Try exact Locale or exact language no matter the country
+                    for (Post candidat : posts) {
+                        System.out.println(candidat.language + " vs " + locale);
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
+                            post = candidat;
+                            System.out.println("Ok");
+                            break;
+                        }
+                    }
+                    if (post != null)
+                        break;
+                }
+                if (post == null)
+                    post = posts.get(0);
+                if (post == null)
+                    notFound();
+        }
+
         if (session.get("username") != null)
-            BlogController.show(title);
-        Post post = Post.getPostByTitle(title);
+            render("BlogController/show.html", post, Codec.UUID());
         render(post, Codec.UUID());
     }
 
@@ -39,12 +69,11 @@ public class BlogViewer extends Controller {
         PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
         List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
 
-        Post frontPost = (frontPostRef == null) ? null : frontPostRef.getPost();
+        Post frontPost = (frontPostRef == null) ? null : BlogViewer.getTranslation(frontPostRef);
         List<Post> olderPosts = new ArrayList<Post>();
         for(PostRef postRef : olderPostRefs) {
-            olderPosts.add(postRef.getPost());
+            olderPosts.add(BlogViewer.getTranslation(postRef));
         }
-
         render(frontPost, olderPosts);
     }
 
@@ -89,6 +118,30 @@ public class BlogViewer extends Controller {
         post.addComment(comment);
         Cache.delete(randomID);
         BlogViewer.show(post.title);
+    }
+
+    private static Post getTranslation(PostRef postRef) {
+        List<Post> posts = Post.getPostsByPostRef(postRef);
+        if (posts == null)
+            return null;
+
+        switch (posts.size()) {
+            case 0:
+                return null;
+            case 1:
+                return posts.get(0);
+            default:
+                List<Locale> locales = I18nController.getLanguages();
+                for (Locale locale : locales) {
+                    // Try exact Locale or exact language no matter the country
+                    for (Post candidat : posts) {
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
+                            return candidat;
+                    }
+                }
+
+                return posts.get(0);
+        }
     }
 
 }

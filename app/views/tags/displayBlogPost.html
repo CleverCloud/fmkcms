@@ -38,6 +38,9 @@
 </div>
 
 #{if _as == 'full'}
+    <div class="translateMe">
+        <a href="@{BlogController.newPost(_post.title)}">Translate me !</a>
+    </div>
     <div class="comments">
         <h3>
             ${_post.comments?.size() ?: 'no'}

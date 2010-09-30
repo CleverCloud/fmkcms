@@ -13,7 +13,6 @@ import models.user.GAppUser;
 import models.user.User;
 import play.cache.Cache;
 import play.data.validation.Validation;
-import play.libs.Codec;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -25,13 +24,8 @@ import play.mvc.With;
 @With(Secure.class)
 public class BlogController extends Controller {
 
-    public static void show(String title) {
-        Post post = Post.getPostByTitle(title);
-        render(post, Codec.UUID());
-    }
-
-    public static void newPost() {
-        render();
+    public static void newPost(String otherTitle) {
+        render(otherTitle);
     }
 
     public static void doNewPost() {
@@ -78,7 +72,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost();
+            BlogController.newPost("");
         }
         post.postReference.save();
         post.save();
@@ -107,7 +101,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost();
+            BlogController.newPost("");
         }
 
         return postRef;

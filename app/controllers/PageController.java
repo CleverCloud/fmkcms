@@ -19,39 +19,36 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
-    public static void newPage() {
-        render();
+    public static void newPage(String otherUrlId) {
+        render(otherUrlId);
     }
 
     public static void doNewPage() {
-        String urlId = params.get("linkTo.urlId");
-        if (urlId.equals("new"))
-            urlId = params.get("linkTo.newUrlId");
-        String title = params.get("page.title");
-        String content = params.get("page.content");
-        Locale language = params.get("page.language", Locale.class);
-        Boolean published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
-
-        Page page = Page.getPageByUrlId(urlId);
+        String urlId = params.get("linkto.otherUrlId");
+        Page page = null;
         PageRef pageRef = null;
+
+        if (urlId != null && urlId.equals(""))
+            page = Page.getPageByUrlId(urlId);
         if (page != null)
             pageRef = page.pageReference;
         else
             pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
+        urlId = params.get("page.urlId");
 
         page = new Page();
         page.pageReference = pageRef;
         page.urlId = urlId;
-        page.title = title;
-        page.content = content;
-        page.language = language;
-        page.published = published;
+        page.title = params.get("page.title");
+        page.content = params.get("page.content");
+        page.language = params.get("page.language", Locale.class);
+        page.published = (params.get("page.published") == null) ? Boolean.FALSE : Boolean.TRUE;
 
         validation.valid(page);
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage();
+            PageController.newPage("");
         }
         page.pageReference.save();
         page.save();
@@ -77,7 +74,7 @@ public class PageController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage();
+            PageController.newPage("");
         }
 
         return pageRef;

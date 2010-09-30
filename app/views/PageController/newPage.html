@@ -1,29 +1,13 @@
 #{extends 'main.html' /}
 #{set title:'New Page' /}
 
+#{if otherTitle}
+<p>You are currently translating ${otherUrlId}.</p>
+#{/if}
+
 #{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
 
-#{field 'linkTo.urlId'}
-<p>
-    <label>&{field.name}</label>
-    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    %{
-        java.util.Set<String> urlIds = new TreeSet<String>();
-        Iterator<String> itz = mongo.MongoEntity.getDs().find(models.Page.class).iterator();
-        while (itz.hasNext()) {
-            urlIds.add(itz.next().urlId);
-        }
-        urlIds.add("new");
-    }%
-    #{list items:urlIds, as:'u'}
-        <option value="${u}" ${((field.flash == null && u.equals("new")) || field.flash.toString().equals(u)) ? 'selected="true"'.raw() : ''}>${u}</option>
-    #{/list}
-    </select>
-    <span class="error">${field.error}</span>
-</p>
-#{/}
-
-#{field 'linkTo.newUrlId'}
+#{field 'page.urlId'}
 <p>
     <label>&{field.name}</label>
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
@@ -89,6 +73,7 @@
 </p>
 #{/}
 
+<input type="hidden" name="linkto.otherUrlId" value="${otherUrlId}" />
 <input type="submit" value="ok" />
 
 #{/form}

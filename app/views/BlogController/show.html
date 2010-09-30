@@ -4,14 +4,14 @@
 <ul id="pagination">
     #{if post.postReference.previous()}
         <li id="previous">
-            <a href="@{BlogController.show(post.postReference.previous().id)}">
+            <a href="@{BlogViewer.show(post.postReference.previous().id)}">
                 ${models.blog.Post.getPost(post.postReference.previous().id).title}
             </a>
         </li>
     #{/if}
     #{if post.postReference.next()}
         <li id="next">
-            <a href="@{BlogController.show(post.postReference.next().id)}">
+            <a href="@{BlogViewer.show(post.postReference.next().id)}">
                 ${models.blog.Post.getPost(post.postReference.next().id).title}
             </a>
         </li>

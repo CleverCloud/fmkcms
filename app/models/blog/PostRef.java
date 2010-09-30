@@ -30,9 +30,4 @@ public class PostRef extends MongoEntity {
     public PostRef next() {
         return MongoEntity.getDs().find(PostRef.class, "postedAt >", this.postedAt).order("postedAt").get();
     }
-
-    public Post getPost() {
-        return Post.getPost(this.id);
-    }
-    
 }
