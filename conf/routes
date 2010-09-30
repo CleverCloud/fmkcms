@@ -5,12 +5,14 @@
 GET     /page/{urlId}                           PageViewer.page
 GET     /pages/tag/{tagName}                    PageViewer.pagesTag
 *       /pages/search                           PageViewer.searchPage
+GET     /newPage                                PageController.newPage(otherUrlId:'')
 GET     /newPage/{otherUrlId}                   PageController.newPage
 POST    /doNewPage                              PageController.doNewPage
 GET     /captcha                                BlogViewer.captcha
 GET     /blog                                   BlogViewer.index
 GET     /post/{title}                           BlogViewer.show
 GET     /posts/{tag}                            BlogViewer.listTagged
+GET     /newPost                                BlogController.newPost(otherTitle:'')
 GET     /newPost/{otherTitle}                   BlogController.newPost
 POST    /doNewPost                              BlogController.doNewPost
 POST    /post/{title}/comments                  BlogController.postComment

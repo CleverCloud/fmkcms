@@ -28,7 +28,7 @@ public class PageController extends Controller {
         Page page = null;
         PageRef pageRef = null;
 
-        if (urlId != null && urlId.equals(""))
+        if (urlId != null && !urlId.equals(""))
             page = Page.getPageByUrlId(urlId);
         if (page != null)
             pageRef = page.pageReference;
