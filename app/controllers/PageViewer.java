@@ -27,6 +27,8 @@ public class PageViewer extends Controller {
                 notFound();
             case 1:
                 page = pages.get(0);
+                if (!page.published)
+                    notFound();
                 break;
             default:
                 List<Locale> locales = I18nController.getLanguages();
