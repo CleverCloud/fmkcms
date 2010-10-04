@@ -3,7 +3,6 @@ package models.blog;
 import models.user.User;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
-import controllers.I18nController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.Locale;
 import javax.persistence.Lob;
 import models.Tag;
 import mongo.MongoEntity;
-import org.bson.types.ObjectId;
 import play.Logger;
 import play.data.validation.Required;
 
@@ -45,15 +43,6 @@ public class Post extends MongoEntity {
     //
     // Constructor
     //
-    private Post(PostRef postReference, User author, Locale language, String title, String content) {
-        this.postReference = postReference;
-        this.author = author;
-        this.language = language;
-        this.title = title;
-        this.content = content;
-        this.postedAt = new Date();
-    }
-
     public Post() {}
 
     //
@@ -112,31 +101,7 @@ public class Post extends MongoEntity {
 
     public static List<Post> findTaggedWith(String ... tags) {
         // TODO: waxzce, gogo elastic search !
-/*        List<PostRef> postRefs = PostRef.find(
-        "select distinct p from PostRef p join p.tags as t where t.name in (:tags) group by p.id, p.author, p.postedAt having count(t.id) = :size").bind("tags", tags).bind("size", tags.length).fetch();
-        
-        List<Post> posts = new ArrayList<Post>();
-        List<Locale> locales = I18nController.getLanguages();
-        for (PostRef postRef : postRefs) {
-        posts.add(postRef.getPost(locales));
-        }
-
-        return posts;*/
         return null;
-    }
-
-    //
-    // I18n handling
-    //
-    public Post removeTranslation(Locale language) {
-        if (this.language.equals(language)) {
-            Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);
-            return this;
-        }
-
-        Post.getPostByLocale(this.title, language).delete();
-
-        return this;
     }
 
     //

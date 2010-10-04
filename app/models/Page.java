@@ -51,17 +51,7 @@ public class Page extends MongoEntity implements Searchable {
     //
     // Constructor
     //
-    public Page() {
-    }
-
-    private Page(PageRef pageReference, String urlId, String title, String content, Locale language, Boolean published) {
-        this.pageReference = pageReference;
-        this.urlId = urlId;
-        this.title = title;
-        this.content = content;
-        this.language = language;
-        this.published = published;
-    }
+    public Page() {}
 
     //
     // Tags handling
@@ -78,20 +68,6 @@ public class Page extends MongoEntity implements Searchable {
         // TODO: waxzce, gogo elastic search !
         List<Page> p = MongoEntity.getDs().find(Page.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
         return p;
-    }
-
-    //
-    // I18n handling
-    //
-    public Page removeTranslation(Locale language) {
-        if (this.language.equals(language)) {
-            Logger.error("Cannot self remove, please remove from another translation.", new Object[0]);
-            return this;
-        }
-
-        Page.getPageByLocale(this.urlId, language).delete();
-
-        return this;
     }
 
     //
