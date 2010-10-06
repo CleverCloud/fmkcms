@@ -24,4 +24,13 @@ public class PageRef extends MongoEntity {
         return MongoEntity.getDs().find(PageRef.class, "id", id).get();
     }
 
+    public String getTagsAsString() {
+        String tagsString = "";
+        if (this.tags == null)
+            return tagsString;
+        for (Tag tag : this.tags)
+            tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
+        return tagsString;
+    }
+
 }

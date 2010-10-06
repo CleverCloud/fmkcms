@@ -1,8 +1,15 @@
 #{extends 'main.html' /}
 #{set title:'New Page' /}
 
+%{
+    models.Page otherPage;
+}%
+
 #{if otherUrlId}
-<p>You are currently translating ${otherUrlId}.</p>
+<p>You are currently translating ${otherUrlId} from ${language}.</p>
+%{
+    otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
+}%
 #{/if}
 
 #{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
@@ -19,12 +26,8 @@
 <p>
     <label>&{field.name}</label>
     %{
-        String tags = "";
-        if(field.value != null){
-        for (String tag : field.value) {
-            tags += (tags.isEmpty() ? "" : ", ") + tag;
-        }
-    }
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.pageReference.getTagsAsString();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -34,6 +37,10 @@
 #{field 'page.title'}
 <p>
     <label>&{field.name}</label>
+    %{
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.title;
+    }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
@@ -42,6 +49,10 @@
 #{field 'page.content'}
 <p>
     <label>&{field.name}</label>
+    %{
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.content;
+    }%
     <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
     <span class="error">${field.error}</span>
 </p>
@@ -56,6 +67,8 @@
         for (java.util.Locale locale : java.util.Arrays.asList(java.util.Locale.getAvailableLocales())) {
             locales.add(locale.toString());
         }
+        if (language != null && !language.isEmpty())
+            locales.remove(language);
     }%
     #{list items:locales, as:'l'}
         <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>

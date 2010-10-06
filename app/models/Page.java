@@ -1,7 +1,7 @@
 package models;
 
-import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
 import java.util.ArrayList;
@@ -10,10 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import javax.persistence.Lob;
 import mongo.MongoEntity;
-import play.Logger;
 import play.data.validation.Required;
 import play.mvc.Router;
 
@@ -40,18 +38,30 @@ public class Page extends MongoEntity implements Searchable {
     public Locale language;
 
     @Required
+    @Reference
     public PageRef pageReference;
 
     @Required
     public Boolean published = false;
 
-    @Embedded
-    public Set<Tag> tags;
-
     //
     // Constructor
     //
     public Page() {}
+
+    /* Make Play! views happy ... */
+    public static Page call(Page other) {
+        if (other == null)
+            return null;
+        Page page = new Page();
+        page.urlId = other.urlId;
+        page.title = other.title;
+        page.content = other.content;
+        page.language = other.language;
+        page.pageReference = other.pageReference;
+        page.published = other.published;
+        return page;
+    }
 
     //
     // Tags handling
@@ -75,7 +85,7 @@ public class Page extends MongoEntity implements Searchable {
     //
     public static List<Page> getPagesByUrlId(String urlId) {
         Page page = Page.getPageByUrlId(urlId);
-        return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference._id", page.pageReference.id).asList();
+        return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).asList();
     }
 
     public static Page getPageByUrlId(String urlId) {
@@ -84,7 +94,7 @@ public class Page extends MongoEntity implements Searchable {
 
     public static Page getPageByLocale(String urlId, Locale locale) {
         Page page = Page.getPageByUrlId(urlId);
-        return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference._id", page.pageReference.id).filter("language =", locale).get();
+        return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).filter("language =", locale).get();
     }
 
     //

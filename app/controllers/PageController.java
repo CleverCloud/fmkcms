@@ -19,22 +19,30 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
-    public static void newPage(String otherUrlId) {
-        render(otherUrlId);
+    public static void newPage(String otherUrlId, String language) {
+        render(otherUrlId, language);
     }
 
     public static void doNewPage() {
         String urlId = params.get("linkto.otherUrlId");
         Page page = null;
         PageRef pageRef = null;
+        String tagsString = params.get("pageReference.tags");
 
         if (urlId != null && !urlId.equals(""))
             page = Page.getPageByUrlId(urlId);
         if (page != null)
             pageRef = page.pageReference;
         else
-            pageRef = PageController.doNewPageRef(params.get("pageReference.tags"));
+            pageRef = PageController.doNewPageRef();
         urlId = params.get("page.urlId");
+
+        Set<Tag> tags = new TreeSet<Tag>();
+        if (!tagsString.isEmpty()) {
+            for (String tag : Arrays.asList(tagsString.split(",")))
+                tags.add(Tag.findOrCreateByName(tag));
+        }
+        pageRef.tags = tags;
 
         page = new Page();
         page.pageReference = pageRef;
@@ -48,7 +56,7 @@ public class PageController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage("");
+            PageController.newPage("", "");
         }
         page.pageReference.save();
         page.save();
@@ -59,22 +67,14 @@ public class PageController extends Controller {
             PageViewer.page("index");
     }
 
-    private static PageRef doNewPageRef(String tagsString) {
+    private static PageRef doNewPageRef() {
         PageRef pageRef = new PageRef();
-        Set<Tag> tags = new TreeSet<Tag>();
 
-        if (!tagsString.isEmpty()) {
-            for (String tag : Arrays.asList(tagsString.split(","))) {
-                tags.add(Tag.findOrCreateByName(tag));
-            }
-        }
-
-        pageRef.tags = tags;
         validation.valid(pageRef);
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage("");
+            PageController.newPage("", "");
         }
 
         return pageRef;
