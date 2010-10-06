@@ -1,10 +1,13 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import play.Play;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -87,6 +90,15 @@ public class I18nController extends Controller {
                 locales.add(new Locale(language));
         }
 
+        return locales;
+    }
+
+    public static Set<String> getAllLocalesAsStrings(String ... blacklist) {
+        Set<String> locales = new TreeSet<String>();
+        for (Locale locale : Arrays.asList(Locale.getAvailableLocales()))
+            locales.add(locale.toString());
+        for (String blacklisted : blacklist)
+            locales.remove(blacklisted);
         return locales;
     }
 

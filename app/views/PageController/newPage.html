@@ -62,15 +62,7 @@
 <p>
     <label>&{field.name}</label>
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    %{
-        java.util.Set<String> locales = new java.util.TreeSet<String>();
-        for (java.util.Locale locale : java.util.Arrays.asList(java.util.Locale.getAvailableLocales())) {
-            locales.add(locale.toString());
-        }
-        if (language != null && !language.isEmpty())
-            locales.remove(language);
-    }%
-    #{list items:locales, as:'l'}
+    #{list items:controllers.I18nController.getAllLocalesAsStrings(language), as:'l'}
         <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
     #{/list}
     </select>
