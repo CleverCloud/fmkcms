@@ -49,9 +49,9 @@ public class I18nController extends Controller {
     }
 
     public static Locale getTldLanguage() {
-        String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales");
+        String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales", "false");
 
-        if (tld4locales == null || !tld4locales.equalsIgnoreCase("true"))
+        if (!tld4locales.equalsIgnoreCase("true"))
             return null;
 
         Map<String, Locale> tldLocales = new HashMap<String, Locale>();
