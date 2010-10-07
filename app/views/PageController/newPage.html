@@ -12,7 +12,7 @@
 }%
 #{/if}
 
-#{form @PageController.doNewPage() , id:'creationForm', enctype:'multipart/form-data' }
+#{form @PageController.doNewPage(otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'page.title'}
 <p>
@@ -78,7 +78,6 @@
 </p>
 #{/}
 
-<input type="hidden" name="linkto.otherUrlId" value="${otherUrlId}" />
 <input type="submit" value="ok" />
 
 #{/form}

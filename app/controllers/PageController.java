@@ -23,8 +23,8 @@ public class PageController extends Controller {
         render(otherUrlId, language);
     }
 
-    public static void doNewPage() {
-        String urlId = params.get("linkto.otherUrlId");
+    public static void doNewPage(String otherUrlId, String otherLanguage) {
+        String urlId = otherUrlId;
         Page page = null;
         PageRef pageRef = null;
         String tagsString = params.get("pageReference.tags");
@@ -56,7 +56,7 @@ public class PageController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage("", "");
+            PageController.newPage(otherUrlId, otherLanguage);
         }
         page.pageReference.save();
         page.save();
