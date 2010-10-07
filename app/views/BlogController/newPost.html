@@ -1,8 +1,12 @@
 #{extends 'main.html' /}
 #{set title:'New Page' /}
 
+%{
+    models.blog.Post otherPost;
+}%
+
 #{if otherTitle}
-<p>You are currently translating ${otherTitle}.</p>
+<p>You are currently translating ${otherTitle} from ${language}.</p>
 #{/if}
 
 #{form @BlogController.doNewPost() , id:'creationForm', enctype:'multipart/form-data' }
@@ -11,12 +15,8 @@
 <p>
     <label>&{field.name}</label>
     %{
-        String tags = "";
-        if(field.value != null){
-        for (String tag : field.value) {
-            tags += (tags.isEmpty() ? "" : ", ") + tag;
-        }
-    }
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.pageReference.getTagsAsString();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -26,6 +26,10 @@
 #{field 'post.title'}
 <p>
     <label>&{field.name}</label>
+    %{
+        if (field.flash == null && otherPost != null)
+            field.flash = otherPost.title;
+    }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
@@ -34,6 +38,10 @@
 #{field 'post.content'}
 <p>
     <label>&{field.name}</label>
+    %{
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.content;
+    }%
     <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
     <span class="error">${field.error}</span>
 </p>
