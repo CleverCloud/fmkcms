@@ -44,10 +44,8 @@ public class BlogViewer extends Controller {
                 for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
-                        System.out.println(candidat.language + " vs " + locale);
                         if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
                             post = candidat;
-                            System.out.println("Ok");
                             break;
                         }
                     }

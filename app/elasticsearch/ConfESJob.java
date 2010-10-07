@@ -42,8 +42,6 @@ public class ConfESJob extends Job {
         public StatusResponse() {}
 
         public void onFailure(Throwable thrwbl) {
-            System.out.println("StatusResponseonFailure");
-
             String indexname = Play.configuration.getProperty("elasticsearch.indexname");
             CreateIndexRequest cir = new CreateIndexRequest(indexname);
 
@@ -51,8 +49,6 @@ public class ConfESJob extends Job {
         }
 
         public void onResponse(IndicesStatusResponse rspns) {
-            System.out.println("StatusResponseonResponse");
-
             MappingResponse mr = new MappingResponse();
             mr.onResponse(null);
         }
@@ -63,12 +59,10 @@ public class ConfESJob extends Job {
         public MappingResponse() {}
 
         public void onResponse(CreateIndexRequest rspns) {
-            System.out.println("mapping reponse");
             addMapping("page", "page.json");
         }
 
         public void onFailure(Throwable thrwbl) {
-            System.out.println("mapping fail");
             onResponse(null);
             Logger.error("Elastic Search Failure : create %s index faillure server %s:%s", Play.configuration.getProperty("elasticsearch.indexname"), Play.configuration.getProperty("elasticsearch.host"), Play.configuration.getProperty("elasticsearch.port"));
         }
@@ -76,7 +70,6 @@ public class ConfESJob extends Job {
         private void addMapping(String nametype, String filename) {
             String indexname = Play.configuration.getProperty("elasticsearch.indexname");
             VirtualFile vf = Play.getVirtualFile("conf/es_mapping/" + filename);
-            System.out.println(vf.contentAsString());
             PutMappingRequest pmr = new PutMappingRequest();
             pmr.indices(new String[]{indexname}).type(nametype).source(vf.contentAsString());
             admin.indices().putMapping(pmr);
