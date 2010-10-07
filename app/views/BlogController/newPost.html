@@ -6,17 +6,22 @@
 }%
 
 #{if otherTitle}
+#{if action.equals("translate")}
 <p>You are currently translating ${otherTitle} from ${language}.</p>
+#{/if}
+#{elseif action.equals("edit")}
+<p>You are currently editing ${otherTitle}.</p>
+#{/elseif}
 %{
     otherPost = models.blog.Post.getPostByLocale(otherTitle, new java.util.Locale(language));
 }%
 #{/if}
 
-#{form @BlogController.doNewPost(otherTitle, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @BlogController.doNewPost("translate", otherTitle, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'post.title'}
 <p>
-    <label>Title</label>
+    <label>Title: </label>
     %{
         if (field.flash == null && otherPost != null)
             field.flash = otherPost.title;
@@ -28,7 +33,7 @@
 
 #{field 'post.content'}
 <p>
-    <label>Content</label>
+    <label>Content: </label>
     %{
         if (field.flash == null && otherPost != null)
             field.flash = otherPost.content;
@@ -40,11 +45,16 @@
 
 #{field 'post.language'}
 <p>
-    <label>Language</label>
+    <label>Language: </label>
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    #{list items:controllers.I18nController.getAllLocalesAsStrings(language), as:'l'}
-        <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
-    #{/list}
+    #{if action.equals("edit")}
+        <option value="${language}">${language}</option>
+    #{/if}
+    #{else}
+        #{list items:controllers.I18nController.getAllLocalesAsStrings(language), as:'l'}
+            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+        #{/list}
+    #{/else}
     </select>
     <span class="error">${field.error}</span>
 </p>
@@ -52,7 +62,7 @@
 
 #{field 'postReference.tags'}
 <p>
-    <label>Tags</label>
+    <label>Tags: </label>
     %{
         if (field.flash == null && otherPost != null)
             field.flash = otherPost.postReference.getTagsAsString();

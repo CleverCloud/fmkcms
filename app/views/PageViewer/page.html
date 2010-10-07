@@ -6,7 +6,9 @@ ${page.content}
 #{/verbatim}
 
 <div class="translateMe">
-    <a href="@{PageController.newPage(page.urlId, page.language)}">Translate me !</a>
+    <a href="@{PageController.newPage("translate", page.urlId, page.language)}">Translate me !</a>
+    &nbsp;|&nbsp;
+    <a href="@{PageController.newPage("edit", page.urlId, page.language)}">Edit me !</a>
 </div>
 
 <ul>

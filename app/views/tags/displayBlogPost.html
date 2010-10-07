@@ -39,7 +39,9 @@
 
 #{if _as == 'full'}
     <div class="translateMe">
-        <a href="@{BlogController.newPost(_post.title, _post.language)}">Translate me !</a>
+        <a href="@{BlogController.newPost("translate", _post.title, _post.language)}">Translate me !</a>
+        &nbsp;|&nbsp;
+        <a href="@{BlogController.newPost("edit", _post.title, _post.language)}">Edit me !</a>
     </div>
     <div class="comments">
         <h3>

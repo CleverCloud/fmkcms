@@ -19,11 +19,11 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
-    public static void newPage(String otherUrlId, String language) {
-        render(otherUrlId, language);
+    public static void newPage(String action, String otherUrlId, String language) {
+        render(action, otherUrlId, language);
     }
 
-    public static void doNewPage(String otherUrlId, String otherLanguage) {
+    public static void doNewPage(String action, String otherUrlId, String otherLanguage) {
         String urlId = otherUrlId;
         Page page = null;
         PageRef pageRef = null;
@@ -34,7 +34,7 @@ public class PageController extends Controller {
         if (page != null)
             pageRef = page.pageReference;
         else
-            pageRef = PageController.doNewPageRef(otherUrlId, otherLanguage);
+            pageRef = PageController.doNewPageRef(action, otherUrlId, otherLanguage);
         urlId = params.get("page.urlId");
 
         Set<Tag> tags = new TreeSet<Tag>();
@@ -56,7 +56,7 @@ public class PageController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage(otherUrlId, otherLanguage);
+            PageController.newPage(action, otherUrlId, otherLanguage);
         }
         page.pageReference.save();
         page.save();
@@ -67,14 +67,14 @@ public class PageController extends Controller {
             PageViewer.page("index");
     }
 
-    private static PageRef doNewPageRef(String otherUrlId, String otherLanguage) {
+    private static PageRef doNewPageRef(String action, String otherUrlId, String otherLanguage) {
         PageRef pageRef = new PageRef();
 
         validation.valid(pageRef);
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage(otherUrlId, otherLanguage);
+            PageController.newPage(action, otherUrlId, otherLanguage);
         }
 
         return pageRef;

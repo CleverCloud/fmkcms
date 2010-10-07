@@ -4,19 +4,23 @@
 %{
     models.Page otherPage;
 }%
-
 #{if otherUrlId}
+#{if action.equals("translate")}
 <p>You are currently translating ${otherUrlId} from ${language}.</p>
+#{/if}
+#{elseif action.equals("edit")}
+<p>You are currently editing ${otherUrlId}.</p>
+#{/elseif}
 %{
     otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
 }%
 #{/if}
 
-#{form @PageController.doNewPage(otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @PageController.doNewPage(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'page.title'}
 <p>
-    <label>Title</label>
+    <label>Title: </label>
     %{
         if (field.flash == null && otherPage != null)
             field.flash = otherPage.title;
@@ -28,7 +32,7 @@
 
 #{field 'page.content'}
 <p>
-    <label>Content</label>
+    <label>Content: </label>
     %{
         if (field.flash == null && otherPage != null)
             field.flash = otherPage.content;
@@ -40,27 +44,39 @@
 
 #{field 'page.urlId'}
 <p>
-    <label>Url ID</label>
+    <label>Url ID: </label>
+    #{if action.equals("edit")}
+    <input type="hidden" id="${field.id}" name="${field.name}" value="${otherUrlId}" class="${field.errorClass}" />
+    ${otherUrlId}
+    #{/if}
+    #{else}
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    #{/else}
     <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'page.language'}
 <p>
-    <label>Language</label>
+    <label>Language: </label>
+    #{if action.equals("edit")}
+    <input type="hidden" id="${field.id}" name="${field.name}" value="${language}" class="${field.errorClass}" />
+    ${language}
+    #{/if}
+    #{else}
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    #{list items:controllers.I18nController.getAllLocalesAsStrings(language), as:'l'}
-        <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
-    #{/list}
+        #{list items:controllers.I18nController.getAllLocalesAsStrings(language), as:'l'}
+            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+        #{/list}
     </select>
+    #{/else}
     <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'pageReference.tags'}
 <p>
-    <label>Tags</label>
+    <label>Tags: </label>
     %{
         if (field.flash == null && otherPage != null)
             field.flash = otherPage.pageReference.getTagsAsString();
@@ -72,7 +88,10 @@
 
 #{field 'page.published'}
 <p>
-    <label>Published</label>
+    <label>Published: </label>
+    #{if action.equals("edit")}
+    %{field.flash = otherPage.published;}%
+    #{/if}
     <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" %{if (field.flash != null && field.flash) {}%checked%{}}%/>
     <span class="error">${field.error}</span>
 </p>

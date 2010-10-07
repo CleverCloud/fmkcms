@@ -97,8 +97,10 @@ public class I18nController extends Controller {
         Set<String> locales = new TreeSet<String>();
         for (Locale locale : Arrays.asList(Locale.getAvailableLocales()))
             locales.add(locale.toString());
-        for (String blacklisted : blacklist)
-            locales.remove(blacklisted);
+        if (blacklist != null) {
+            for (String blacklisted : blacklist)
+                locales.remove(blacklisted);
+        }
         return locales;
     }
 
