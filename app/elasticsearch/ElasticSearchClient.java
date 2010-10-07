@@ -21,4 +21,5 @@ public class ElasticSearchClient extends TransportClient {
                 Play.configuration.getProperty("elasticsearch.host"),
                 Integer.parseInt(Play.configuration.getProperty("elasticsearch.port"))));
     }
+
 }

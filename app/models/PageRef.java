@@ -3,8 +3,6 @@ package models;
 import com.google.code.morphia.annotations.Entity;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.persistence.CascadeType;
-import javax.persistence.ManyToMany;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 
@@ -15,7 +13,6 @@ import org.bson.types.ObjectId;
 @Entity
 public class PageRef extends MongoEntity {
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
     public Set<Tag> tags;
 
     //

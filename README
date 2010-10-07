@@ -1,4 +1,4 @@
-fmkcms is a play framework module
-a collection of utils for making a cms
+fmkcms is a Play! framework module
+It's a collection of utils to make a CMS
 
-this is not ready for prod we want making docs soon
+It is not fully ready for prod, doc coming soon

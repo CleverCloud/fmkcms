@@ -142,6 +142,7 @@ public class BlogViewer extends Controller {
 
                 return posts.get(0);
         }
+
     }
 
 }

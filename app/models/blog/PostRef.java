@@ -2,6 +2,7 @@ package models.blog;
 
 import models.user.User;
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
@@ -15,8 +16,9 @@ import mongo.MongoEntity;
 @Entity
 public class PostRef extends MongoEntity {
 
-    public Date postedAt;
+    @Reference
     public User author;
+    public Date postedAt;
     public Set<Tag> tags;
 
     //

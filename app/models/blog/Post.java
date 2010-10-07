@@ -28,6 +28,9 @@ public class Post extends MongoEntity {
     @Lob
     @Required
     public String content;
+
+    @Reference
+    @Required
     public PostRef postReference;
 
     @Required
@@ -123,16 +126,16 @@ public class Post extends MongoEntity {
     //
     public static Post getPostByLocale(String title, Locale language) {
         Post post = Post.getPostByTitle(title);
-        return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).filter("language =", language).get();
+        return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).filter("language =", language).get();
     }
 
     public static List<Post> getPostsByPostRef(PostRef postReference) {
-        return MongoEntity.getDs().find(Post.class, "postReference._id", postReference.id).asList();
+        return MongoEntity.getDs().find(Post.class, "postReference", postReference).asList();
     }
 
     public static List<Post> getPostsByTitle(String title) {
         Post post = Post.getPostByTitle(title);
-        return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference._id", post.postReference.id).asList();
+        return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).asList();
     }
 
     public static Post getPostByTitle(String title) {

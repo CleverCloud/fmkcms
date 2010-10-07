@@ -35,23 +35,19 @@ public class ConfESJob extends Job {
         admin.indices().status(isr, new StatusResponse());
 
         //      c.close();
-
     }
 
     private class StatusResponse implements ActionListener<IndicesStatusResponse> {
 
-        public StatusResponse() {
-        }
+        public StatusResponse() {}
 
         public void onFailure(Throwable thrwbl) {
             System.out.println("StatusResponseonFailure");
-
 
             String indexname = Play.configuration.getProperty("elasticsearch.indexname");
             CreateIndexRequest cir = new CreateIndexRequest(indexname);
 
             admin.indices().create(cir, (ActionListener) new MappingResponse());
-
         }
 
         public void onResponse(IndicesStatusResponse rspns) {
@@ -64,8 +60,7 @@ public class ConfESJob extends Job {
 
     private class MappingResponse implements ActionListener<CreateIndexRequest> {
 
-        public MappingResponse() {
-        }
+        public MappingResponse() {}
 
         public void onResponse(CreateIndexRequest rspns) {
             System.out.println("mapping reponse");
@@ -87,4 +82,5 @@ public class ConfESJob extends Job {
             admin.indices().putMapping(pmr);
         }
     }
+
 }

@@ -36,4 +36,5 @@ public class Tag extends MongoEntity implements Comparable<Tag> {
         }
         return tag;
     }
+
 }
