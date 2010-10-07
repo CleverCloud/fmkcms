@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Entity;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
 import mongo.MongoEntity;
@@ -25,10 +26,10 @@ public class PageRef extends MongoEntity {
     }
 
     public String getTagsAsString() {
-        String tagsString = "";
+        String tagsString = new String();
         if (this.tags == null)
             return tagsString;
-        for (Tag tag : this.tags)
+        for (Tag tag : new TreeSet<Tag>(this.tags))
             tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
         return tagsString;
     }

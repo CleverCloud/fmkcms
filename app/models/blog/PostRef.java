@@ -4,6 +4,7 @@ import models.user.User;
 import com.google.code.morphia.annotations.Entity;
 import java.util.Date;
 import java.util.Set;
+import java.util.TreeSet;
 import models.Tag;
 import mongo.MongoEntity;
 
@@ -30,10 +31,10 @@ public class PostRef extends MongoEntity {
     }
 
     public String getTagsAsString() {
-        String tagsString = "";
+        String tagsString = new String();
         if (this.tags == null)
             return tagsString;
-        for (Tag tag : this.tags)
+        for (Tag tag : new TreeSet<Tag>(this.tags))
             tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
         return tagsString;
     }
