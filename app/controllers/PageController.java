@@ -34,7 +34,7 @@ public class PageController extends Controller {
         if (page != null)
             pageRef = page.pageReference;
         else
-            pageRef = PageController.doNewPageRef();
+            pageRef = PageController.doNewPageRef(otherUrlId, otherLanguage);
         urlId = params.get("page.urlId");
 
         Set<Tag> tags = new TreeSet<Tag>();
@@ -67,14 +67,14 @@ public class PageController extends Controller {
             PageViewer.page("index");
     }
 
-    private static PageRef doNewPageRef() {
+    private static PageRef doNewPageRef(String otherUrlId, String otherLanguage) {
         PageRef pageRef = new PageRef();
 
         validation.valid(pageRef);
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            PageController.newPage("", "");
+            PageController.newPage(otherUrlId, otherLanguage);
         }
 
         return pageRef;

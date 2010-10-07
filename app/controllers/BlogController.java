@@ -58,7 +58,7 @@ public class BlogController extends Controller {
         if (post != null)
             postRef = post.postReference;
         else
-            postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author);
+            postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, otherTitle, otherLanguage);
 
         post = new Post();
         post.postReference = postRef;
@@ -81,7 +81,7 @@ public class BlogController extends Controller {
         BlogViewer.index();
     }
 
-    private static PostRef doNewPostRef(String tagsString, Date postedAt, User author) {
+    private static PostRef doNewPostRef(String tagsString, Date postedAt, User author, String otherTitle, String otherLanguage) {
         PostRef postRef = new PostRef();
         Set<Tag> tags = new TreeSet<Tag>();
         Tag t = null;
@@ -102,7 +102,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost("", "");
+            BlogController.newPost(otherTitle, otherLanguage);
         }
 
         return postRef;
