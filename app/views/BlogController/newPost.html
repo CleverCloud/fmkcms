@@ -11,18 +11,6 @@
 
 #{form @BlogController.doNewPost() , id:'creationForm', enctype:'multipart/form-data' }
 
-#{field 'postReference.tags'}
-<p>
-    <label>&{field.name}</label>
-    %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.pageReference.getTagsAsString();
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
-</p>
-#{/}
-
 #{field 'post.title'}
 <p>
     <label>&{field.name}</label>
@@ -55,6 +43,18 @@
         <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
     #{/list}
     </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'postReference.tags'}
+<p>
+    <label>&{field.name}</label>
+    %{
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.pageReference.getTagsAsString();
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}
