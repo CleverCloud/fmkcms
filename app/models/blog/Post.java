@@ -11,7 +11,6 @@ import java.util.Locale;
 import javax.persistence.Lob;
 import models.Tag;
 import mongo.MongoEntity;
-import play.Logger;
 import play.data.validation.Required;
 
 /**
@@ -44,6 +43,21 @@ public class Post extends MongoEntity {
     // Constructor
     //
     public Post() {}
+
+    /* Make Play! views happy ... */
+    public static Post call(Post other) {
+        if (other == null)
+            return null;
+        Post post = new Post();
+        post.title = other.title;
+        post.content = other.content;
+        post.language = other.language;
+        post.postReference = other.postReference;
+        post.postedAt = other.postedAt;
+        post.author = other.author;
+        post.comments = other.comments;
+        return post;
+    }
 
     //
     // Comments handling
