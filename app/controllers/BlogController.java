@@ -25,11 +25,11 @@ import play.mvc.With;
 public class BlogController extends Controller {
 
     public static void newPost(String otherTitle, String language) {
+            System.out.println("1 " + otherTitle + " " + language);
         render(otherTitle, language);
     }
 
-    public static void doNewPost() {
-        String otherTitle = params.get("linkTo.title");
+    public static void doNewPost(String otherTitle, String otherLanguage) {
         String title = params.get("post.title");
         String content = params.get("post.content");
         Locale language = params.get("post.language", Locale.class);
@@ -72,7 +72,8 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost("", "");
+            System.out.println("2 " + otherTitle + " " + otherLanguage);
+            BlogController.newPost(otherTitle, otherLanguage);
         }
         post.postReference.save();
         post.save();

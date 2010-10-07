@@ -1,5 +1,5 @@
 #{extends 'main.html' /}
-#{set title:'New Page' /}
+#{set title:'New Post' /}
 
 %{
     models.blog.Post otherPost;
@@ -7,9 +7,12 @@
 
 #{if otherTitle}
 <p>You are currently translating ${otherTitle} from ${language}.</p>
+%{
+    otherPost = models.blog.Post.getPostByLocale(otherTitle, new java.util.Locale(language));
+}%
 #{/if}
 
-#{form @BlogController.doNewPost() , id:'creationForm', enctype:'multipart/form-data' }
+#{form @BlogController.doNewPost(otherTitle, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'post.title'}
 <p>
@@ -27,8 +30,8 @@
 <p>
     <label>&{field.name}</label>
     %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.content;
+        if (field.flash == null && otherPost != null)
+            field.flash = otherPost.content;
     }%
     <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
     <span class="error">${field.error}</span>
@@ -51,15 +54,14 @@
 <p>
     <label>&{field.name}</label>
     %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.pageReference.getTagsAsString();
+        if (field.flash == null && otherPost != null)
+            field.flash = otherPost.postReference.getTagsAsString();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}
 
-<input type="hidden" name="linkTo.title" value="${otherTitle}" />
 <input type="submit" value="ok" />
 
 #{/form}
