@@ -28,4 +28,14 @@ public class PostRef extends MongoEntity {
     public PostRef next() {
         return MongoEntity.getDs().find(PostRef.class, "postedAt >", this.postedAt).order("postedAt").get();
     }
+
+    public String getTagsAsString() {
+        String tagsString = "";
+        if (this.tags == null)
+            return tagsString;
+        for (Tag tag : this.tags)
+            tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
+        return tagsString;
+    }
+
 }
