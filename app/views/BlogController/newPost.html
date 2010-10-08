@@ -52,15 +52,9 @@
     #{/if}
     #{else}
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    %{ if (action.equals("translate")){ }%
-        #{list items:controllers.I18nController.getAllLocales(otherPost.postReference.getAvailableLocales()), as:'l'}
+        #{list items:controllers.I18nController.getAllLocales(otherPost?.postReference?.getAvailableLocales()), as:'l'}
             <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
         #{/list}
-    %{ }else{ }%
-        #{list items:controllers.I18nController.getAllLocalesAsStrings(), as:'l'}
-            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
-        #{/list}
-    %{ } }%
     </select>
     #{/else}
     <span class="error">${field.error}</span>

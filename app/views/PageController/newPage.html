@@ -45,6 +45,10 @@
 #{field 'page.urlId'}
 <p>
     <label>Url ID: </label>
+    %{
+        if (field.flash == null && otherPage != null)
+            field.flash = otherPage.urlId;
+    }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
@@ -59,15 +63,9 @@
     #{/if}
     #{else}
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-    %{ if (action.equals("translate")){ }%
-        #{list items:controllers.I18nController.getAllLocales(otherPage.pageReference.getAvailableLocales()), as:'l'}
+        #{list items:controllers.I18nController.getAllLocales(otherPage?.pageReference?.getAvailableLocales()), as:'l'}
             <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
         #{/list}
-    %{ }else{ }%
-        #{list items:controllers.I18nController.getAllLocalesAsStrings(), as:'l'}
-            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
-        #{/list}
-    %{ } }%
     </select>
     #{/else}
     <span class="error">${field.error}</span>
