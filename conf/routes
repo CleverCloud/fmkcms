@@ -11,7 +11,7 @@ GET     /bootstrap/{action}/{otherUrlId}                 PageController.newPage(
 GET     /page/{action}/{otherUrlId}/from/{language}      PageController.newPage
 POST    /doNewPage                                       PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
 POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPage
-GET     /captcha                                         BlogViewer.captcha
+GET     /captcha/{randomID}                              BlogViewer.captcha
 GET     /blog                                            BlogViewer.index
 GET     /post/{title}                                    BlogViewer.show
 GET     /posts/{tag}                                     BlogViewer.listTagged

@@ -23,9 +23,9 @@ import play.mvc.Controller;
  */
 public class BlogViewer extends Controller {
 
-    public static void captcha(String id) {
+    public static void captcha(String randomID) {
         Captcha captcha = Images.captcha();
-        Cache.set(id, captcha.getText().toLowerCase(), "10min");
+        Cache.set(randomID, captcha.getText().toLowerCase(), "10min");
         renderBinary(captcha);
     }
 
@@ -58,11 +58,13 @@ public class BlogViewer extends Controller {
                     notFound();
         }
 
+        String randomID = Codec.UUID();
+
         if (session.get("username") != null)
-            render("BlogController/show.html", post, Codec.UUID());
+            render("BlogController/show.html", post, randomID);
 
         Boolean isConnected = session.contains("username");
-        render(post, Codec.UUID(), isConnected);
+        render(post, randomID, isConnected);
     }
 
     public static void index() {
