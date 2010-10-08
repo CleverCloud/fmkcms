@@ -59,7 +59,8 @@ public class PageViewer extends Controller {
         if (request.headers.get("accept").value().contains("json"))
             renderJSON(page);
 
-        render(page);
+        Boolean isConnected = session.contains("username");
+        render(page, isConnected);
     }
 
     public static void pagesTag(String tagName) {

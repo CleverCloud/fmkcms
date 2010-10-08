@@ -5,11 +5,13 @@
 ${page.content}
 #{/verbatim}
 
+#{if isConnected}
 <div class="translateMe">
     <a href="@{PageController.newPage("translate", page.urlId, page.language)}">Translate me !</a>
     &nbsp;|&nbsp;
     <a href="@{PageController.newPage("edit", page.urlId, page.language)}">Edit me !</a>
 </div>
+#{/if}
 
 <ul>
     #{list items:page.pageReference.tags, as:'tag'}

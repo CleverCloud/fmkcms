@@ -60,7 +60,9 @@ public class BlogViewer extends Controller {
 
         if (session.get("username") != null)
             render("BlogController/show.html", post, Codec.UUID());
-        render(post, Codec.UUID());
+
+        Boolean isConnected = session.contains("username");
+        render(post, Codec.UUID(), isConnected);
     }
 
     public static void index() {
