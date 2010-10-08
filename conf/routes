@@ -2,10 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+GET     /                                                PageViewer.page(urlId:'index')
 GET     /page/{urlId}                                    PageViewer.page
 GET     /pages/tag/{tagName}                             PageViewer.pagesTag
 *       /pages/search                                    PageViewer.searchPage
 GET     /newPage                                         PageController.newPage(action:'create',otherUrlId:'',language:'')
+GET     /bootstrap/{action}/{otherUrlId}                 PageController.newPage(language:'')
 GET     /page/{action}/{otherUrlId}/from/{language}      PageController.newPage
 POST    /doNewPage                                       PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
 POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPage

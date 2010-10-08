@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>Not found</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>	
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     </head>
     <body>
-		#{if play.mode.name() == 'DEV'}
-			#{404 result /}
-		#{/if}
-        #{else}
-        	<h1>Not found</h1>
-			<p>
-				${result.message}
-			</p>
-        #{/else}
+    #{if result.message.equals("index")}
+        <h1>Not found</h1>
+        <p>
+            No Index was found, you should go <a href="@{PageController.newPage("create", "index", "")}">here</a> and create a new page with "index" as the Url ID.
+        </p>
+    #{/if}
+    #{elseif play.mode.name() == 'DEV'}
+        #{404 result /}
+    #{/elseif}
+    #{else}
+        <h1>Not found</h1>
+        <p>
+            ${result.message}
+        </p>
+    #{/else}
     </body>
 </html>

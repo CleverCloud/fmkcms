@@ -47,8 +47,8 @@
 <p>
     <label>Url ID: </label>
     %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.urlId;
+        if (field.flash == null)
+            field.flash = otherUrlId;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -88,9 +88,12 @@
 #{field 'page.published'}
 <p>
     <label>Published: </label>
-    #{if action.equals("edit")}
-    %{field.flash = otherPage.published;}%
-    #{/if}
+    %{
+        if(action.equals("edit"))
+            field.flash = otherPage.published;
+        else if (otherUrlId.equals("index")) // when bootstraping because of no Index
+            field.flash = true;
+    }%
     <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" %{if (field.flash != null && field.flash) {}%checked%{}}%/>
     <span class="error">${field.error}</span>
 </p>

@@ -24,7 +24,7 @@ public class PageViewer extends Controller {
 
         switch (pages.size()) {
             case 0:
-                notFound();
+                notFound(urlId);
             case 1:
                 page = pages.get(0);
                 if (!page.published)
@@ -52,7 +52,6 @@ public class PageViewer extends Controller {
                         }
                     }
                 }
-
                 if (page == null || !page.published)
                     notFound();
         }
