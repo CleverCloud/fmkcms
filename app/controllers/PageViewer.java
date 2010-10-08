@@ -28,7 +28,7 @@ public class PageViewer extends Controller {
             case 1:
                 page = pages.get(0);
                 if (!page.published)
-                    notFound();
+                    notFound(urlId);
                 break;
             default:
                 List<Locale> locales = I18nController.getLanguages();
@@ -53,7 +53,7 @@ public class PageViewer extends Controller {
                     }
                 }
                 if (page == null || !page.published)
-                    notFound();
+                    notFound(urlId);
         }
 
         if (request.headers.get("accept").value().contains("json"))

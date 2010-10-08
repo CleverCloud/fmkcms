@@ -38,7 +38,7 @@ public class PageController extends Controller {
         urlId = params.get("page.urlId");
 
         Set<Tag> tags = new TreeSet<Tag>();
-        if (!tagsString.isEmpty()) {
+        if (tagsString != null && !tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(",")))
                 tags.add(Tag.findOrCreateByName(tag));
         }

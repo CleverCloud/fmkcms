@@ -86,17 +86,20 @@
 #{/}
 
 #{field 'page.published'}
+#{if otherUrlId.equals("index")}
+<input type="hidden" id="${field.id}" name="${field.name}" value="on" class="${field.errorClass}" />
+#{/if}
+#{else}
 <p>
     <label>Published: </label>
     %{
         if(action.equals("edit"))
             field.flash = otherPage.published;
-        else if (otherUrlId.equals("index")) // when bootstraping because of no Index
-            field.flash = true;
     }%
     <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" %{if (field.flash != null && field.flash) {}%checked%{}}%/>
     <span class="error">${field.error}</span>
 </p>
+#{/else}
 #{/}
 
 <input type="submit" value="ok" />
