@@ -96,7 +96,7 @@
         if(action.equals("edit"))
             field.flash = otherPage.published;
     }%
-    <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" %{if (field.flash != null && field.flash) {}%checked%{}}%/>
+    <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" #{if field.flash} checked #{/if} />
     <span class="error">${field.error}</span>
 </p>
 #{/else}
