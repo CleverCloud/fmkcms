@@ -1,6 +1,9 @@
 package models;
 
 import com.google.code.morphia.annotations.Entity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import mongo.MongoEntity;
@@ -29,6 +32,18 @@ public class PageRef extends MongoEntity {
         for (Tag tag : new TreeSet<Tag>(this.tags))
             tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
         return tagsString;
+    }
+
+    public List<Locale> getAvailableLocales() {
+        List<Page> pages = MongoEntity.getDs().find(Page.class, "pageReference", this).asList();
+        List<Locale> locales = new ArrayList<Locale>();
+
+        if (pages != null && !pages.isEmpty()) {
+            for (Page page : pages)
+                locales.add(page.language);
+        }
+
+        return locales;
     }
 
 }

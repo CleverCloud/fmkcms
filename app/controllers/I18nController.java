@@ -93,13 +93,13 @@ public class I18nController extends Controller {
         return locales;
     }
 
-    public static Set<String> getAllLocalesAsStrings(String ... blacklist) {
+    public static Set<String> getAllLocales(List<Locale> blacklist) {
         Set<String> locales = new TreeSet<String>();
         for (Locale locale : Arrays.asList(Locale.getAvailableLocales()))
             locales.add(locale.toString());
-        if (blacklist != null) {
-            for (String blacklisted : blacklist)
-                locales.remove(blacklisted);
+        if (blacklist != null && !blacklist.isEmpty()) {
+            for (Locale blacklisted : blacklist)
+                locales.remove(blacklisted.toString());
         }
         return locales;
     }

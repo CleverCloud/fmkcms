@@ -3,7 +3,10 @@ package models.blog;
 import models.user.User;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
@@ -39,6 +42,18 @@ public class PostRef extends MongoEntity {
         for (Tag tag : new TreeSet<Tag>(this.tags))
             tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
         return tagsString;
+    }
+
+    public List<Locale> getAvailableLocales() {
+        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference", this).asList();
+        List<Locale> locales = new ArrayList<Locale>();
+
+        if (posts != null && !posts.isEmpty()) {
+            for (Post post : posts)
+                locales.add(post.language);
+        }
+
+        return locales;
     }
 
 }
