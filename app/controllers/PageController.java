@@ -44,7 +44,8 @@ public class PageController extends Controller {
         }
         pageRef.tags = tags;
 
-        page = new Page();
+        if (!action.equals("edit"))
+            page = new Page();
         page.pageReference = pageRef;
         page.urlId = urlId;
         page.title = params.get("page.title");

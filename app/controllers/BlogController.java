@@ -59,7 +59,8 @@ public class BlogController extends Controller {
         else
             postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, action, otherTitle, otherLanguage);
 
-        post = new Post();
+        if (!action.equals("edit"))
+            post = new Post();
         post.postReference = postRef;
         post.author = author;
         post.content = content;
