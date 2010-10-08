@@ -45,13 +45,7 @@
 #{field 'page.urlId'}
 <p>
     <label>Url ID: </label>
-    #{if action.equals("edit")}
-    <input type="hidden" id="${field.id}" name="${field.name}" value="${otherUrlId}" class="${field.errorClass}" />
-    ${otherUrlId}
-    #{/if}
-    #{else}
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    #{/else}
     <span class="error">${field.error}</span>
 </p>
 #{/}
