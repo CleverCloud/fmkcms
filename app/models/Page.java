@@ -128,7 +128,7 @@ public class Page extends MongoEntity implements Searchable {
     public String getPrintURL() {
         Map<String, Object> argmap = new HashMap<String, Object>();
         argmap.put("urlId", this.urlId);
-        return Router.getFullUrl("PageController.page", argmap);
+        return Router.getFullUrl("PageViewer.page", argmap);
     }
 
 }

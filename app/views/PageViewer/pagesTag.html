@@ -1,8 +1,8 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'Pages tagged with ' + tag /}
 <h1>${tag.name}</h1>
 <ul>
-    #{list items:listOfPages, as:'page'}
+    #{list items:pages, as:'page'}
     <li><a href="@{PageViewer.page(page.urlId)}">${page.title}</a></li>
     #{/list}
 </ul>

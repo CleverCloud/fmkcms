@@ -142,7 +142,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(title);
+            render("BlogController/show.html", post, randomID);
         }
         comment.save();
 

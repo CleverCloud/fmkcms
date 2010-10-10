@@ -32,16 +32,14 @@ public class PageViewer extends Controller {
                 break;
             default:
                 List<Locale> locales = I18nController.getLanguages();
-                for (Locale locale : locales) {
+                linguas: for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Page candidat : pages) {
                         if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) && candidat.published) {
                             page = candidat;
-                            break;
+                            break linguas;
                         }
                     }
-                    if (page != null)
-                        break;
                 }
 
                 if (page == null || !page.published) {
@@ -65,7 +63,8 @@ public class PageViewer extends Controller {
 
     public static void pagesTag(String tagName) {
         Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
-        render(Page.findTaggedWith(tagName), tag);
+        List<Page> pages = Page.findTaggedWith(tagName);
+        render(pages, tag);
     }
 
     public static void searchPage(String q) {

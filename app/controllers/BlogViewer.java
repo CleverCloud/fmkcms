@@ -41,16 +41,14 @@ public class BlogViewer extends Controller {
                 break;
             default:
                 List<Locale> locales = I18nController.getLanguages();
-                for (Locale locale : locales) {
+                linguas: for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
                         if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
                             post = candidat;
-                            break;
+                            break linguas;
                         }
                     }
-                    if (post != null)
-                        break;
                 }
                 if (post == null)
                     post = posts.get(0);
@@ -59,11 +57,11 @@ public class BlogViewer extends Controller {
         }
 
         String randomID = Codec.UUID();
+        Boolean isConnected = session.contains("username");
 
-        if (session.get("username") != null)
+        if (isConnected)
             render("BlogController/show.html", post, randomID);
 
-        Boolean isConnected = session.contains("username");
         render(post, randomID, isConnected);
     }
 
@@ -73,14 +71,15 @@ public class BlogViewer extends Controller {
 
         Post frontPost = (frontPostRef == null) ? null : BlogViewer.getTranslation(frontPostRef);
         List<Post> olderPosts = new ArrayList<Post>();
-        for(PostRef postRef : olderPostRefs) {
+        for(PostRef postRef : olderPostRefs)
             olderPosts.add(BlogViewer.getTranslation(postRef));
-        }
         render(frontPost, olderPosts);
     }
 
-    public static void listTagged(String tag) {
-        render(Tag.findOrCreateByName(tag), Post.findTaggedWith(tag));
+    public static void listTagged(String tagString) {
+        Tag tag = Tag.findOrCreateByName(tagString);
+        List<Post> posts = Post.findTaggedWith(tagString);
+        render(tag, posts);
     }
 
     public static void postComment(String title, String email, String userName, String webSite, String content, String code, String randomID) {
@@ -89,8 +88,11 @@ public class BlogViewer extends Controller {
             return;
 
         validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
-        if (Validation.hasErrors())
-            render("BlogViewer/show.html", post, randomID);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep(); // keep the errors for the next request
+            BlogViewer.show(title);
+        }
 
         CommentUser user = new CommentUser();
         user.email = email;
@@ -106,7 +108,7 @@ public class BlogViewer extends Controller {
 
         Comment comment = new Comment();
         comment.content = content;
-        comment.user = user.save();
+        comment.user = user;
         comment.postedAt = new Date();
 
         validation.valid(comment);
@@ -115,6 +117,7 @@ public class BlogViewer extends Controller {
             Validation.keep(); // keep the errors for the next request
             BlogViewer.show(title);
         }
+        comment.user.save();
         comment.save();
 
         post.addComment(comment);

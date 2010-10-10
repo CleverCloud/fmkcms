@@ -14,7 +14,7 @@ POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPag
 GET     /captcha/{randomID}                              BlogViewer.captcha
 GET     /blog                                            BlogViewer.index
 GET     /post/{title}                                    BlogViewer.show
-GET     /posts/{tag}                                     BlogViewer.listTagged
+GET     /posts/{tagString}                               BlogViewer.listTagged
 GET     /newPost                                         BlogController.newPost(action:'create',otherTitle:'',language:'')
 GET     /post/{action}/{otherTitle}/from/{language}      BlogController.newPost
 POST    /doNewPost                                       BlogController.doNewPost(action:'create',otherTitle:'',otherLanguage:'')

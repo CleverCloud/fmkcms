@@ -30,10 +30,14 @@ import utils.LangProperties;
 public class Feeds extends Controller {
 
     public static void main(String lang) {
+        if (lang == null)
+            return;
 
         Locale locale = null;
         String[] s = lang.split("_");
         switch (s.length) {
+            case 0:
+                break;
             case 1:
                 locale = new Locale(s[0]);
                 break;

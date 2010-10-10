@@ -39,6 +39,8 @@ public class I18nController extends Controller {
                 continue;
             String[] locale = current[1].split("-");
             switch (locale.length) {
+                case 0:
+                    break;
                 case 1:
                     locales.add(new Locale(locale[0]));
                     break;
@@ -82,12 +84,20 @@ public class I18nController extends Controller {
     public static List<Locale> getBrowserLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
         List<String> languages = Http.Request.current().acceptLanguage();
+        String[] locale;
 
         for (String language : languages) {
-            if (language.contains("-"))
-                locales.add(new Locale(language.split("-")[0], language.split("-")[1]));
-            else
-                locales.add(new Locale(language));
+            locale = language.split("-");
+            switch (locale.length) {
+                case 0:
+                    break;
+                case 1:
+                    locales.add(new Locale(locale[0]));
+                    break;
+                default:
+                    locales.add(new Locale(locale[0], locale[1].substring(0, 2)));
+                    break;
+            }
         }
 
         return locales;
