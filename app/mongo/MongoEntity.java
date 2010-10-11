@@ -18,12 +18,12 @@ public abstract class MongoEntity {
     public ObjectId id;
 
     @Transient
-    private static Morphia morphia;
+    private static Datastore datastore;
 
     public static Datastore getDs() {
-        if (MongoEntity.morphia == null)
-            MongoEntity.morphia = new Morphia();
-        return MongoEntity.morphia.createDatastore(Play.configuration.getProperty("fmkcms.db"));
+        if (MongoEntity.datastore == null)
+            MongoEntity.datastore = (new Morphia()).createDatastore(Play.configuration.getProperty("fmkcms.db", "fmkcms"));
+        return MongoEntity.datastore;
     }
 
     public <T extends MongoEntity> T save() {
