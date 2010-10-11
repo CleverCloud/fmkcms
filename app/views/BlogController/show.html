@@ -5,14 +5,14 @@
     #{if post.postReference.previous()}
         <li id="previous">
             <a href="@{BlogViewer.show(post.postReference.previous().id)}">
-                ${BlogViewer.getTranslation(post.postReference.previous()).title}
+                ${controllers.BlogViewer.getTranslation(post.postReference.previous()).title}
             </a>
         </li>
     #{/if}
     #{if post.postReference.next()}
         <li id="next">
             <a href="@{BlogViewer.show(post.postReference.next().id)}">
-                ${BlogViewer.getTranslation(post.postReference.next()).title}
+                ${controller.BlogViewer.getTranslation(post.postReference.next()).title}
             </a>
         </li>
     #{/if}
