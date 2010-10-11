@@ -2,17 +2,19 @@
 #{set title:post.title /}
 
 <ul id="pagination">
-    #{if post.postReference.previous()}
-        <li id="previous">
-            <a href="@{BlogViewer.show(post.postReference.previous().id)}">
-                ${controllers.BlogViewer.getTranslation(post.postReference.previous()).title}
+    #{if post.postReference.next()}
+        %{String title = controllers.BlogViewer.getTranslation(post.postReference.next()).title;}%
+        <li id="next">
+            <a href="@{BlogViewer.show(title)}">
+                << ${title}
             </a>
         </li>
     #{/if}
-    #{if post.postReference.next()}
-        <li id="next">
-            <a href="@{BlogViewer.show(post.postReference.next().id)}">
-                ${controller.BlogViewer.getTranslation(post.postReference.next()).title}
+    #{if post.postReference.previous()}
+        %{String title = controllers.BlogViewer.getTranslation(post.postReference.previous()).title;}%
+        <li id="previous">
+            <a href="@{BlogViewer.show(title)}">
+                ${title} >>
             </a>
         </li>
     #{/if}
