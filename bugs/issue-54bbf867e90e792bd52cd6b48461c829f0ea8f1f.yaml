@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: add some tag page
+desc: ATM it's not possible to see all the pages with a common tag.
+type: :feature
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-10-28 16:12:23.329566 Z
+references: []
+
+id: 54bbf867e90e792bd52cd6b48461c829f0ea8f1f
+log_events: 
+- - 2010-10-28 16:12:35.251096 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""
