@@ -4,3 +4,4 @@ tmp
 *.log
 test-result
 test-result/application.log
+html
