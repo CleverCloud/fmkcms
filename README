@@ -2,3 +2,6 @@ fmkcms is a Play! framework module
 It's a collection of utils to make a CMS
 
 It is not fully ready for prod, doc coming soon
+
+
+we use ditz as bugtracker for a better git interraction
