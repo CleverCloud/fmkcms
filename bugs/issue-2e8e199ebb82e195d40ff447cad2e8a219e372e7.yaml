@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: add the dyn template system
+desc: |-
+  when the page are loaded or edit, provide capacity to use a template located like this :
+  view/PageEvent/{view,edit}/<urlid>.html
+  
+  and the #{include} is the powa
+type: :feature
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-10 17:41:52.375208 Z
+references: []
+
+id: 2e8e199ebb82e195d40ff447cad2e8a219e372e7
+log_events: 
+- - 2010-11-10 17:41:54.702783 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""
