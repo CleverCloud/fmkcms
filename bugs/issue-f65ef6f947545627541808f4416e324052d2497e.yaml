@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: enable a rich text editor
+desc: ""
+type: :feature
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-11 15:18:57.876424 Z
+references: []
+
+id: f65ef6f947545627541808f4416e324052d2497e
+log_events: 
+- - 2010-11-11 15:18:59.517124 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""

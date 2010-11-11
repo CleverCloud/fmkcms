@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Add a menu system
+desc: |-
+  just a menu name, a menu id, and an list of fmkcms pages
+  design for help building quick websites
+type: :feature
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-11 15:21:20.302881 Z
+references: []
+
+id: dcba54f6cfc93b930eb0c5b4b094ed072ed51b42
+log_events: 
+- - 2010-11-11 15:21:21.918547 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""

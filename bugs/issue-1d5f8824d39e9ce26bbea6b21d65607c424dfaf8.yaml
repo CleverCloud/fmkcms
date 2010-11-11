@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: elastic search 12 migration
+desc: ""
+type: :task
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-11 15:21:51.016495 Z
+references: []
+
+id: 1d5f8824d39e9ce26bbea6b21d65607c424dfaf8
+log_events: 
+- - 2010-11-11 15:21:52.771040 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""
