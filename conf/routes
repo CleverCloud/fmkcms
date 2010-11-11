@@ -2,7 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                                                PageViewer.page(urlId:'index')
+GET     /                                                PageViewer.index
 GET     /page/{urlId}                                    PageViewer.page
 GET     /pages/tag/{tagName}                             PageViewer.pagesTag
 *       /pages/search                                    PageViewer.searchPage
