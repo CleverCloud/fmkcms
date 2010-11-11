@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import models.Page;
 import models.PageRef;
 import models.Tag;
+import play.Play;
 import play.mvc.Controller;
 
 /**
@@ -35,7 +36,7 @@ public class PageViewer extends Controller {
                 return page;
             default:
                 List<Locale> locales = I18nController.getLanguages();
-                linguas: for (Locale locale : locales) {
+                for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Page candidat : pages) {
                         if ((candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) && candidat.published)
@@ -54,7 +55,7 @@ public class PageViewer extends Controller {
     }
 
     public static void index() {
-        PageViewer.page("index");
+        PageViewer.page(Play.configuration.getProperty("fmkcms.index", "index"));
     }
 
     public static void page(String urlId) {
