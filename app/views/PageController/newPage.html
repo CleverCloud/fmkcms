@@ -86,7 +86,7 @@
 #{/}
 
 #{field 'page.published'}
-#{if otherUrlId.equals("index")}
+#{if otherUrlId.equals(play.Play.configuration.getProperty("fmkcms.index", "index"))}
 <input type="hidden" id="${field.id}" name="${field.name}" value="on" class="${field.errorClass}" />
 #{/if}
 #{else}
