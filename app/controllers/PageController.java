@@ -27,7 +27,7 @@ public class PageController extends Controller {
         page.delete();
         if (Page.getFirstPageByPageRef(pageRef) == null)
             pageRef.delete();
-        PageViewer.page("index");
+        PageViewer.index();
     }
 
     public static void newPage(String action, String otherUrlId, String language) {
@@ -78,7 +78,7 @@ public class PageController extends Controller {
         if (page.published)
             PageViewer.page(urlId);
         else
-            PageViewer.page("index");
+            PageViewer.index();
     }
 
     private static PageRef doNewPageRef(String action, String otherUrlId, String otherLanguage) {

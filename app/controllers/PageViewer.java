@@ -53,6 +53,10 @@ public class PageViewer extends Controller {
         }
     }
 
+    public static void index() {
+        PageViewer.page("index");
+    }
+
     public static void page(String urlId) {
         List<Page> pages = Page.getPagesByUrlId(urlId);
         Page page = PageViewer.getGoodPage(pages);
