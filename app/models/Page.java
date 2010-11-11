@@ -74,12 +74,6 @@ public class Page extends MongoEntity implements Searchable {
         return this;
     }
 
-    public static List<Page> findTaggedWith(Tag ... tags) {
-        // TODO: waxzce, gogo elastic search !
-        List<Page> p = MongoEntity.getDs().find(Page.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
-        return p;
-    }
-
     //
     // Accessing stuff
     //
@@ -99,6 +93,10 @@ public class Page extends MongoEntity implements Searchable {
 
     public static Page getFirstPageByPageRef(PageRef pageRef) {
         return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).get();
+    }
+
+    public static List<Page> getPagesByPageRef(PageRef pageRef) {
+        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
     }
 
     //

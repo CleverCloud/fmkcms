@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Entity;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -44,6 +45,10 @@ public class PageRef extends MongoEntity {
         }
 
         return locales;
+    }
+
+    public static List<PageRef> findTaggedWith(Tag ... tags) {
+        return MongoEntity.getDs().find(PageRef.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
     }
 
 }
