@@ -151,4 +151,8 @@ public class Post extends MongoEntity {
         return (posts == null) ? new ArrayList<Post>() : posts;
     }
 
+    public static Object getFirstPostByPostRef(PostRef postRef) {
+        return MongoEntity.getDs().find(Post.class, "postReference", postRef).get();
+    }
+
 }

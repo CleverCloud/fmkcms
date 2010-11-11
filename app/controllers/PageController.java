@@ -19,7 +19,19 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
+    public static void deletePage(String urlId, String language) {
+        Page page = Page.getPageByLocale(urlId, new Locale(language));
+        if (page == null)
+            return;
+        PageRef pageRef = page.pageReference;
+        page.delete();
+        if (Page.getFirstPageByPageRef(pageRef) == null)
+            pageRef.delete();
+    }
+
     public static void newPage(String action, String otherUrlId, String language) {
+        if (action.equals("delete"))
+            PageController.deletePage(otherUrlId, language);
         render(action, otherUrlId, language);
     }
 

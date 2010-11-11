@@ -24,7 +24,19 @@ import play.mvc.With;
 @With(Secure.class)
 public class BlogController extends Controller {
 
+    public static void deletePost(String title, String language) {
+        Post post = Post.getPostByLocale(title, new Locale(language));
+        if (post == null)
+            return;
+        PostRef postRef = post.postReference;
+        post.delete();
+        if (Post.getFirstPostByPostRef(postRef) == null)
+            postRef.delete();
+    }
+
     public static void newPost(String action, String otherTitle, String language) {
+        if (action.equals("delete"))
+            BlogController.deletePost(otherTitle, language);
         render(action, otherTitle, language);
     }
 

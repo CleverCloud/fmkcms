@@ -63,7 +63,7 @@ public class PageViewer extends Controller {
 
     public static void pagesTag(String tagName) {
         Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
-        List<Page> pages = Page.findTaggedWith(tagName);
+        List<Page> pages = Page.findTaggedWith(tag);
         render(pages, tag);
     }
 
