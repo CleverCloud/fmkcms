@@ -1,6 +1,7 @@
 package models;
 
 import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.bson.types.ObjectId;
 @Entity
 public class PageRef extends MongoEntity {
 
+    @Reference
     public Set<Tag> tags;
 
     //
@@ -48,7 +50,10 @@ public class PageRef extends MongoEntity {
     }
 
     public static List<PageRef> findTaggedWith(Tag ... tags) {
-        return MongoEntity.getDs().find(PageRef.class).field("tags").hasAnyOf(Arrays.asList(tags)).asList();
+        List<PageRef> pageRefs = new ArrayList<PageRef>();
+        for (Tag tag : tags)
+            pageRefs.addAll(MongoEntity.getDs().find(PageRef.class).field("tags").hasThisElement(tag).asList());
+        return pageRefs;
     }
 
 }
