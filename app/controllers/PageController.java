@@ -27,6 +27,7 @@ public class PageController extends Controller {
         page.delete();
         if (Page.getFirstPageByPageRef(pageRef) == null)
             pageRef.delete();
+        PageViewer.page("index");
     }
 
     public static void newPage(String action, String otherUrlId, String language) {

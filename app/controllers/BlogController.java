@@ -32,6 +32,7 @@ public class BlogController extends Controller {
         post.delete();
         if (Post.getFirstPostByPostRef(postRef) == null)
             postRef.delete();
+        BlogViewer.index();
     }
 
     public static void newPost(String action, String otherTitle, String language) {
