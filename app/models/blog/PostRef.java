@@ -23,6 +23,8 @@ public class PostRef extends MongoEntity {
     public User author;
 
     public Date postedAt;
+
+    @Reference
     public Set<Tag> tags;
 
     //
