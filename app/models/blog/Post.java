@@ -116,11 +116,6 @@ public class Post extends MongoEntity {
         return this;
     }
 
-    public static List<Post> findTaggedWith(String ... tags) {
-        // TODO: waxzce, gogo elastic search !
-        return null;
-    }
-
     //
     // Accessing stuff
     //

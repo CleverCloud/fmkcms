@@ -29,32 +29,38 @@ public class BlogViewer extends Controller {
         renderBinary(captcha);
     }
 
-    public static void show(String title) {
-        List<Post> posts = Post.getPostsByTitle(title);
-        Post post = null;
+    public static Post getGoodPost(List<Post> posts) {
+        if (posts == null)
+            return null;
 
+        Post post = null;
         switch (posts.size()) {
             case 0:
-                notFound();
+                return null;
             case 1:
-                post = posts.get(0);
-                break;
+                return posts.get(0);
             default:
                 List<Locale> locales = I18nController.getLanguages();
-                linguas: for (Locale locale : locales) {
+                for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
-                            post = candidat;
-                            break linguas;
-                        }
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
+                            return candidat;
                     }
                 }
+                post = posts.get(0);
                 if (post == null)
-                    post = posts.get(0);
-                if (post == null)
-                    notFound();
+                    return null;
+                return post;
         }
+    }
+
+    public static void show(String title) {
+        List<Post> posts = Post.getPostsByTitle(title);
+        Post post = BlogViewer.getGoodPost(posts);
+
+        if (post == null)
+            notFound();
 
         String randomID = Codec.UUID();
         Boolean isConnected = session.contains("username");
@@ -76,10 +82,17 @@ public class BlogViewer extends Controller {
         render(frontPost, olderPosts);
     }
 
-    public static void listTagged(String tagString) {
-        Tag tag = Tag.findOrCreateByName(tagString);
-        List<Post> posts = Post.findTaggedWith(tagString);
-        render(tag, posts);
+    public static void listTagged(String tagName) {
+        Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
+        List<PostRef> postRefs = PostRef.findTaggedWith(tag);
+        List<Post> posts = new ArrayList<Post>();
+        Post post = null;
+        for (PostRef postRef : postRefs) {
+            post = BlogViewer.getGoodPost(Post.getPostsByPostRef(postRef));
+            if (post != null)
+                posts.add(post);
+        }
+        render(posts, tag);
     }
 
     public static void postComment(String title, String email, String userName, String webSite, String content, String code, String randomID) {

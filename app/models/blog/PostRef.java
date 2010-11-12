@@ -57,4 +57,11 @@ public class PostRef extends MongoEntity {
         return locales;
     }
 
+    public static List<PostRef> findTaggedWith(Tag ... tags) {
+        List<PostRef> postRefs = new ArrayList<PostRef>();
+        for (Tag tag : tags)
+            postRefs.addAll(MongoEntity.getDs().find(PostRef.class).field("tags").hasThisElement(tag).asList());
+        return postRefs;
+    }
+
 }
