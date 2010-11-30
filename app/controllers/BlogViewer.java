@@ -71,6 +71,22 @@ public class BlogViewer extends Controller {
         render(post, randomID, isConnected);
     }
 
+    public static void last() {
+        PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
+        Post post = BlogViewer.getTranslation(frontPostRef);
+
+        if (post == null)
+            notFound();
+
+        String randomID = Codec.UUID();
+        Boolean isConnected = session.contains("username");
+
+        if (isConnected)
+            render("BlogController/show.html", post, randomID);
+
+        render("BlogViewer/show.html", post, randomID, isConnected);
+    }
+
     public static void index() {
         PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
         List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();

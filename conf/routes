@@ -13,6 +13,7 @@ POST    /doNewPage                                       PageController.doNewPag
 POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPage
 GET     /captcha/{randomID}                              BlogViewer.captcha
 GET     /blog                                            BlogViewer.index
+GET     /blog/lastPost                                   BlogViewer.last
 GET     /post/{title}                                    BlogViewer.show
 GET     /posts/{tagName}                                 BlogViewer.listTagged
 GET     /newPost                                         BlogController.newPost(action:'create',otherTitle:'',language:'')
