@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import models.Menu;
 import models.Page;
 import models.PageRef;
 import models.Tag;
@@ -74,6 +75,15 @@ public class PageController extends Controller {
         }
         page.pageReference.save();
         page.save();
+
+        String menus = params.get("menus");
+        Menu menu;
+        if (menus != null && !menus.isEmpty()) {
+            for (String m : Arrays.asList(menus.split(","))) {
+               menu = Menu.findOrCreateByName(m);
+               menu.addPage(page).save();
+            }
+        }
 
         if (page.published)
             PageViewer.page(urlId);

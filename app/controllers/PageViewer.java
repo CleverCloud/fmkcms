@@ -21,7 +21,7 @@ import play.mvc.Controller;
 @SuppressWarnings("unchecked")
 public class PageViewer extends Controller {
 
-    private static Page getGoodPage(List<Page> pages) {
+    public static Page getGoodPage(List<Page> pages) {
         if(pages == null)
             return null;
 
