@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,6 +19,14 @@ import play.mvc.With;
  */
 @With(Secure.class)
 public class PageController extends Controller {
+
+    public static void listPages(Integer pagenumber){
+        if(pagenumber == null){
+            pagenumber = 0;
+        }
+        List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
+        render(pages);
+    }
 
     public static void deletePage(String urlId, String language) {
         Page page = Page.getPageByLocale(urlId, new Locale(language));

@@ -4,4 +4,8 @@
 admintitle=Administration
 listpages=List all pages
 addPage=Add a page
-resultfor=Results for 
+resultfor=Results for
+admin.edit=edit
+admin.delete=delete
+admin.see=go to
+admin.addnewlocale=add a new traduction
