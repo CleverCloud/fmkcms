@@ -3,7 +3,7 @@
 
 <ul id="pagination">
     #{if post.postReference.next()}
-        %{models.Post p = controllers.BlogViewer.getTranslation(post.postReference.next());}%
+        %{models.blog.Post p = controllers.BlogViewer.getTranslation(post.postReference.next());}%
         <li id="next">
             <a href="@{BlogViewer.show(p.urlId)}">
                 << ${p.title}
@@ -11,7 +11,7 @@
         </li>
     #{/if}
     #{if post.postReference.previous()}
-        %{models.Post p = controllers.BlogViewer.getTranslation(post.postReference.previous());}%
+        %{models.blog.Post p = controllers.BlogViewer.getTranslation(post.postReference.previous());}%
         <li id="previous">
             <a href="@{BlogViewer.show(p.urlId)}">
                 ${p.title} >>
