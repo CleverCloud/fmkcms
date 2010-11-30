@@ -43,6 +43,8 @@
         <a href="@{BlogController.newPost("translate", _post.title, _post.language)}">Translate me !</a>
         &nbsp;|&nbsp;
         <a href="@{BlogController.newPost("edit", _post.title, _post.language)}">Edit me !</a>
+        &nbsp;|&nbsp;
+        <a href="@{BlogController.newPost("delete", _post.title, _post.language)}">Delete me !</a>
     </div>
     #{/if}
     <div class="comments">
