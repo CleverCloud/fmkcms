@@ -26,18 +26,30 @@ public class BlogController extends Controller {
 
     public static void deletePost(String urlId, String language) {
         Post post = Post.getPostByLocale(urlId, new Locale(language));
-        if (post == null)
+        if (post == null) {
             return;
+        }
         PostRef postRef = post.postReference;
         post.delete();
-        if (Post.getFirstPostByPostRef(postRef) == null)
+        if (Post.getFirstPostByPostRef(postRef) == null) {
             postRef.delete();
+        }
         BlogViewer.index();
     }
 
     public static void newPost(String action, String otherUrlId, String language) {
-        if (action.equals("delete"))
+        if (action.equals("delete")) {
             BlogController.deletePost(otherUrlId, language);
+        }
+
+        Post otherPost = null;
+
+        if (otherUrlId != null) {
+            if (otherUrlId.equals("")) {
+                otherPost = models.blog.Post.getPostByLocale(otherUrlId, new java.util.Locale(language));
+            }
+        }
+
         render(action, otherUrlId, language);
     }
 
@@ -68,13 +80,15 @@ public class BlogController extends Controller {
 
         Post post = Post.getPostByUrlId(otherUrlId);
         PostRef postRef = null;
-        if (post != null)
+        if (post != null) {
             postRef = post.postReference;
-        else
+        } else {
             postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, action, otherUrlId, otherLanguage);
+        }
 
-        if (!action.equals("edit"))
+        if (!action.equals("edit")) {
             post = new Post();
+        }
         post.postReference = postRef;
         post.author = author;
         post.content = content;
@@ -103,8 +117,9 @@ public class BlogController extends Controller {
         if (!tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
                 t = Tag.findOrCreateByName(tag);
-                if (!tags.contains(t))
+                if (!tags.contains(t)) {
                     tags.add(t);
+                }
             }
         }
 
@@ -124,12 +139,14 @@ public class BlogController extends Controller {
 
     public static void postComment(String urlId, String content, String code, String randomID) {
         Post post = Post.getPostByUrlId(urlId);
-        if (post == null)
+        if (post == null) {
             return;
+        }
 
         validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
-        if (Validation.hasErrors())
+        if (Validation.hasErrors()) {
             render("BlogController/show.html", post, randomID);
+        }
 
         GAppUser user = GAppUser.getByOpenId(session.get("username"));
         if (user == null) {
@@ -165,5 +182,4 @@ public class BlogController extends Controller {
         Cache.delete(randomID);
         BlogViewer.show(post.urlId);
     }
-
 }

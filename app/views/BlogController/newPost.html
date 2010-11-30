@@ -1,9 +1,6 @@
 #{extends 'main.html' /}
 #{set title:'New Post' /}
 
-%{
-    models.blog.Post otherPost;
-}%
 
 #{if otherUrlId}
 #{if action.equals("translate")}
@@ -12,9 +9,6 @@
 #{elseif action.equals("edit")}
 <p>You are currently editing ${otherUrlId}.</p>
 #{/elseif}
-%{
-    otherPost = models.blog.Post.getPostByLocale(otherUrlId, new java.util.Locale(language));
-}%
 #{/if}
 
 #{form @BlogController.doNewPost(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
@@ -23,8 +17,8 @@
 <p>
     <label>Url ID: </label>
     %{
-        if (field.flash == null && otherPost != null)
-            field.flash = otherPost.urlId;
+    if (field.flash == null && otherPost != null)
+    field.flash = otherPost.urlId;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -35,8 +29,8 @@
 <p>
     <label>Title: </label>
     %{
-        if (field.flash == null && otherPost != null)
-            field.flash = otherPost.title;
+    if (field.flash == null && otherPost != null)
+    field.flash = otherPost.title;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -47,8 +41,8 @@
 <p>
     <label>Content: </label>
     %{
-        if (field.flash == null && otherPost != null)
-            field.flash = otherPost.content;
+    if (field.flash == null && otherPost != null)
+    field.flash = otherPost.content;
     }%
     *{ TODO: waxzce, aloha here ! }*
     <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
@@ -60,13 +54,13 @@
 <p>
     <label>Language: </label>
     #{if action.equals("edit")}
-        <input type="hidden" id="${field.id}" name="${field.name}" value="${language}" class="${field.errorClass}" />
-        ${language}
+    <input type="hidden" id="${field.id}" name="${field.name}" value="${language}" class="${field.errorClass}" />
+    ${language}
     #{/if}
     #{else}
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
         #{list items:controllers.I18nController.getAllLocales(otherPost?.postReference?.getAvailableLocales()), as:'l'}
-            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
+        <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="true"'.raw() : ''}>${l}</option>
         #{/list}
     </select>
     #{/else}
@@ -78,8 +72,8 @@
 <p>
     <label>Tags: </label>
     %{
-        if (field.flash == null && otherPost != null)
-            field.flash = otherPost.postReference.getTagsAsString();
+    if (field.flash == null && otherPost != null)
+    field.flash = otherPost.postReference.getTagsAsString();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
