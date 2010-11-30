@@ -5,19 +5,31 @@
     models.blog.Post otherPost;
 }%
 
-#{if otherTitle}
+#{if otherUrlId}
 #{if action.equals("translate")}
-<p>You are currently translating ${otherTitle} from ${language}.</p>
+<p>You are currently translating ${otherUrlId} from ${language}.</p>
 #{/if}
 #{elseif action.equals("edit")}
-<p>You are currently editing ${otherTitle}.</p>
+<p>You are currently editing ${otherUrlId}.</p>
 #{/elseif}
 %{
-    otherPost = models.blog.Post.getPostByLocale(otherTitle, new java.util.Locale(language));
+    otherPost = models.blog.Post.getPostByLocale(otherUrlId, new java.util.Locale(language));
 }%
 #{/if}
 
-#{form @BlogController.doNewPost("translate", otherTitle, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @BlogController.doNewPost("translate", otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'post.urlId'}
+<p>
+    <label>Url ID: </label>
+    %{
+        if (field.flash == null && otherPost != null)
+            field.flash = otherPost.urlId;
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
 
 #{field 'post.title'}
 <p>

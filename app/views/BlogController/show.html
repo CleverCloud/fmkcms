@@ -3,18 +3,18 @@
 
 <ul id="pagination">
     #{if post.postReference.next()}
-        %{String title = controllers.BlogViewer.getTranslation(post.postReference.next()).title;}%
+        %{models.Post p = controllers.BlogViewer.getTranslation(post.postReference.next());}%
         <li id="next">
-            <a href="@{BlogViewer.show(title)}">
-                << ${title}
+            <a href="@{BlogViewer.show(p.urlId)}">
+                << ${p.title}
             </a>
         </li>
     #{/if}
     #{if post.postReference.previous()}
-        %{String title = controllers.BlogViewer.getTranslation(post.postReference.previous()).title;}%
+        %{models.Post p = controllers.BlogViewer.getTranslation(post.postReference.previous());}%
         <li id="previous">
-            <a href="@{BlogViewer.show(title)}">
-                ${title} >>
+            <a href="@{BlogViewer.show(p.urlId)}">
+                ${p.title} >>
             </a>
         </li>
     #{/if}
@@ -24,7 +24,7 @@
 
 <h3>Post a comment</h3>
 
-#{form @BlogController.postComment(post.title)}
+#{form @BlogController.postComment(post.urlId)}
 
     #{ifErrors}
         <p class="error">

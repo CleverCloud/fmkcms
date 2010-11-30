@@ -14,10 +14,10 @@ POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPag
 GET     /captcha/{randomID}                              BlogViewer.captcha
 GET     /blog                                            BlogViewer.index
 GET     /blog/lastPost                                   BlogViewer.last
-GET     /post/{title}                                    BlogViewer.show
+GET     /post/{urlId}                                    BlogViewer.show
 GET     /posts/{tagName}                                 BlogViewer.listTagged
-GET     /newPost                                         BlogController.newPost(action:'create',otherTitle:'',language:'')
-GET     /post/{action}/{otherTitle}/from/{language}      BlogController.newPost
-POST    /doNewPost                                       BlogController.doNewPost(action:'create',otherTitle:'',otherLanguage:'')
-POST    /doNewPost/{action}/{otherTitle}/{otherLanguage} BlogController.doNewPost
-POST    /post/{title}/comments                           BlogController.postComment
+GET     /newPost                                         BlogController.newPost(action:'create',otherUrlId:'',language:'')
+GET     /post/{action}/{otherUrlId}/from/{language}      BlogController.newPost
+POST    /doNewPost                                       BlogController.doNewPost(action:'create',otherUrlId:'',otherLanguage:'')
+POST    /doNewPost/{action}/{otherUrlId}/{otherLanguage} BlogController.doNewPost
+POST    /post/{urlId}/comments                           BlogController.postComment

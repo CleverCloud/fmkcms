@@ -55,8 +55,8 @@ public class BlogViewer extends Controller {
         }
     }
 
-    public static void show(String title) {
-        List<Post> posts = Post.getPostsByTitle(title);
+    public static void show(String urlId) {
+        List<Post> posts = Post.getPostsByUrlId(urlId);
         Post post = BlogViewer.getGoodPost(posts);
 
         if (post == null)
@@ -111,8 +111,8 @@ public class BlogViewer extends Controller {
         render(posts, tag);
     }
 
-    public static void postComment(String title, String email, String userName, String webSite, String content, String code, String randomID) {
-        Post post = Post.getPostByTitle(title);
+    public static void postComment(String urlId, String email, String userName, String webSite, String content, String code, String randomID) {
+        Post post = Post.getPostByUrlId(urlId);
         if (post == null)
             return;
 
@@ -120,7 +120,7 @@ public class BlogViewer extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(title);
+            BlogViewer.show(urlId);
         }
 
         CommentUser user = new CommentUser();
@@ -132,7 +132,7 @@ public class BlogViewer extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(title);
+            BlogViewer.show(urlId);
         }
 
         Comment comment = new Comment();
@@ -144,14 +144,14 @@ public class BlogViewer extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(title);
+            BlogViewer.show(urlId);
         }
         comment.user.save();
         comment.save();
 
         post.addComment(comment);
         Cache.delete(randomID);
-        BlogViewer.show(post.title);
+        BlogViewer.show(post.urlId);
     }
 
     public static Post getTranslation(PostRef postRef) {

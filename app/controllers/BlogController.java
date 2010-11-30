@@ -24,8 +24,8 @@ import play.mvc.With;
 @With(Secure.class)
 public class BlogController extends Controller {
 
-    public static void deletePost(String title, String language) {
-        Post post = Post.getPostByLocale(title, new Locale(language));
+    public static void deletePost(String urlId, String language) {
+        Post post = Post.getPostByLocale(urlId, new Locale(language));
         if (post == null)
             return;
         PostRef postRef = post.postReference;
@@ -35,13 +35,14 @@ public class BlogController extends Controller {
         BlogViewer.index();
     }
 
-    public static void newPost(String action, String otherTitle, String language) {
+    public static void newPost(String action, String otherUrlId, String language) {
         if (action.equals("delete"))
-            BlogController.deletePost(otherTitle, language);
-        render(action, otherTitle, language);
+            BlogController.deletePost(otherUrlId, language);
+        render(action, otherUrlId, language);
     }
 
-    public static void doNewPost(String action, String otherTitle, String otherLanguage) {
+    public static void doNewPost(String action, String otherUrlId, String otherLanguage) {
+        String urlId = params.get("post.urlId");
         String title = params.get("post.title");
         String content = params.get("post.content");
         Locale language = params.get("post.language", Locale.class);
@@ -65,18 +66,19 @@ public class BlogController extends Controller {
             author.save();
         }
 
-        Post post = Post.getPostByTitle(otherTitle);
+        Post post = Post.getPostByUrlId(otherUrlId);
         PostRef postRef = null;
         if (post != null)
             postRef = post.postReference;
         else
-            postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, action, otherTitle, otherLanguage);
+            postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, action, otherUrlId, otherLanguage);
 
         if (!action.equals("edit"))
             post = new Post();
         post.postReference = postRef;
         post.author = author;
         post.content = content;
+        post.urlId = urlId;
         post.title = title;
         post.postedAt = postedAt;
         post.language = language;
@@ -85,7 +87,7 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost(action, otherTitle, otherLanguage);
+            BlogController.newPost(action, otherUrlId, otherLanguage);
         }
         post.postReference.save();
         post.save();
@@ -93,7 +95,7 @@ public class BlogController extends Controller {
         BlogViewer.index();
     }
 
-    private static PostRef doNewPostRef(String tagsString, Date postedAt, User author, String action, String otherTitle, String otherLanguage) {
+    private static PostRef doNewPostRef(String tagsString, Date postedAt, User author, String action, String otherUrlId, String otherLanguage) {
         PostRef postRef = new PostRef();
         Set<Tag> tags = new TreeSet<Tag>();
         Tag t = null;
@@ -114,14 +116,14 @@ public class BlogController extends Controller {
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope
             Validation.keep(); // keep the errors for the next request
-            BlogController.newPost(action, otherTitle, otherLanguage);
+            BlogController.newPost(action, otherUrlId, otherLanguage);
         }
 
         return postRef;
     }
 
-    public static void postComment(String title, String content, String code, String randomID) {
-        Post post = Post.getPostByTitle(title);
+    public static void postComment(String urlId, String content, String code, String randomID) {
+        Post post = Post.getPostByUrlId(urlId);
         if (post == null)
             return;
 
@@ -161,7 +163,7 @@ public class BlogController extends Controller {
 
         post.addComment(comment);
         Cache.delete(randomID);
-        BlogViewer.show(post.title);
+        BlogViewer.show(post.urlId);
     }
 
 }

@@ -23,6 +23,9 @@ public class Post extends MongoEntity {
     public Date postedAt;
 
     @Required
+    public String urlId;
+    
+    @Required
     public String title;
 
     @Lob
@@ -52,7 +55,8 @@ public class Post extends MongoEntity {
         if (other == null)
             return null;
         Post post = new Post();
-        post.title = other.title;
+        post.urlId = other.urlId;
+	post.title = other.title;
         post.content = other.content;
         post.language = other.language;
         post.postReference = other.postReference;
@@ -119,8 +123,8 @@ public class Post extends MongoEntity {
     //
     // Accessing stuff
     //
-    public static Post getPostByLocale(String title, Locale language) {
-        Post post = Post.getPostByTitle(title);
+    public static Post getPostByLocale(String urlId, Locale language) {
+        Post post = Post.getPostByUrlId(urlId);
         return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).filter("language =", language).get();
     }
 
@@ -128,13 +132,13 @@ public class Post extends MongoEntity {
         return MongoEntity.getDs().find(Post.class, "postReference", postReference).asList();
     }
 
-    public static List<Post> getPostsByTitle(String title) {
-        Post post = Post.getPostByTitle(title);
+    public static List<Post> getPostsByUrlId(String urlId) {
+        Post post = Post.getPostByUrlId(urlId);
         return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).asList();
     }
 
-    public static Post getPostByTitle(String title) {
-        return MongoEntity.getDs().find(Post.class, "title", title).get();
+    public static Post getPostByUrlId(String urlId) {
+        return MongoEntity.getDs().find(Post.class, "urlId", urlId).get();
     }
 
     public static List<Post> getLatestPostsByLocale(Locale locale, Integer number, Integer page) {
