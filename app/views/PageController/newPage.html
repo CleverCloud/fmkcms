@@ -1,9 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'New Page' /}
 
-%{
-    models.Page otherPage;
-}%
+
 #{if otherUrlId}
 #{if action.equals("translate")}
 <p>You are currently translating ${otherUrlId} from ${language}.</p>
@@ -11,9 +9,6 @@
 #{elseif action.equals("edit")}
 <p>You are currently editing ${otherUrlId}.</p>
 #{/elseif}
-%{
-    otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
-}%
 #{/if}
 
 #{form @PageController.doNewPage(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }

@@ -20,8 +20,8 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
-    public static void listPages(Integer pagenumber){
-        if(pagenumber == null){
+    public static void listPages(Integer pagenumber) {
+        if (pagenumber == null) {
             pagenumber = 0;
         }
         List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
@@ -30,19 +30,34 @@ public class PageController extends Controller {
 
     public static void deletePage(String urlId, String language) {
         Page page = Page.getPageByLocale(urlId, new Locale(language));
-        if (page == null)
+        if (page == null) {
             return;
+            
+        }
         PageRef pageRef = page.pageReference;
         page.delete();
-        if (Page.getFirstPageByPageRef(pageRef) == null)
+        if (Page.getFirstPageByPageRef(pageRef) == null) {
             pageRef.delete();
+            
+        }
         PageViewer.index();
     }
 
     public static void newPage(String action, String otherUrlId, String language) {
-        if (action.equals("delete"))
+        if (action.equals("delete")) {
             PageController.deletePage(otherUrlId, language);
-        render(action, otherUrlId, language);
+
+            
+        }
+        Page otherPage = null;
+
+        if (otherUrlId != null) {
+            if (otherUrlId.equals("")) {
+                otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
+            }
+        }
+
+        render(action, otherUrlId, language, otherPage);
     }
 
     public static void doNewPage(String action, String otherUrlId, String otherLanguage) {
@@ -51,23 +66,32 @@ public class PageController extends Controller {
         PageRef pageRef = null;
         String tagsString = params.get("pageReference.tags");
 
-        if (urlId != null && !urlId.equals(""))
+        if (urlId != null && !urlId.equals("")) {
             page = Page.getPageByUrlId(urlId);
-        if (page != null)
+
+        }
+        if (page != null) {
             pageRef = page.pageReference;
-        else
+            
+        } else {
             pageRef = PageController.doNewPageRef(action, otherUrlId, otherLanguage);
+            
+        }
         urlId = params.get("page.urlId");
 
         Set<Tag> tags = new TreeSet<Tag>();
         if (tagsString != null && !tagsString.isEmpty()) {
-            for (String tag : Arrays.asList(tagsString.split(",")))
+            for (String tag : Arrays.asList(tagsString.split(","))) {
                 tags.add(Tag.findOrCreateByName(tag));
+                
+            }
         }
         pageRef.tags = tags;
 
-        if (!action.equals("edit"))
+        if (!action.equals("edit")) {
             page = new Page();
+            
+        }
         page.pageReference = pageRef;
         page.urlId = urlId;
         page.title = params.get("page.title");
@@ -84,10 +108,13 @@ public class PageController extends Controller {
         page.pageReference.save();
         page.save();
 
-        if (page.published)
+        if (page.published) {
             PageViewer.page(urlId);
-        else
+            
+        } else {
             PageViewer.index();
+            
+        }
     }
 
     private static PageRef doNewPageRef(String action, String otherUrlId, String otherLanguage) {
@@ -102,5 +129,4 @@ public class PageController extends Controller {
 
         return pageRef;
     }
-
 }
