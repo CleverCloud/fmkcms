@@ -14,7 +14,13 @@ references: []
 
 id: dcba54f6cfc93b930eb0c5b4b094ed072ed51b42
 log_events: 
-- - 2010-11-11 15:21:21.918547 Z
-  - Quentin ADAM <quentin.adam@waxzce.org>
-  - created
-  - ""
+  - - 2010-11-11 15:21:21.918547 Z
+    - Quentin ADAM <quentin.adam@waxzce.org>
+    - created
+    - ""
+  - - 2010-11-30 14:19:27.136000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - issue claimed
+    - ""
+git_branch: 
+claimer: Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
