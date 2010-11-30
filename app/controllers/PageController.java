@@ -52,7 +52,7 @@ public class PageController extends Controller {
         Page otherPage = null;
 
         if (otherUrlId != null) {
-            if (otherUrlId.equals("")) {
+            if (!otherUrlId.equals("")) {
                 otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
             }
         }

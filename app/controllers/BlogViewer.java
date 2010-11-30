@@ -30,8 +30,9 @@ public class BlogViewer extends Controller {
     }
 
     public static Post getGoodPost(List<Post> posts) {
-        if (posts == null)
+        if (posts == null) {
             return null;
+        }
 
         Post post = null;
         switch (posts.size()) {
@@ -44,13 +45,15 @@ public class BlogViewer extends Controller {
                 for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
                             return candidat;
+                        }
                     }
                 }
                 post = posts.get(0);
-                if (post == null)
+                if (post == null) {
                     return null;
+                }
                 return post;
         }
     }
@@ -59,42 +62,56 @@ public class BlogViewer extends Controller {
         List<Post> posts = Post.getPostsByUrlId(urlId);
         Post post = BlogViewer.getGoodPost(posts);
 
-        if (post == null)
+        if (post == null) {
             notFound();
+        }
 
         String randomID = Codec.UUID();
         Boolean isConnected = session.contains("username");
 
-        if (isConnected)
-            render("BlogController/show.html", post, randomID);
+        if (isConnected) {
 
-        render(post, randomID, isConnected);
+            render("BlogController/show.html", post, randomID);
+        }
+        Post postNext = null;
+        Post postPrevious = null;
+        if (post.postReference.next() != null) {
+            postNext = controllers.BlogViewer.getTranslation(post.postReference.next());
+        }
+        if (post.postReference.previous() != null) {
+            postPrevious = controllers.BlogViewer.getTranslation(post.postReference.previous());
+        }
+
+        render(post, randomID, isConnected, postNext, postPrevious);
     }
 
     public static void last() {
         PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
         Post post = BlogViewer.getTranslation(frontPostRef);
 
-        if (post == null)
+        if (post == null) {
             notFound();
+        }
 
         String randomID = Codec.UUID();
         Boolean isConnected = session.contains("username");
 
-        if (isConnected)
+        if (isConnected) {
             render("BlogController/show.html", post, randomID);
+        }
 
         render("BlogViewer/show.html", post, randomID, isConnected);
     }
 
     public static void index() {
         PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
-        List<PostRef> olderPostRefs =  MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
+        List<PostRef> olderPostRefs = MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
 
         Post frontPost = (frontPostRef == null) ? null : BlogViewer.getTranslation(frontPostRef);
         List<Post> olderPosts = new ArrayList<Post>();
-        for(PostRef postRef : olderPostRefs)
+        for (PostRef postRef : olderPostRefs) {
             olderPosts.add(BlogViewer.getTranslation(postRef));
+        }
         render(frontPost, olderPosts);
     }
 
@@ -105,16 +122,18 @@ public class BlogViewer extends Controller {
         Post post = null;
         for (PostRef postRef : postRefs) {
             post = BlogViewer.getGoodPost(Post.getPostsByPostRef(postRef));
-            if (post != null)
+            if (post != null) {
                 posts.add(post);
+            }
         }
         render(posts, tag);
     }
 
     public static void postComment(String urlId, String email, String userName, String webSite, String content, String code, String randomID) {
         Post post = Post.getPostByUrlId(urlId);
-        if (post == null)
+        if (post == null) {
             return;
+        }
 
         validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
         if (Validation.hasErrors()) {
@@ -156,8 +175,9 @@ public class BlogViewer extends Controller {
 
     public static Post getTranslation(PostRef postRef) {
         List<Post> posts = Post.getPostsByPostRef(postRef);
-        if (posts == null)
+        if (posts == null) {
             return null;
+        }
 
         switch (posts.size()) {
             case 0:
@@ -169,8 +189,9 @@ public class BlogViewer extends Controller {
                 for (Locale locale : locales) {
                     // Try exact Locale or exact language no matter the country
                     for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage())))
+                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
                             return candidat;
+                        }
                     }
                 }
 
@@ -178,5 +199,4 @@ public class BlogViewer extends Controller {
         }
 
     }
-
 }
