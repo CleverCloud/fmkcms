@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "[CORE] Add a urlId field for blog posts"
+desc: ""
+type: :bugfix
+component: fmkcms
+release: 
+reporter: Kevin Decherf <kdecherf@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-30 09:30:29.148355 Z
+references: []
+
+id: e7bd5979036fded184861f87df3fa4c85bf12b8d
+log_events: 
+- - 2010-11-30 09:30:31.996002 Z
+  - Kevin Decherf <kdecherf@gmail.com>
+  - created
+  - ""
