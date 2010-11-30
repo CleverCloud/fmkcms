@@ -154,7 +154,7 @@ public class BlogViewer extends Controller {
         BlogViewer.show(post.title);
     }
 
-    private static Post getTranslation(PostRef postRef) {
+    public static Post getTranslation(PostRef postRef) {
         List<Post> posts = Post.getPostsByPostRef(postRef);
         if (posts == null)
             return null;
