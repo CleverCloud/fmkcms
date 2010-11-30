@@ -17,7 +17,7 @@
 }%
 #{/if}
 
-#{form @BlogController.doNewPost("translate", otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @BlogController.doNewPost(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'post.urlId'}
 <p>
