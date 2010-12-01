@@ -27,6 +27,7 @@ public class IndexJob extends Job<String> {
         Gson gson = new Gson();
         Client c = new ElasticSearchClient();
         String t = gson.toJson(indexable);
+
         IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
         c.close();
         return response.toString();

@@ -2,6 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
+import com.google.gson.Gson;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Lob;
 import mongo.MongoEntity;
+import org.bson.types.ObjectId;
+import org.elasticsearch.search.SearchHit;
 import play.data.validation.Required;
 import play.mvc.Router;
 
@@ -26,33 +29,30 @@ public class Page extends MongoEntity implements Searchable {
 
     @Required
     public String urlId;
-
     @Required
     public String title;
-
     @Required
     @Lob
     public String content;
-
     @Required
     public Locale language;
-
     @Required
     @Reference
     public PageRef pageReference;
-
     @Required
     public Boolean published = false;
 
     //
     // Constructor
     //
-    public Page() {}
+    public Page() {
+    }
 
     /* Make Play! views happy ... */
     public static Page call(Page other) {
-        if (other == null)
+        if (other == null) {
             return null;
+        }
         Page page = new Page();
         page.urlId = other.urlId;
         page.title = other.title;
@@ -115,7 +115,7 @@ public class Page extends MongoEntity implements Searchable {
     @Override
     public Page save() {
         super.save();
-        new IndexJob(this, "page", this.id.toStringMongod()).now();
+        new IndexJob(this, Page.class.getCanonicalName(), this.id.toStringMongod()).now();
         return this;
     }
 
@@ -133,4 +133,8 @@ public class Page extends MongoEntity implements Searchable {
         return Router.getFullUrl("PageViewer.page", argmap);
     }
 
+    public static Searchable getFrom(SearchHit sh) {
+        return MongoEntity.getDs().find(Page.class).get();
+        // return MongoEntity.getDs().get(Page.class, ObjectId.babbleToMongod(sh.id()));
+    }
 }
