@@ -12,6 +12,7 @@
         #{set pp:ppp.getValue()/}
         <td>${pp.language}</td>
         <td>${pp.title}</td>
+        <td>${pp.urlId}</td>
         <td>#{a @PageController.newPage("edit", pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
         <td>#{a @PageController.newPage("delete", pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
         <td>#{a @PageController.newPage("translate", pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
