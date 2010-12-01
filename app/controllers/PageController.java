@@ -25,20 +25,20 @@ public class PageController extends Controller {
             pagenumber = 0;
         }
         List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
-        render(pages);
+        render(pages, pagenumber);
     }
 
     public static void deletePage(String urlId, String language) {
         Page page = Page.getPageByLocale(urlId, new Locale(language));
         if (page == null) {
             return;
-            
+
         }
         PageRef pageRef = page.pageReference;
         page.delete();
         if (Page.getFirstPageByPageRef(pageRef) == null) {
             pageRef.delete();
-            
+
         }
         PageViewer.index();
     }
@@ -47,7 +47,7 @@ public class PageController extends Controller {
         if (action.equals("delete")) {
             PageController.deletePage(otherUrlId, language);
 
-            
+
         }
         Page otherPage = null;
 
@@ -72,10 +72,10 @@ public class PageController extends Controller {
         }
         if (page != null) {
             pageRef = page.pageReference;
-            
+
         } else {
             pageRef = PageController.doNewPageRef(action, otherUrlId, otherLanguage);
-            
+
         }
         urlId = params.get("page.urlId");
 
@@ -83,14 +83,14 @@ public class PageController extends Controller {
         if (tagsString != null && !tagsString.isEmpty()) {
             for (String tag : Arrays.asList(tagsString.split(","))) {
                 tags.add(Tag.findOrCreateByName(tag));
-                
+
             }
         }
         pageRef.tags = tags;
 
         if (!action.equals("edit")) {
             page = new Page();
-            
+
         }
         page.pageReference = pageRef;
         page.urlId = urlId;
@@ -110,10 +110,10 @@ public class PageController extends Controller {
 
         if (page.published) {
             PageViewer.page(urlId);
-            
+
         } else {
             PageViewer.index();
-            
+
         }
     }
 
