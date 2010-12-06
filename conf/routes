@@ -35,3 +35,6 @@ POST    /blog/posts/{action}/{otherUrlId}/{otherLanguage}     BlogController.doN
 # Post accessing stuff + Comments posting stuff
 GET     /blog/post/{urlId}                                    BlogViewer.show
 POST    /blog/post/{urlId}/comment/new                        BlogController.postComment
+
+# Rss
+GET     /blog/rss/{lang}                                      Feeds.main
