@@ -22,7 +22,7 @@ import play.mvc.Controller;
 public class PageViewer extends Controller {
 
     private static Page getGoodPage(List<Page> pages) {
-        if(pages == null)
+        if(pages == null || pages.isEmpty())
             return null;
 
         Page page = null;
@@ -52,6 +52,10 @@ public class PageViewer extends Controller {
                 }
                 return null;
         }
+    }
+
+    public static Page getGoodPageByUrlId(String urlId) {
+       return PageViewer.getGoodPage(Page.getPagesByUrlId(urlId));
     }
 
     public static void index() {
