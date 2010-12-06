@@ -18,8 +18,8 @@ import play.vfs.VirtualFile;
  *
  * @author waxzce
  */
-@OnApplicationStart
-@Every("5d")
+//@OnApplicationStart
+//@Every("5d")
 @SuppressWarnings("unchecked")
 public class ConfESJob extends Job {
 
