@@ -1,0 +1,19 @@
+#{extends 'main.html' /}
+#{set title:'search result' /}
+
+<h2>&{'resultfor'} "${query}"</h2>
+
+
+<dl>
+   #{list items:result, as:'hit'}
+
+   %{
+      def desc =  (hit.getPrintDesc().size() > 140) ? hit.getPrintDesc().substring(0.140): hit.getPrintDesc()
+   }%
+
+   <dt>
+      <a href="${hit.getPrintURL()}">${hit.getPrintTitle()}</a>
+   </dt>
+   <dd>${desc}</dd>
+   #{/list}
+</dl>

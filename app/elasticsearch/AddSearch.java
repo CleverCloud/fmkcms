@@ -16,7 +16,7 @@ import play.jobs.OnApplicationStart;
  * this is a functionality disabled for now but it can be fine to add search in all page
  *
  */
-// @OnApplicationStart
+@OnApplicationStart
 public class AddSearch extends Job {
 
     @Override
@@ -26,7 +26,7 @@ public class AddSearch extends Job {
 
         for (Page page : MongoEntity.getDs().createQuery(Page.class).asList()) {
             String t = gson.toJson(page);
-            IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), "page", page.id.toStringMongod()).setSource(t).execute().actionGet();
+            IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), page.getClass().getCanonicalName(), page.id.toStringMongod()).setSource(t).execute().actionGet();
         }
         c.close();
     }

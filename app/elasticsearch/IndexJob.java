@@ -24,7 +24,7 @@ public class IndexJob extends Job<String> {
 
     @Override
     public String doJobWithResult() throws Exception {
-	/*
+	
         Gson gson = new Gson();
         Client c = new ElasticSearchClient();
         String t = gson.toJson(indexable);
@@ -32,8 +32,6 @@ public class IndexJob extends Job<String> {
         IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
         c.close();
         return response.toString();
-*/
-return "";
     }
     
 }

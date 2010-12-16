@@ -9,7 +9,7 @@ GET     /                                                     PageViewer.index
 # List tagged, search, create, edit, translate...
 # Paths start with /pages to avoid collisions with pages urlIds
 GET     /pages/tagged/{tagName}                               PageViewer.pagesTag
-*       /pages/search                                         PageViewer.searchPage
+*       /pages/search                                         SearchController.search
 GET     /pages/new                                            PageController.newPage(action:'create',otherUrlId:'',language:'')
 POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
 GET     /pages/{action}/{otherUrlId}/from/{language}          PageController.newPage
