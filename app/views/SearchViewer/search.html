@@ -1,5 +1,5 @@
 #{extends 'main.html' /}
-#{set title:'search result' /}
+#{set title:'Search results' /}
 
 <h2>&{'resultfor'} "${query}"</h2>
 
@@ -8,7 +8,7 @@
    #{list items:result, as:'hit'}
 
    %{
-      def desc =  (hit.getPrintDesc().size() > 140) ? hit.getPrintDesc().substring(0.140): hit.getPrintDesc()
+      def desc =  (hit.getPrintDesc().size() > 140) ? hit.getPrintDesc().substring(0,140): hit.getPrintDesc()
    }%
 
    <dt>

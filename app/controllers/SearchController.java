@@ -1,64 +1,61 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import elasticsearch.ElasticSearchClient;
-import play.mvc.Controller;
+import com.google.code.morphia.query.Query;
+import elasticsearch.AddSearch;
 import elasticsearch.Searchable;
-import exceptions.NotSearchableException;
-import java.util.LinkedList;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.xcontent.QueryStringQueryBuilder;
-import org.elasticsearch.search.SearchHit;
-import play.Logger;
+import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import mongo.MongoEntity;
 import play.Play;
+import play.classloading.ApplicationClasses;
+import play.classloading.ApplicationClasses.ApplicationClass;
+import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  *
  * @author judu
  */
+@With(Secure.class)
 public class SearchController extends Controller {
 
-   public static void search(String query) {
-      Client c = new ElasticSearchClient();
+   public static void indexAndStats(Boolean reindex) {
+      ApplicationClasses classes = Play.classes;
+      List<ApplicationClass> appClassesList = classes.all();
 
-      QueryStringQueryBuilder qsqb = new QueryStringQueryBuilder(query);
+      Map<String, Long> indexesStats = new HashMap<String, Long>();
 
-      SearchResponse rayponce = c.prepareSearch(Play.configuration.getProperty("elasticsearch.indexname")).setSearchType(SearchType.DEFAULT).setQuery(qsqb).execute().actionGet();
+      for (ApplicationClass appClass : appClassesList) {
+         if (appClass.getPackage().contains("models")) {
+            for (Class inter : appClass.javaClass.getInterfaces()) {
+               if (inter.equals(Searchable.class)) {
+                  Long count = MongoEntity.getDs().getCount(appClass.javaClass);
+                  indexesStats.put(appClass.javaClass.getSimpleName(), count);
 
-      List<Searchable> result = new LinkedList<Searchable>();
-
-      for (SearchHit searchHit : rayponce.hits()) {
-         try {
-            Object obj = Class.forName(searchHit.getType()).
-                    getMethod("getFrom", new Class[]{SearchHit.class}).
-                    invoke(Class.forName(searchHit.getType()), new Object[]{searchHit});
-            if (obj instanceof Searchable) {
-               Searchable sobj = (Searchable) obj;
-               sobj.setScore(searchHit.getScore());
-               result.add(sobj);
-            } else {
-               throw new NotSearchableException("The returned object is not a Searchable element.");
+               }
             }
-         } catch (NotSearchableException e) {
-            Logger.debug("Not searchable : %s", e.getMessage());
-            error(503, "Encountered an internal server error");
-         } catch (ClassNotFoundException ex) {
-            Logger.debug("no CRUDFieldProvider found for %s", ex);
-            error(503, "Encountered an internal server error");
-         } catch (Exception e) {
-            e.printStackTrace();
-            error();
          }
       }
 
-      render(result, query);
+      if(reindex != null && reindex) {
+         renderArgs.put("reindex", true);
+      }
+      render(indexesStats);
+   }
+
+   public static void reindex() {
+      AddSearch sjob = new AddSearch();
+      try {
+         sjob.now();
+      } catch (Exception ex) {
+         Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      indexAndStats(Boolean.TRUE);
    }
 }

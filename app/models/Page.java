@@ -152,4 +152,8 @@ public class Page extends MongoEntity implements Searchable {
    public void setScore(float score) {
       this.score = score;
    }
+
+   public ObjectId getEntityId() {
+      return this.id;
+   }
 }
