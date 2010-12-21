@@ -26,7 +26,7 @@ public class MenuController extends Controller {
       MenuController.edit("create", null);
    }
 
-   public static void doEditMenu(String action) {
+   public static void doEdit(String action) {
       Menu menu = Menu.findOrCreateByName(params.get("menu.name"));
    }
 
