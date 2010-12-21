@@ -4,5 +4,26 @@
 You are adding an item to &{name} <br />
 
 #{form @MenuController.doAddItem(name) , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'item.type'}
+<p>
+    <label>Type: </label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+        #{list items:types, as:'t'}
+            <option value="${t}" ${(field.flash?.toString()?.equals(t))? 'selected="true"'.raw() : ''}>${t}</option>
+        #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+#{field 'item.value'}
+<p>
+    <label>Value: </label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 <input type="submit" value="ok" />
 #{/form}
