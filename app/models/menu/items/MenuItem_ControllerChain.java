@@ -2,6 +2,7 @@ package models.menu.items;
 
 import models.menu.Menu;
 import models.menu.MenuItem;
+import play.mvc.Router;
 
 /**
  *
@@ -13,22 +14,20 @@ public class MenuItem_ControllerChain extends MenuItem {
 
    public MenuItem_ControllerChain(String controllerChain, Menu menu) {
       super(menu);
-      this.controllerChain = controllerChain;
+      this.controllerChain = controllerChain.trim();
    }
 
    public MenuItem_ControllerChain(String controllerChain) {
-      this.controllerChain = controllerChain;
+      this.controllerChain = controllerChain.trim();
    }
 
    @Override
    public String getLink() {
-      /* TODO: :D */
-      throw new UnsupportedOperationException("Not supported yet.");
+      return Router.reverse(this.controllerChain + (this.controllerChain.endsWith(")") ? "" : "()")).url;
    }
 
    @Override
    public String getDisplayStr() {
-      /* TODO: what ? */
       return this.controllerChain;
    }
 
