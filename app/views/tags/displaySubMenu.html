@@ -1,0 +1,7 @@
+#{if _menu}
+<ul class="menu">
+#{list item:_menu.items as:'item'}
+   #{displayMenuItem menuItem:item /}
+#{/list}
+</ul>
+#{/if}
