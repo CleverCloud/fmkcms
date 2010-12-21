@@ -23,7 +23,7 @@ public class MenuItem_ControllerChain extends MenuItem {
 
    @Override
    public String getLink() {
-      return Router.reverse(this.controllerChain + (this.controllerChain.endsWith(")") ? "" : "()")).url;
+      return Router.reverse(this.controllerChain).url;
    }
 
    @Override
