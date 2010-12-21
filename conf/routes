@@ -21,10 +21,8 @@ GET     /page/{urlId}                                         PageViewer.page
 # Menus stuff
 GET     /menus/new                                            MenuController.newMenu
 GET     /menus/create                                         MenuController.newMenu
-GET     /menus/edit/{name}                                    MenuController.edit
-GET     /menus/delete/{name}                                  MenuController.delete
-POST    /menus/create/{name}                                  MenuController.doEditMenu(action:'create')
-POST    /menus/edit/{name}                                    MenuController.doEditMenu(action:'edit')
+GET     /menus/{action}/{name}                                MenuController.edit
+POST    /menus/{action}/{name}                                MenuController.doEditMenu
 GET     /menu/{name}/add                                      MenuController.addItem
 POST    /menu/{name}/add                                      MenuController.doAddItem
 
