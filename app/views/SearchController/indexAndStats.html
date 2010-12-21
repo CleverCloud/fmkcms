@@ -1,0 +1,20 @@
+#{extends 'main.html' /}
+#{set title:'Statistiques' /}
+
+
+<div id="stats">
+   <dl>
+      #{list items:indexesStats.keySet(), as:'key'}
+      <dt>${key}</dt>
+      <dd>${indexesStats.get(key)}</dd>
+      #{/list}
+   </dl>
+</div>
+<div id="indexAdmin">
+   #{if reindex}
+   <p>Réindexation de la base en cours…</p>
+   #{/if}
+   <form action="@{SearchController.reindex()}">
+      <input type="submit" value="Réindexer l'application" />
+   </form>
+</div>

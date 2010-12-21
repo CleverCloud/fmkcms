@@ -2,7 +2,7 @@ package models;
 
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
-import com.google.gson.Gson;
+import com.google.code.morphia.annotations.Transient;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
 import java.util.ArrayList;
@@ -26,114 +26,134 @@ import play.mvc.Router;
 @SuppressWarnings("unchecked")
 public class Page extends MongoEntity implements Searchable {
 
-    @Required
-    public String urlId;
-    @Required
-    public String title;
-    @Required
-    @Lob
-    public String content;
-    @Required
-    public Locale language;
-    @Required
-    @Reference
-    public PageRef pageReference;
-    @Required
-    public Boolean published = false;
+   @Required
+   public String urlId;
 
-    //
-    // Constructor
-    //
-    public Page() {
-    }
+   @Required
+   public String title;
 
-    /* Make Play! views happy ... */
-    public static Page call(Page other) {
-        if (other == null) {
-            return null;
-        }
-        Page page = new Page();
-        page.urlId = other.urlId;
-        page.title = other.title;
-        page.content = other.content;
-        page.language = other.language;
-        page.pageReference = other.pageReference;
-        page.published = other.published;
-        return page;
-    }
+   @Required
+   @Lob
+   public String content;
 
-    //
-    // Tags handling
-    //
-    public Page tagItWith(String name) {
-        if (name != null && !name.isEmpty()) {
-            this.pageReference.tags.add(Tag.findOrCreateByName(name));
-            this.pageReference.save();
-        }
-        return this;
-    }
+   @Required
+   public Locale language;
 
-    //
-    // Accessing stuff
-    //
-    public static List<Page> getPagesByUrlId(String urlId) {
-        Page page = Page.getPageByUrlId(urlId);
-        return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).asList();
-    }
+   @Required
+   @Reference
+   public PageRef pageReference;
 
-    public static Page getPageByUrlId(String urlId) {
-        return MongoEntity.getDs().find(Page.class, "urlId", urlId).get();
-    }
+   @Required
+   public Boolean published = false;
 
-    public static Page getPageByLocale(String urlId, Locale locale) {
-        Page page = Page.getPageByUrlId(urlId);
-        return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).filter("language =", locale).get();
-    }
+   @Transient
+   private float score;
 
-    public static Page getFirstPageByPageRef(PageRef pageRef) {
-        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).get();
-    }
 
-    public static List<Page> getPagesByPageRef(PageRef pageRef) {
-        return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
-    }
+   //
+   // Constructor
+   //
+   public Page() {
+   }
 
-    //
-    // Managing stuff
-    //
-    public Page publish() {
-        this.published = true;
-        return this.save();
-    }
+   /* Make Play! views happy ... */
+   public static Page call(Page other) {
+      if (other == null) {
+         return null;
+      }
+      Page page = new Page();
+      page.urlId = other.urlId;
+      page.title = other.title;
+      page.content = other.content;
+      page.language = other.language;
+      page.pageReference = other.pageReference;
+      page.published = other.published;
+      return page;
+   }
 
-    public Page unPublish() {
-        this.published = false;
-        return this.save();
-    }
+   //
+   // Tags handling
+   //
+   public Page tagItWith(String name) {
+      if (name != null && !name.isEmpty()) {
+         this.pageReference.tags.add(Tag.findOrCreateByName(name));
+         this.pageReference.save();
+      }
+      return this;
+   }
 
-    @Override
-    public Page save() {
-        super.save();
-        new IndexJob(this, Page.class.getCanonicalName(), this.id.toStringMongod()).now();
-        return this;
-    }
+   //
+   // Accessing stuff
+   //
+   public static List<Page> getPagesByUrlId(String urlId) {
+      Page page = Page.getPageByUrlId(urlId);
+      return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).asList();
+   }
 
-    public String getPrintTitle() {
-        return title;
-    }
+   public static Page getPageByUrlId(String urlId) {
+      return MongoEntity.getDs().find(Page.class, "urlId", urlId).get();
+   }
 
-    public String getPrintDesc() {
-        return content;
-    }
+   public static Page getPageByLocale(String urlId, Locale locale) {
+      Page page = Page.getPageByUrlId(urlId);
+      return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).filter("language =", locale).get();
+   }
 
-    public String getPrintURL() {
-        Map<String, Object> argmap = new HashMap<String, Object>();
-        argmap.put("urlId", this.urlId);
-        return Router.getFullUrl("PageViewer.page", argmap);
-    }
+   public static Page getFirstPageByPageRef(PageRef pageRef) {
+      return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).get();
+   }
 
-    public static Searchable getFrom(SearchHit sh) {
-        return MongoEntity.getDs().find(Page.class).get();
-        // return MongoEntity.getDs().get(Page.class, ObjectId.babbleToMongod(sh.id()));
-    }
+   public static List<Page> getPagesByPageRef(PageRef pageRef) {
+      return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
+   }
+
+   //
+   // Managing stuff
+   //
+   public Page publish() {
+      this.published = true;
+      return this.save();
+   }
+
+   public Page unPublish() {
+      this.published = false;
+      return this.save();
+   }
+
+   @Override
+   public Page save() {
+      super.save();
+      new IndexJob(this, Page.class.getCanonicalName(), this.id.toStringMongod()).now();
+      return this;
+   }
+
+   public String getPrintTitle() {
+      return title;
+   }
+
+   public String getPrintDesc() {
+      return content;
+   }
+
+   public String getPrintURL() {
+      Map<String, Object> argmap = new HashMap<String, Object>();
+      argmap.put("urlId", this.urlId);
+      return Router.getFullUrl("PageViewer.page", argmap);
+   }
+
+   public static Searchable getFrom(SearchHit sh) {
+      return MongoEntity.getDs().get(Page.class, new ObjectId(sh.id()));
+   }
+
+   public float getScore() {
+      return this.score;
+   }
+
+   public void setScore(float score) {
+      this.score = score;
+   }
+
+   public ObjectId getEntityId() {
+      return this.id;
+   }
 }

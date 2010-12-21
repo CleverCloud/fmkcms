@@ -1,6 +1,5 @@
 package controllers;
 
-import elasticsearch.SearchJob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -88,7 +87,7 @@ public class PageViewer extends Controller {
         render(pages, tag);
     }
 
-    public static void searchPage(String q) {
+    /*public static void searchPage(String q) {
         if (request.isNew) {
             Future<String> task = new SearchJob(q).now();
             request.args.put("task", task);
@@ -101,6 +100,6 @@ public class PageViewer extends Controller {
         } catch (ExecutionException ex) {
             Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
 }

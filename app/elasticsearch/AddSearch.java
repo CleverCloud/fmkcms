@@ -1,34 +1,38 @@
 package elasticsearch;
 
-import com.google.gson.Gson;
-import models.Page;
+import java.util.List;
 import mongo.MongoEntity;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.Client;
 import play.Play;
+import play.classloading.ApplicationClasses;
+import play.classloading.ApplicationClasses.ApplicationClass;
 import play.jobs.Job;
-import play.jobs.OnApplicationStart;
 
 /**
- *
+ * Add all Searchable classes of the application to the index.
  * @author waxzce
- *
- * this is a functionality disabled for now but it can be fine to add search in all page
- *
+ * @author Julien Durillon
  */
-// @OnApplicationStart
+//@OnApplicationStart
 public class AddSearch extends Job {
 
-    @Override
-    public void doJob() throws Exception {
-        Gson gson = new Gson();
-        Client c = new ElasticSearchClient();
+   @Override
+   public void doJob() throws Exception {
+      ApplicationClasses appClasses = Play.classes;
+      List<ApplicationClass> classes = appClasses.all();
 
-        for (Page page : MongoEntity.getDs().createQuery(Page.class).asList()) {
-            String t = gson.toJson(page);
-            IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), "page", page.id.toStringMongod()).setSource(t).execute().actionGet();
-        }
-        c.close();
-    }
-
+      for (ApplicationClass acl : classes) {
+         for (Class inter : acl.javaClass.getInterfaces()) {
+            if (inter.equals(Searchable.class)) {
+               for (Object src : MongoEntity.getDs().createQuery(acl.javaClass).asList()) {
+                  Searchable casted = (Searchable) src;
+                  IndexJob indexJob = new IndexJob(casted,
+                                                   acl.javaClass.getCanonicalName(),
+                                                   casted.getEntityId().toStringMongod());
+                  indexJob.doJobWithResult();
+               }
+               break; // Oui, c'est sale, et alors ? Au moins ça va vite ;)
+            }
+         }
+      }
+   }
 }
