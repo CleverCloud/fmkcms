@@ -22,7 +22,14 @@ public class MenuItem_ControllerChain extends MenuItem {
 
    @Override
    public String getLink() {
+      /* TODO: :D */
       throw new UnsupportedOperationException("Not supported yet.");
+   }
+
+   @Override
+   public String getDisplayStr() {
+      /* TODO: what ? */
+      return this.controllerChain;
    }
 
 }

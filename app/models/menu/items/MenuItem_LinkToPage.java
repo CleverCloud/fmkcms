@@ -30,4 +30,9 @@ public class MenuItem_LinkToPage extends MenuItem {
       return Router.reverse("PageViewer.page", map).url;
    }
 
+   @Override
+   public String getDisplayStr() {
+      return this.urlId;
+   }
+
 }

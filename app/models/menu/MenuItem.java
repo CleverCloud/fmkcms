@@ -17,5 +17,6 @@ public abstract class MenuItem extends MongoEntity {
    }
 
    public abstract String getLink();
+   public abstract String getDisplayStr();
 
 }

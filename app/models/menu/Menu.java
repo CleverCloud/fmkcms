@@ -1,6 +1,7 @@
 package models.menu;
 
 import com.google.code.morphia.annotations.Reference;
+import java.util.ArrayList;
 import java.util.List;
 import mongo.MongoEntity;
 import play.data.validation.Required;
@@ -43,6 +44,8 @@ public class Menu extends MongoEntity {
    }
 
    public Menu addItem(MenuItem item) {
+      if (this.items == null)
+         this.items = new ArrayList<MenuItem>();
       this.items.add(item);
       return this.save();
    }

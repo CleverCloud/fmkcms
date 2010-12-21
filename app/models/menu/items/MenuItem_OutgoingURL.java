@@ -25,4 +25,9 @@ public class MenuItem_OutgoingURL extends MenuItem {
       return this.url;
    }
 
+   @Override
+   public String getDisplayStr() {
+      return this.url;
+   }
+
 }

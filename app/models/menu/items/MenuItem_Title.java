@@ -22,7 +22,12 @@ public class MenuItem_Title extends MenuItem {
 
    @Override
    public String getLink() {
-      return null;
+      return "#";
+   }
+
+   @Override
+   public String getDisplayStr() {
+      return this.title;
    }
 
 }

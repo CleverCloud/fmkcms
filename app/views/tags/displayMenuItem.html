@@ -1,0 +1,6 @@
+   <li class="menuItem">
+      <a href="&{_menuItem.getLink()}">&{_menuItem.getDisplayStr()}</a>
+   </li>
+#{if _menuItem.menu}
+   #{displayMenu menu:_menuItem.menu /}
+#{/if}
