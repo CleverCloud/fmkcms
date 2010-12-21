@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import models.Menu;
+import models.menu.Menu;
 import models.Page;
 import models.PageRef;
 import models.Tag;

@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Menu;
+import models.menu.Menu;
 import play.mvc.Controller;
 import play.mvc.With;
 

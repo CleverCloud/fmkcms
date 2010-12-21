@@ -1,10 +1,12 @@
-package models;
+package models.menu;
 
 import com.google.code.morphia.annotations.Reference;
 import controllers.PageViewer;
 import java.util.ArrayList;
 import java.util.List;
 import models.Page;
+import models.Page;
+import models.PageRef;
 import mongo.MongoEntity;
 import play.data.validation.Required;
 
