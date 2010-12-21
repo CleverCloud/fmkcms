@@ -8,7 +8,7 @@ import mongo.MongoEntity;
  */
 public abstract class MenuItem extends MongoEntity {
 
-   Menu menu;
+   public Menu menu;
 
    public MenuItem() {}
 

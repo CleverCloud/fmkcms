@@ -17,7 +17,7 @@ public class Menu extends MongoEntity {
    @Reference
    public List<MenuItem> items;
 
-   private Menu(String name) {
+   public Menu(String name) {
       this.name = name;
    }
 
