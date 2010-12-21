@@ -1,12 +1,7 @@
 package models.menu;
 
 import com.google.code.morphia.annotations.Reference;
-import controllers.PageViewer;
-import java.util.ArrayList;
 import java.util.List;
-import models.Page;
-import models.Page;
-import models.PageRef;
 import mongo.MongoEntity;
 import play.data.validation.Required;
 
@@ -20,28 +15,10 @@ public class Menu extends MongoEntity {
    public String name;
 
    @Reference
-   public List<PageRef> items;
+   public List<MenuItem> items;
 
    private Menu(String name) {
       this.name = name;
-   }
-
-   public Menu addPage(Page page) {
-      this.items.add(page.pageReference);
-      return this;
-   }
-
-   public Menu addPage(PageRef pageRef) {
-      this.items.add(pageRef);
-      return this;
-   }
-
-   public List<Page> getPages() {
-      List<Page> pages = new ArrayList<Page>();
-      for (PageRef pr : this.items) {
-         pages.add(PageViewer.getGoodPage(Page.getPagesByPageRef(pr)));
-      }
-      return pages;
    }
 
    public static Menu findOrCreateByName(String name) {
@@ -60,4 +37,15 @@ public class Menu extends MongoEntity {
       if (menu != null)
          menu.delete();
    }
+
+   public Menu addItem(MenuItem item) {
+      this.items.add(item);
+      return this.save();
+   }
+
+   public Menu removeItem(MenuItem item) {
+      this.items.remove(item);
+      return this.save();
+   }
+
 }
