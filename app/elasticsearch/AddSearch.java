@@ -1,26 +1,18 @@
 package elasticsearch;
 
-import com.google.gson.Gson;
-import java.util.LinkedList;
 import java.util.List;
-import models.Page;
 import mongo.MongoEntity;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.Client;
 import play.Play;
 import play.classloading.ApplicationClasses;
 import play.classloading.ApplicationClasses.ApplicationClass;
 import play.jobs.Job;
-import play.jobs.OnApplicationStart;
 
 /**
- *
+ * Add all Searchable classes of the application to the index.
  * @author waxzce
- *
- * this is a functionality disabled for now but it can be fine to add search in all page
- *
+ * @author Julien Durillon
  */
-@OnApplicationStart
+//@OnApplicationStart
 public class AddSearch extends Job {
 
    @Override
@@ -28,31 +20,19 @@ public class AddSearch extends Job {
       ApplicationClasses appClasses = Play.classes;
       List<ApplicationClass> classes = appClasses.all();
 
-      List<Class> toIndex = new LinkedList<Class>();
-
       for (ApplicationClass acl : classes) {
-         acl.javaClass.getInterfaces();
          for (Class inter : acl.javaClass.getInterfaces()) {
             if (inter.equals(Searchable.class)) {
-               toIndex.add(acl.javaClass);
+               for (Object src : MongoEntity.getDs().createQuery(acl.javaClass).asList()) {
+                  Searchable casted = (Searchable) src;
+                  IndexJob indexJob = new IndexJob(casted,
+                                                   acl.javaClass.getCanonicalName(),
+                                                   casted.getEntityId().toStringMongod());
+                  indexJob.doJobWithResult();
+               }
+               break; // Oui, c'est sale, et alors ? Au moins ça va vite ;)
             }
          }
       }
-
-      System.out.println(toIndex);
-
-      Gson gson = new Gson();
-      Client c = new ElasticSearchClient();
-
-      for(Class cl : toIndex) {
-         for(Object src : MongoEntity.getDs().createQuery(cl).asList()) {
-            String t = gson.toJson(src);
-            Searchable casted = (Searchable) cl.cast(src);
-            IndexJob indexJob = new IndexJob(casted, cl.getCanonicalName(), casted.getEntityId().toStringMongod());
-            indexJob.doJobWithResult();
-         }
-      }
-
-      c.close();
    }
 }

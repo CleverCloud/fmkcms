@@ -1,79 +1,64 @@
 package elasticsearch;
 
-import org.elasticsearch.action.ActionListener;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import com.google.gson.Gson;
+import java.util.LinkedList;
+import java.util.List;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
-import org.elasticsearch.action.admin.indices.status.IndicesStatusRequest;
-import org.elasticsearch.action.admin.indices.status.IndicesStatusResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
-import play.Logger;
 import play.Play;
-import play.jobs.Every;
+import play.classloading.ApplicationClasses;
+import play.classloading.ApplicationClasses.ApplicationClass;
 import play.jobs.Job;
 import play.jobs.OnApplicationStart;
 import play.vfs.VirtualFile;
 
 /**
+ * Add mapping for all available Searchable class mappings.
+ * The file for the class my.package.MyClass must have for path conf/es_mapping/my.package.MyClass.json
  *
  * @author waxzce
+ * @author Julien Durillon
  */
 @OnApplicationStart
-//@Every("5d")
-@SuppressWarnings("unchecked")
 public class ConfESJob extends Job {
 
-    static Client c;
-    static AdminClient admin;
+   static Client c;
 
-    @Override
-    public void doJob() throws Exception {
-        c = new ElasticSearchClient();
-        admin = c.admin();
+   static AdminClient admin;
 
-        IndicesStatusRequest isr = new IndicesStatusRequest(Play.configuration.getProperty("elasticsearch.indexname"));
-        admin.indices().status(isr, new StatusResponse());
+   @Override
+   public void doJob() throws Exception {
 
-        //      c.close();
-    }
+      ElasticSearchClient client = new ElasticSearchClient();
+      admin = client.admin();
 
-    private class StatusResponse implements ActionListener<IndicesStatusResponse> {
+      ApplicationClasses appClasses = Play.classes;
+      List<ApplicationClass> classes = appClasses.all();
 
-        public StatusResponse() {}
+      List<Class> toIndex = new LinkedList<Class>();
 
-        public void onFailure(Throwable thrwbl) {
-            String indexname = Play.configuration.getProperty("elasticsearch.indexname");
-            CreateIndexRequest cir = new CreateIndexRequest(indexname);
+      Gson gson = new Gson();
 
-            admin.indices().create(cir, (ActionListener) new MappingResponse());
-        }
+      for (ApplicationClass acl : classes) {
+         for (Class inter : acl.javaClass.getInterfaces()) {
+            if (inter.equals(Searchable.class)) {
+               this.addMapping(acl.javaClass.getCanonicalName());
+               break;
+            }
+         }
+      }
 
-        public void onResponse(IndicesStatusResponse rspns) {
-            MappingResponse mr = new MappingResponse();
-            mr.onResponse(null);
-        }
-    }
+      client.close();
+   }
 
-    private class MappingResponse implements ActionListener<CreateIndexRequest> {
-
-        public MappingResponse() {}
-
-        public void onResponse(CreateIndexRequest rspns) {
-            addMapping("page", "page.json");
-        }
-
-        public void onFailure(Throwable thrwbl) {
-            onResponse(null);
-            Logger.error("Elastic Search Failure : create %s index faillure server %s:%s", Play.configuration.getProperty("elasticsearch.indexname"), Play.configuration.getProperty("elasticsearch.host"), Play.configuration.getProperty("elasticsearch.port"));
-        }
-
-        private void addMapping(String nametype, String filename) {
-            String indexname = Play.configuration.getProperty("elasticsearch.indexname");
-            VirtualFile vf = Play.getVirtualFile("conf/es_mapping/" + filename);
-            PutMappingRequest pmr = new PutMappingRequest();
-            pmr.indices(new String[]{indexname}).type(nametype).source(vf.contentAsString());
-            admin.indices().putMapping(pmr);
-        }
-    }
-
+   private void addMapping(String typeName) {
+      String indexname = Play.configuration.getProperty("elasticsearch.indexname");
+      VirtualFile vf = Play.getVirtualFile("conf/es_mapping/" + typeName + ".json");
+      if (vf.exists()) {
+         PutMappingRequest pmr = new PutMappingRequest();
+         pmr.indices(new String[]{indexname}).type(typeName).source(vf.contentAsString());
+         admin.indices().putMapping(pmr);
+      }
+   }
 }

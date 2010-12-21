@@ -45,19 +45,15 @@ public class SearchViewer extends Controller {
                   sobj.setScore(searchHit.getScore());
                   result.add(sobj);
                } else {
-                  Logger.info("Class name : %s", obj.getClass().getCanonicalName());
                   throw new NotSearchableException("The returned object is not a Searchable element : " + searchHit.getType());
                }
             }
          } catch (NotSearchableException e) {
             Logger.error("Not searchable : %s", e.getMessage());
-            error(503, "Element not searchable.");
          } catch (ClassNotFoundException ex) {
             Logger.error("no CRUDFieldProvider found for %s", ex);
-            error(503, "No class for element.");
          } catch (Exception e) {
-            Logger.error(e, "");
-            error(503, "Unexpected error");
+            Logger.error("Error : ", e);
          }
       }
 
