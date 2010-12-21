@@ -29,10 +29,15 @@ public class MenuController extends Controller {
    }
 
    public static void doEditMenu(String action) {
-      String name = params.get("name");
+      Menu menu = Menu.findOrCreateByName(params.get("name"));
+   }
+
+   public static void addItem(String name) {
+      render(name);
+   }
+
+   public static void doAddItem(String name) {
       Menu menu = Menu.findOrCreateByName(name);
-      /* TODO: edit menus */
-      menu.save();
    }
 
 }

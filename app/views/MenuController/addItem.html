@@ -1,0 +1,8 @@
+#{extends 'main.html' /}
+#{set title:'Edit Menu' /}
+
+You are adding an item to &{name} <br />
+
+#{form @MenuController.doAddItem(name) , id:'creationForm', enctype:'multipart/form-data' }
+<input type="submit" value="ok" />
+#{/form}

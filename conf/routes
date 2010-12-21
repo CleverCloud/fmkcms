@@ -25,6 +25,8 @@ GET     /menus/edit/{name}                                    MenuController.edi
 GET     /menus/delete/{name}                                  MenuController.delete
 POST    /menus/create/{name}                                  MenuController.doEditMenu(action:'create')
 POST    /menus/edit/{name}                                    MenuController.doEditMenu(action:'edit')
+GET     /menu/{name}/add                                      MenuController.addItem
+POST    /menu/{name}/add                                      MenuController.doAddItem
 
 # Captcha generator
 GET     /captcha/{randomID}                                   BlogViewer.captcha
