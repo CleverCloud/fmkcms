@@ -1,6 +1,6 @@
-   <li class="menuItem">
-      <a href="&{_menuItem.getLink()}">&{_menuItem.displayStr}</a>
-   </li>
-#{if _menuItem.menu}
+<li class="menuItem ${request.url.equals(_menuItem.getLink()) ? ' active' : ''}">
+   <a href="&{_menuItem.getLink()}">&{_menuItem.displayStr}</a>
+   #{if _menuItem.menu}
    #{displaySubMenu menu:_menuItem.menu /}
-#{/if}
+   #{/if}
+</li>
