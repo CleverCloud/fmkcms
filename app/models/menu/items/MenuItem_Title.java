@@ -11,23 +11,19 @@ public class MenuItem_Title extends MenuItem {
 
    public String title;
 
-   public MenuItem_Title(String title, Menu menu) {
-      super(menu);
+   public MenuItem_Title(String title, String displayStr, Menu menu) {
+      super(displayStr, menu);
       this.title = title;
    }
 
-   public MenuItem_Title(String title) {
+   public MenuItem_Title(String title, String displayStr) {
+      super(displayStr);
       this.title = title;
    }
 
    @Override
    public String getLink() {
       return "#";
-   }
-
-   @Override
-   public String getDisplayStr() {
-      return this.title;
    }
 
 }

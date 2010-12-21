@@ -9,14 +9,17 @@ import mongo.MongoEntity;
 public abstract class MenuItem extends MongoEntity {
 
    public Menu menu;
+   public String displayStr;
 
-   public MenuItem() {}
+   public MenuItem(String displayStr) {
+      this.displayStr = displayStr;
+   }
 
-   public MenuItem(Menu menu) {
+   public MenuItem(String displayStr, Menu menu) {
+      this.displayStr = displayStr;
       this.menu = menu;
    }
 
    public abstract String getLink();
-   public abstract String getDisplayStr();
 
 }

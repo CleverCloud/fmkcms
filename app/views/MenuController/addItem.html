@@ -25,5 +25,13 @@ You are adding an item to &{name} <br />
 </p>
 #{/}
 
+#{field 'item.display'}
+<p>
+    <label>Display string: </label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 <input type="submit" value="ok" />
 #{/form}

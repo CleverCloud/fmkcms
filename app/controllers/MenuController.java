@@ -22,8 +22,7 @@ public class MenuController extends Controller {
       if (action.equals("delete"))
          Menu.delete(name);
       else {
-         Menu menu = Menu.findOrCreateByName(name);
-         render(action, menu);
+         render(action, name);
       }
    }
 
@@ -32,10 +31,12 @@ public class MenuController extends Controller {
    }
 
    public static void doEdit(String action) {
-      Menu menu = Menu.findOrCreateByName(params.get("menu.name"));
+      Menu.findOrCreateByName(params.get("menu.name"));
    }
 
    public static void addItem(String name) {
+      if (name == null || name.isEmpty())
+         notFound();
       List<String> types = new ArrayList<String>();
       types.add("ControllerChain");
       types.add("LinkToPage");
@@ -48,16 +49,23 @@ public class MenuController extends Controller {
       Menu menu = Menu.findOrCreateByName(name);
       MenuItem item;
       String type = params.get("item.type");
+      String value = params.get("item.value");
+      String displayStr = params.get("item.display");
+
+      if (displayStr == null || displayStr.isEmpty())
+         displayStr = value;
+
       if (type.equals("ControllerChain"))
-         item = new MenuItem_ControllerChain(params.get("item.value"));
+         item = new MenuItem_ControllerChain(value, displayStr);
       else if (type.equals("LinkToPage"))
-         item = new MenuItem_LinkToPage(params.get("item.value"));
+         item = new MenuItem_LinkToPage(value, displayStr);
       else if (type.equals("OutgoingURL"))
-         item = new MenuItem_OutgoingURL(params.get("item.value"));
+         item = new MenuItem_OutgoingURL(value, displayStr);
       else if (type.equals("Title"))
-         item = new MenuItem_Title(params.get("item.value"));
+         item = new MenuItem_Title(value, displayStr);
       else
          return;
+
       item.save();
       menu.addItem(item);
    }

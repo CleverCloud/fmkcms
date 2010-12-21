@@ -12,23 +12,19 @@ public class MenuItem_ControllerChain extends MenuItem {
 
    public String controllerChain;
 
-   public MenuItem_ControllerChain(String controllerChain, Menu menu) {
-      super(menu);
+   public MenuItem_ControllerChain(String controllerChain, String displayStr, Menu menu) {
+      super(displayStr, menu);
       this.controllerChain = controllerChain.trim();
    }
 
-   public MenuItem_ControllerChain(String controllerChain) {
+   public MenuItem_ControllerChain(String controllerChain, String displayStr) {
+      super(displayStr);
       this.controllerChain = controllerChain.trim();
    }
 
    @Override
    public String getLink() {
       return Router.reverse(this.controllerChain).url;
-   }
-
-   @Override
-   public String getDisplayStr() {
-      return this.controllerChain;
    }
 
 }

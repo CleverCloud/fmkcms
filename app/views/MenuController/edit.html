@@ -7,8 +7,8 @@
 <p>
     <label>Name: </label>
     %{
-        if (field.flash == null && menu)
-            field.flash = menu.name;
+        if (field.flash == null && name)
+            field.flash = name;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -19,5 +19,5 @@
 #{/form}
 
 #{if action.equals("edit")}
-<a href="@{MenuController.addItem(menu.name)}">Add menu item</a>
+<a href="@{MenuController.addItem(name)}">Add menu item</a>
 #{/if}

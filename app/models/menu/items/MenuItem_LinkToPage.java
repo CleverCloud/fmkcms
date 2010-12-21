@@ -14,12 +14,13 @@ public class MenuItem_LinkToPage extends MenuItem {
 
    public String urlId;
 
-   public MenuItem_LinkToPage(String urlId, Menu menu) {
-      super(menu);
+   public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {
+      super(displayStr, menu);
       this.urlId = urlId;
    }
 
-   public MenuItem_LinkToPage(String urlId) {
+   public MenuItem_LinkToPage(String urlId, String displayStr) {
+      super(displayStr);
       this.urlId = urlId;
    }
 
@@ -28,11 +29,6 @@ public class MenuItem_LinkToPage extends MenuItem {
       Map<String, Object> map = new HashMap<String, Object>();
       map.put("urlId", urlId);
       return Router.reverse("PageViewer.page", map).url;
-   }
-
-   @Override
-   public String getDisplayStr() {
-      return this.urlId;
    }
 
 }
