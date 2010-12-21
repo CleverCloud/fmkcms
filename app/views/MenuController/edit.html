@@ -1,0 +1,23 @@
+#{extends 'main.html' /}
+#{set title:'Edit Menu' /}
+
+#{form @MenuController.doEdit(action) , id:'creationForm', enctype:'multipart/form-data' }
+
+#{field 'menu.name'}
+<p>
+    <label>Name: </label>
+    %{
+        if (field.flash == null && menu)
+            field.flash = menu.name;
+    }%
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
+<input type="submit" value="ok" />
+#{/form}
+
+#{if action.equals("edit")}
+<a href="@{MenuController.addItem(menu.name)}">Add menu item</a>
+#{/if}

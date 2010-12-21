@@ -1,0 +1,8 @@
+#{if _menu}
+<h2 class="menutitle">&{_menu.name}</h2>
+<ul class="menu">
+#{list items:_menu.items, as:'item'}
+   #{displayMenuItem menuItem:item /}
+#{/list}
+</ul>
+#{/if}

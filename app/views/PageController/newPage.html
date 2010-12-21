@@ -68,6 +68,14 @@
 </p>
 #{/}
 
+#{field 'menus'}
+<p>
+    <label>Add to menus: </label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 #{field 'pageReference.tags'}
 <p>
     <label>Tags: </label>
