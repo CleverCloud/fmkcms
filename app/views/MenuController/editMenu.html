@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Edit Menu' /}
 
-#{form @MenuController.doEditMenu(menu) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @MenuController.doEditMenu(action) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'menu.name'}
 <p>
@@ -9,18 +9,6 @@
     %{
         if (field.flash == null)
             field.flash = menu.name;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
-</p>
-#{/}
-
-#{field 'menu.pages'}
-<p>
-    <label>Pages: </label>
-    %{
-        if (field.flash == null)
-            field.flash = menu.getPages();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>

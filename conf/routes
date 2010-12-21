@@ -23,7 +23,7 @@ GET     /menus/new                                            MenuController.new
 GET     /menus/create                                         MenuController.newMenu
 GET     /menus/edit/{name}                                    MenuController.edit
 GET     /menus/delete/{name}                                  MenuController.delete
-POST    /menus/create                                         MenuController.doEditMenu(action:'create')
+POST    /menus/create/{name}                                  MenuController.doEditMenu(action:'create')
 POST    /menus/edit/{name}                                    MenuController.doEditMenu(action:'edit')
 
 # Captcha generator

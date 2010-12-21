@@ -23,6 +23,8 @@ public class Menu extends MongoEntity {
    }
 
    public static Menu findOrCreateByName(String name) {
+      if (name == null || name.isEmpty())
+         return null;
       Menu menu = Menu.findByName(name);
       if (menu == null) {
          menu = new Menu(name);
@@ -32,7 +34,7 @@ public class Menu extends MongoEntity {
    }
 
    public static Menu findByName(String name) {
-      if (name.isEmpty())
+      if (name == null || name.isEmpty())
          return null;
       return MongoEntity.getDs().find(Menu.class, "name", name).get();
    }

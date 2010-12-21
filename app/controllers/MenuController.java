@@ -12,9 +12,7 @@ import play.mvc.With;
 public class MenuController extends Controller {
 
    public static void editMenu(String action, String name) {
-      Menu menu = null;
-      if (name != null)
-         Menu.findOrCreateByName(name);
+      Menu menu = Menu.findOrCreateByName(name);
       render(action, menu);
    }
 
@@ -30,8 +28,11 @@ public class MenuController extends Controller {
       Menu.delete(name);
    }
 
-   public static void doEditMenu(String action, String name) {
-      
+   public static void doEditMenu(String action) {
+      String name = params.get("name");
+      Menu menu = Menu.findOrCreateByName(name);
+      /* TODO: edit menus */
+      menu.save();
    }
 
 }
