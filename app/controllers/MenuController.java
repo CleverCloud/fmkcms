@@ -11,6 +11,10 @@ import play.mvc.With;
 @With(Secure.class)
 public class MenuController extends Controller {
 
+   public static void newMenu() {
+      render();
+   }
+
    public static void deleteMenu(String name) {
       Menu.delete(name);
    }

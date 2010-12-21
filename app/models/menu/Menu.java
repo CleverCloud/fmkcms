@@ -22,14 +22,18 @@ public class Menu extends MongoEntity {
    }
 
    public static Menu findOrCreateByName(String name) {
-      if (name.isEmpty())
-         return null;
-      Menu menu = MongoEntity.getDs().find(Menu.class, "name", name).get();
+      Menu menu = Menu.findByName(name);
       if (menu == null) {
          menu = new Menu(name);
          menu.save();
       }
       return menu;
+   }
+
+   public static Menu findByName(String name) {
+      if (name.isEmpty())
+         return null;
+      return MongoEntity.getDs().find(Menu.class, "name", name).get();
    }
 
    public static void delete(String name) {
