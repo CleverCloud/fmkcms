@@ -2,21 +2,39 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                                                PageViewer.index
-GET     /page/{urlId}                                    PageViewer.page
-GET     /pages/tag/{tagName}                             PageViewer.pagesTag
-*       /pages/search                                    PageViewer.searchPage
-GET     /newPage                                         PageController.newPage(action:'create',otherUrlId:'',language:'')
-GET     /bootstrap/{action}/{otherUrlId}                 PageController.newPage(language:'')
-GET     /page/{action}/{otherUrlId}/from/{language}      PageController.newPage
-POST    /doNewPage                                       PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
-POST    /doNewPage/{action}/{otherUrlId}/{otherLanguage} PageController.doNewPage
-GET     /captcha/{randomID}                              BlogViewer.captcha
-GET     /blog                                            BlogViewer.index
-GET     /post/{title}                                    BlogViewer.show
-GET     /posts/{tagName}                                 BlogViewer.listTagged
-GET     /newPost                                         BlogController.newPost(action:'create',otherTitle:'',language:'')
-GET     /post/{action}/{otherTitle}/from/{language}      BlogController.newPost
-POST    /doNewPost                                       BlogController.doNewPost(action:'create',otherTitle:'',otherLanguage:'')
-POST    /doNewPost/{action}/{otherTitle}/{otherLanguage} BlogController.doNewPost
-POST    /post/{title}/comments                           BlogController.postComment
+# Index stuff
+GET     /                                                     PageViewer.index
+
+# Pages handling stuff
+# List tagged, search, create, edit, translate...
+# Paths start with /pages to avoid collisions with pages urlIds
+GET     /pages/tagged/{tagName}                               PageViewer.pagesTag
+*       /pages/search                                         PageViewer.searchPage
+GET     /pages/new                                            PageController.newPage(action:'create',otherUrlId:'',language:'')
+POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
+GET     /pages/{action}/{otherUrlId}/from/{language}          PageController.newPage
+POST    /pages/{action}/{otherUrlId}/{otherLanguage}          PageController.doNewPage
+
+# Page accessing stuff
+GET     /page/{urlId}                                         PageViewer.page
+
+# Captcha generator
+GET     /captcha/{randomID}                                   BlogViewer.captcha
+
+# Blog stuff starts here
+GET     /blog                                                 BlogViewer.index
+
+# Posts handling stuff, see Pages handling stuff
+GET     /blog/posts/tagged/{tagName}                          BlogViewer.listTagged
+GET     /blog/posts/last                                      BlogViewer.last
+GET     /blog/posts/new                                       BlogController.newPost(action:'create',otherUrlId:'',language:'')
+POST    /blog/posts/new                                       BlogController.doNewPost(action:'create',otherUrlId:'',otherLanguage:'')
+GET     /blog/posts/{action}/{otherUrlId}/from/{language}     BlogController.newPost
+POST    /blog/posts/{action}/{otherUrlId}/{otherLanguage}     BlogController.doNewPost
+
+# Post accessing stuff + Comments posting stuff
+GET     /blog/post/{urlId}                                    BlogViewer.show
+POST    /blog/post/{urlId}/comment/new                        BlogController.postComment
+
+# Rss
+GET     /blog/rss/{lang}                                      Feeds.main

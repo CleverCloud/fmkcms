@@ -54,6 +54,10 @@ public class PageViewer extends Controller {
         }
     }
 
+    public static Page getGoodPageByUrlId(String urlId) {
+       return PageViewer.getGoodPage(Page.getPagesByUrlId(urlId));
+    }
+
     public static void index() {
         PageViewer.page(Play.configuration.getProperty("fmkcms.index", "index"));
     }

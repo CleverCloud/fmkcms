@@ -2,7 +2,7 @@
 
 <div class="post ${_as == 'teaser' ? 'teaser' : ''}">
     <h2 class="post-title">
-        <a href="@{BlogViewer.show(_post.title)}">${_post.title}</a>
+        <a href="@{BlogViewer.show(_post.urlId)}">${_post.title}</a>
     </h2>
     <div class="post-metadata">
         <span class="post-author">by ${_post.postReference.author}</span>,
@@ -40,9 +40,11 @@
 #{if _as == 'full'}
     #{if _isConnected}
     <div class="translateMe">
-        <a href="@{BlogController.newPost("translate", _post.title, _post.language)}">Translate me !</a>
+        <a href="@{BlogController.newPost("translate", _post.urlId, _post.language)}">Translate me !</a>
         &nbsp;|&nbsp;
-        <a href="@{BlogController.newPost("edit", _post.title, _post.language)}">Edit me !</a>
+        <a href="@{BlogController.newPost("edit", _post.urlId, _post.language)}">Edit me !</a>
+        &nbsp;|&nbsp;
+        <a href="@{BlogController.newPost("delete", _post.urlId, _post.language)}">Delete me !</a>
     </div>
     #{/if}
     <div class="comments">

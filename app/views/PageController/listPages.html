@@ -1,0 +1,27 @@
+#{extends 'main.html' /}
+#{set title:'list Pages' /}
+
+
+<table class="listofpage">
+    #{list items:pages, as:'p'}
+    <tr>
+        <td>----------</td>
+    </tr>
+    #{list items:p.getAvailableLocalesAndPages(), as:'ppp'}
+    <tr>
+        #{set pp:ppp.getValue()/}
+        <td>${pp.language}</td>
+        <td>${pp.title}</td>
+        <td>${pp.urlId}</td>
+        <td>#{a @PageController.newPage("edit", pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
+        <td>#{a @PageController.newPage("delete", pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
+        <td>#{a @PageController.newPage("translate", pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
+        <td>#{a @PageViewer.page(pp.urlId)}&{'admin.see'}#{/a}</td>
+    </tr>
+    #{/list}
+
+    #{/list}
+
+    #{a @PageController.listPages((pagenumber-1)>0 ? pagenumber - 1 : 0 )} << #{/a} | #{a @PageController.listPages(pagenumber+1)} >> #{/a}
+
+</table>

@@ -16,7 +16,7 @@ import play.jobs.OnApplicationStart;
  * this is a functionality disabled for now but it can be fine to add search in all page
  *
  */
-@OnApplicationStart
+// @OnApplicationStart
 public class AddSearch extends Job {
 
     @Override

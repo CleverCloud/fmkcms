@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: "[CORE] Routes manager"
+desc: Add an interface to manage routes without editing conf/routes (on-the-fly/on-the-web)
+type: :feature
+component: fmkcms
+release: 
+reporter: Kevin Decherf <kdecherf@gmail.com>
+status: :unstarted
+disposition: 
+creation_time: 2010-11-30 09:33:36.940023 Z
+references: []
+
+id: 4ba16924bb58d11d8566ae779210a9bbca820319
+log_events: 
+- - 2010-11-30 09:33:39.336284 Z
+  - Kevin Decherf <kdecherf@gmail.com>
+  - created
+  - ""

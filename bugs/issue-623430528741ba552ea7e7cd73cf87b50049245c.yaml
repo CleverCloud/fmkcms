@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: upgrade morphia 0.98
+desc: ""
+type: :task
+component: fmkcms
+release: 
+reporter: Quentin ADAM <quentin.adam@waxzce.org>
+status: :unstarted
+disposition: 
+creation_time: 2010-12-14 13:12:05.607161 Z
+references: []
+
+id: 623430528741ba552ea7e7cd73cf87b50049245c
+log_events: 
+- - 2010-12-14 13:12:07.662836 Z
+  - Quentin ADAM <quentin.adam@waxzce.org>
+  - created
+  - ""

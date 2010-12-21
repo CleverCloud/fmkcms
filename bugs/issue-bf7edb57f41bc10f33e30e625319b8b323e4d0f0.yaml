@@ -1,0 +1,20 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: Make a real search page
+desc: Really display the results, not only a JSON
+type: :feature
+component: fmkcms
+release: 
+reporter: Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+status: :unstarted
+disposition: 
+creation_time: 2010-12-06 14:39:42.776000 Z
+references: []
+
+id: bf7edb57f41bc10f33e30e625319b8b323e4d0f0
+log_events: 
+  - - 2010-12-06 14:39:45.241000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - created
+    - ""
+git_branch: 
+claimer: 

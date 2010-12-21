@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,6 +21,13 @@ import play.mvc.With;
 @With(Secure.class)
 public class PageController extends Controller {
 
+    public static void listPages(Integer pagenumber) {
+        if (pagenumber == null)
+            pagenumber = 0;
+        List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
+        render(pages, pagenumber);
+    }
+
     public static void deletePage(String urlId, String language) {
         Page page = Page.getPageByLocale(urlId, new Locale(language));
         if (page == null)
@@ -34,7 +42,14 @@ public class PageController extends Controller {
     public static void newPage(String action, String otherUrlId, String language) {
         if (action.equals("delete"))
             PageController.deletePage(otherUrlId, language);
-        render(action, otherUrlId, language);
+        Page otherPage = null;
+
+        if (otherUrlId != null) {
+            if (!otherUrlId.equals(""))
+                otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
+        }
+
+        render(action, otherUrlId, language, otherPage);
     }
 
     public static void doNewPage(String action, String otherUrlId, String otherLanguage) {
@@ -76,16 +91,7 @@ public class PageController extends Controller {
         page.pageReference.save();
         page.save();
 
-        String menus = params.get("menus");
-        Menu menu;
-        if (menus != null && !menus.isEmpty()) {
-            for (String m : Arrays.asList(menus.split(","))) {
-               menu = Menu.findOrCreateByName(m);
-               menu.addPage(page).save();
-            }
-        }
-
-        if (page.published)
+        if (page.published) 
             PageViewer.page(urlId);
         else
             PageViewer.index();
