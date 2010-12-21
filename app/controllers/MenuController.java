@@ -11,17 +11,27 @@ import play.mvc.With;
 @With(Secure.class)
 public class MenuController extends Controller {
 
-   public static void newMenu() {
-      render();
+   public static void editMenu(String action, String name) {
+      Menu menu = null;
+      if (name != null)
+         Menu.findOrCreateByName(name);
+      render(action, menu);
    }
 
-   public static void deleteMenu(String name) {
+   public static void newMenu() {
+      MenuController.editMenu("create", null);
+   }
+
+   public static void edit(String name) {
+      MenuController.editMenu("edit", name);
+   }
+
+   public static void delete(String name) {
       Menu.delete(name);
    }
 
-   public static void editMenu(String name) {
-      Menu menu = Menu.findOrCreateByName(name);
-      render(menu);
+   public static void doEditMenu(String action, String name) {
+      
    }
 
 }

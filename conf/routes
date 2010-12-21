@@ -18,6 +18,14 @@ POST    /pages/{action}/{otherUrlId}/{otherLanguage}          PageController.doN
 # Page accessing stuff
 GET     /page/{urlId}                                         PageViewer.page
 
+# Menus stuff
+GET     /menus/new                                            MenuController.newMenu
+GET     /menus/create                                         MenuController.newMenu
+GET     /menus/edit/{name}                                    MenuController.edit
+GET     /menus/delete/{name}                                  MenuController.delete
+POST    /menus/create                                         MenuController.doEditMenu(action:'create')
+POST    /menus/edit/{name}                                    MenuController.doEditMenu(action:'edit')
+
 # Captcha generator
 GET     /captcha/{randomID}                                   BlogViewer.captcha
 
