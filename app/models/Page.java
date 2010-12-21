@@ -14,6 +14,7 @@ import javax.persistence.Lob;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import org.elasticsearch.search.SearchHit;
+import org.jsoup.Jsoup;
 import play.data.validation.Required;
 import play.mvc.Router;
 
@@ -132,7 +133,7 @@ public class Page extends MongoEntity implements Searchable {
    }
 
    public String getPrintDesc() {
-      return content;
+      return Jsoup.parse(this.content).body().text();
    }
 
    public String getPrintURL() {

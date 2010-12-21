@@ -15,6 +15,8 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.xcontent.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import play.Logger;
 import play.Play;
 
