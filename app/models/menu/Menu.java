@@ -3,6 +3,8 @@ package models.menu;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import mongo.MongoEntity;
 import play.data.validation.Required;
 
@@ -55,6 +57,18 @@ public class Menu extends MongoEntity {
    public Menu removeItem(MenuItem item) {
       this.items.remove(item);
       return this.save();
+   }
+
+   public static List<Menu> findAll() {
+      return MongoEntity.getDs().find(Menu.class).asList();
+   }
+
+   public static Set<String> getAllNames() {
+      Set<String> names = new TreeSet<String>();
+      for (Menu menu : Menu.findAll())
+         names.add(menu.name);
+      names.add("");
+      return names;
    }
 
 }

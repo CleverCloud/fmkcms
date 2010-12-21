@@ -33,5 +33,17 @@ You are adding an item to &{name} <br />
 </p>
 #{/}
 
+#{field 'item.subMenu'}
+<p>
+    <label>SubMenu: </label>
+    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+        #{list items:models.menu.Menu.getAllNames(), as:'m'}
+            <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="true"'.raw() : ''}>${m}</option>
+        #{/list}
+    </select>
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 <input type="submit" value="ok" />
 #{/form}
