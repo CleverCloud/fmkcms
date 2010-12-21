@@ -55,7 +55,7 @@ public class ConfESJob extends Job {
    private void addMapping(String typeName) {
       String indexname = Play.configuration.getProperty("elasticsearch.indexname");
       VirtualFile vf = Play.getVirtualFile("conf/es_mapping/" + typeName + ".json");
-      if (vf.exists()) {
+      if (vf != null && vf.exists()) {
          PutMappingRequest pmr = new PutMappingRequest();
          pmr.indices(new String[]{indexname}).type(typeName).source(vf.contentAsString());
          admin.indices().putMapping(pmr);
