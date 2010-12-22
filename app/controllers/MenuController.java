@@ -19,9 +19,10 @@ import play.mvc.With;
 public class MenuController extends Controller {
 
    public static void edit(String action, String name) {
-      if (action.equals("delete"))
-         Menu.delete(name);
-      else {
+      if (action.equals("delete")) {
+         System.out.println("delete " + name);
+	 Menu.delete(name);
+      } else {
          render(action, name);
       }
    }
@@ -31,7 +32,7 @@ public class MenuController extends Controller {
    }
 
    public static void doEdit(String action) {
-      Menu.findOrCreateByName(params.get("menu.name"));
+      Menu.findOrCreateByName(params.get("menu.name").replaceAll("[ #\\.]", "-"));
    }
 
    public static void addItem(String name) {
@@ -66,7 +67,8 @@ public class MenuController extends Controller {
       else
          return;
 
-      item.menu = Menu.findByName(params.get("item.subMenu"));
+      item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
+      item.cssLinkClass = params.get("item.cssLink");
       item.save();
       menu.addItem(item);
    }
