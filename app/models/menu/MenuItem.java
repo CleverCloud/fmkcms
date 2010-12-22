@@ -22,4 +22,9 @@ public abstract class MenuItem extends MongoEntity {
 
    public abstract String getLink();
 
+   public void setMenu(Menu menu) {
+      if (menu.isTree(this))
+         this.menu = menu;
+   }
+
 }

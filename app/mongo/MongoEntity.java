@@ -4,8 +4,6 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
-import java.lang.Class;
-import java.util.List;
 import org.bson.types.ObjectId;
 import play.Play;
 
@@ -36,5 +34,27 @@ public abstract class MongoEntity {
     public void delete() {
         MongoEntity.getDs().delete(this);
     }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final MongoEntity other = (MongoEntity) obj;
+      if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+         return false;
+      }
+      return true;
+   }
+
+   @Override
+   public int hashCode() {
+      int hash = 5;
+      hash = 89 * hash + (this.id != null ? this.id.hashCode() : 0);
+      return hash;
+   }
 
 }
