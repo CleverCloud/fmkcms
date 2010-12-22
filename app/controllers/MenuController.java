@@ -19,9 +19,10 @@ import play.mvc.With;
 public class MenuController extends Controller {
 
    public static void edit(String action, String name) {
-      if (action.equals("delete"))
-         Menu.delete(name);
-      else {
+      if (action.equals("delete")) {
+         System.out.println("delete " + name);
+	 Menu.delete(name);
+      } else {
          render(action, name);
       }
    }
