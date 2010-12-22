@@ -1,5 +1,6 @@
 package models.menu;
 
+import com.google.code.morphia.annotations.Reference;
 import mongo.MongoEntity;
 
 /**
@@ -8,6 +9,7 @@ import mongo.MongoEntity;
  */
 public abstract class MenuItem extends MongoEntity {
 
+   @Reference
    public Menu menu;
    public String displayStr;
 
@@ -23,7 +25,7 @@ public abstract class MenuItem extends MongoEntity {
    public abstract String getLink();
 
    public void setMenu(Menu menu) {
-      if (menu.isTree(this))
+      if (menu != null && menu.isTree(this))
          this.menu = menu;
    }
 
