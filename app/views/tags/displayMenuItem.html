@@ -1,4 +1,4 @@
-<li class="menuItem ${request.url.equals(_menuItem.getLink()) ? ' active' : ''} ${liCss}">
+<li class="menuItem ${request.url.equals(_menuItem.getLink()) ? ' active' : ''} ${_liCss}">
 #{if _menuItem.getLink()}
    <a href="${_menuItem.getLink()}" #{if _menuItem.cssLinkClass}class="${_menuItem.cssLinkClass}"#{/if}>${_menuItem.displayStr}</a>
 #{/if}
