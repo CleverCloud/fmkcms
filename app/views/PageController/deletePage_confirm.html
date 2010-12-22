@@ -1,0 +1,11 @@
+#{extends 'main.html' /}
+#{set title:'Confirm page deletion' /}
+<div class="deleteWrapper">
+	<h3>&{'page.deleteconfirm'}</h3>
+	<div>${page.title}</div>
+	<div>&nbsp;</div>
+	<div class="buttons ">
+		<input type="button" name="yes" value="Yes" onclick="self.location.href='@{PageController.deletePage(page.urlId, page.language)}'" >
+		<input type="button" name="no" value="No" onclick="self.location.href='@{Application.index}'" >
+	</div>
+</div>

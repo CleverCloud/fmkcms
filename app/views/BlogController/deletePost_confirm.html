@@ -1,0 +1,11 @@
+#{extends 'main.html' /}
+#{set title:'Confirm post deletion' /}
+<div class="deleteWrapper">
+	<h3>&{'post.deleteconfirm'}</h3>
+	<div>${post.title}</div>
+	<div>&nbsp;</div>
+	<div class="buttons ">
+		<input type="button" name="yes" value="Yes" onclick="self.location.href='@{BlogController.deletePost(post.urlId, post.language)}'" >
+		<input type="button" name="no" value="No" onclick="self.location.href='@{Application.index}'" >
+	</div>
+</div>
