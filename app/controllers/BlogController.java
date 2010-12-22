@@ -23,7 +23,12 @@ import play.mvc.With;
  */
 @With(Secure.class)
 public class BlogController extends Controller {
-
+	
+	public static void deletePost_confirm(String urlId, String language) {
+	  Post post = Post.getPostByLocale(urlId, new Locale(language));
+	  render(post);
+	}
+	
     public static void deletePost(String urlId, String language) {
         Post post = Post.getPostByLocale(urlId, new Locale(language));
         if (post == null) {
@@ -39,7 +44,7 @@ public class BlogController extends Controller {
 
     public static void newPost(String action, String otherUrlId, String language) {
         if (action.equals("delete")) {
-            BlogController.deletePost(otherUrlId, language);
+            BlogController.deletePost_confirm(otherUrlId, language);
         }
 
         Post otherPost = null;

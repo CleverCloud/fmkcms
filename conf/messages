@@ -9,3 +9,5 @@ admin.edit=edit
 admin.delete=delete
 admin.see=go to
 admin.addnewlocale=add a new traduction
+page.deleteconfirm= Please confirm page deletion of :
+post.deleteconfirm= Please confirm post deletion of : 

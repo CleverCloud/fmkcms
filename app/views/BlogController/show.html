@@ -2,14 +2,14 @@
 #{set title:post.title /}
 
 <ul id="pagination">
-    #{if post.postReference.next()}
+    #{if postNext}
         <li id="next">
             <a href="@{BlogViewer.show(postNext.urlId)}">
                 << ${postNext.title}
             </a>
         </li>
     #{/if}
-    #{if post.postReference.previous()}
+    #{if postPrevious}
         <li id="previous">
             <a href="@{BlogViewer.show(postPrevious.urlId)}">
                 ${postPrevious.title} >>

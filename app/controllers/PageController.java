@@ -49,7 +49,7 @@ public class PageController extends Controller {
 
 		public static void newPage(String action, String otherUrlId, String language) {
 		  if (action.equals("delete")) {
-			 PageController.deletePage(otherUrlId, language);
+			 PageController.deletePage_confirm(otherUrlId, language);
 		  }
 		  Page otherPage = null;
 
