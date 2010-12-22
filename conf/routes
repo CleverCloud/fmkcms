@@ -12,7 +12,7 @@ GET     /pages/tagged/{tagName}                               PageViewer.pagesTa
 *       /pages/search                                         SearchController.search
 GET     /pages/new                                            PageController.newPage(action:'create',otherUrlId:'',language:'')
 POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
-GET     /pages/confirmDelete/{otherUrlId}/from/{language}     PageController.deletePage
+GET     /pages/confirmDelete/{urlId}/from/{language}     PageController.deletePage_confirm
 GET     /pages/{action}/{otherUrlId}/from/{language}          PageController.newPage
 POST    /pages/{action}/{otherUrlId}/{otherLanguage}          PageController.doNewPage
 
@@ -38,7 +38,7 @@ GET     /blog/posts/tagged/{tagName}                          BlogViewer.listTag
 GET     /blog/posts/last                                      BlogViewer.last
 GET     /blog/posts/new                                       BlogController.newPost(action:'create',otherUrlId:'',language:'')
 POST    /blog/posts/new                                       BlogController.doNewPost(action:'create',otherUrlId:'',otherLanguage:'')
-GET     /blog/confirmDelete/{otherUrlId}/from/{language}      BlogController.deletePost
+GET     /blog/confirmDelete/{urlId}/from/{language}      BlogController.deletePost_confirm
 GET     /blog/posts/{action}/{otherUrlId}/from/{language}     BlogController.newPost
 POST    /blog/posts/{action}/{otherUrlId}/{otherLanguage}     BlogController.doNewPost
 
