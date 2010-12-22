@@ -15,7 +15,7 @@
 
 #{field 'post.urlId'}
 <p>
-    <label>Url ID: </label>
+    <label for="${field.name}">Url ID: </label>
     %{
     if (field.flash == null && otherPost != null)
     field.flash = otherPost.urlId;
@@ -27,7 +27,7 @@
 
 #{field 'post.title'}
 <p>
-    <label>Title: </label>
+    <label for="${field.name}">Title: </label>
     %{
     if (field.flash == null && otherPost != null)
     field.flash = otherPost.title;
@@ -39,7 +39,7 @@
 
 #{field 'post.content'}
 <p>
-    <label>Content: </label>
+    <label for="${field.name}">Content: </label>
     %{
     if (field.flash == null && otherPost != null)
     field.flash = otherPost.content;
@@ -52,7 +52,7 @@
 
 #{field 'post.language'}
 <p>
-    <label>Language: </label>
+   <label for="${field.name}">Language: </label>
     #{if action.equals("edit")}
     <input type="hidden" id="${field.id}" name="${field.name}" value="${language}" class="${field.errorClass}" />
     ${language}
@@ -70,7 +70,7 @@
 
 #{field 'postReference.tags'}
 <p>
-    <label>Tags: </label>
+    <label for="${field.name}">Tags: </label>
     %{
     if (field.flash == null && otherPost != null)
     field.flash = otherPost.postReference.getTagsAsString();
