@@ -24,8 +24,8 @@ public abstract class MenuItem extends MongoEntity {
 
    public abstract String getLink();
 
-   public void setMenu(Menu menu) {
-      if (menu != null && menu.isTree(this))
+   public void setMenu(Menu menu, Menu parent) {
+      if (menu != null && menu.isTree(this, parent))
          this.menu = menu;
    }
 

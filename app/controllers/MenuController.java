@@ -66,7 +66,7 @@ public class MenuController extends Controller {
       else
          return;
 
-      item.menu = Menu.findByName(params.get("item.subMenu"));
+      item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
       item.save();
       menu.addItem(item);
    }
