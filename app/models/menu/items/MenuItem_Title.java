@@ -23,7 +23,7 @@ public class MenuItem_Title extends MenuItem {
 
    @Override
    public String getLink() {
-      return "#" + this.title;
+      return null;
    }
 
 }
