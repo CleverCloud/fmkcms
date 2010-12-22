@@ -71,4 +71,14 @@ public class Menu extends MongoEntity {
       return names;
    }
 
+   public Boolean isTree(MenuItem item, Menu menu) {
+      if (item == null)
+         return Boolean.TRUE;
+      for (MenuItem i : this.items) {
+         if (i.menu != null && (i.menu.equals(menu) || !i.menu.isTree(item, menu)))
+            return Boolean.FALSE;
+      }
+      return Boolean.TRUE;
+   }
+
 }

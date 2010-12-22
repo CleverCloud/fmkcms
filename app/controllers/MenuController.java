@@ -66,7 +66,8 @@ public class MenuController extends Controller {
       else
          return;
 
-      item.menu = Menu.findByName(params.get("item.subMenu"));
+      item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
+      item.cssLinkClass = params.get("item.cssLink");
       item.save();
       menu.addItem(item);
    }
