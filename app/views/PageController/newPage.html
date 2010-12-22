@@ -1,4 +1,7 @@
 #{extends 'main.html' /}
+#{script 'ckeditor/ckeditor.js' /}
+#{script 'ckeditor/adapters/jquery.js' /}
+#{script 'ckeditor.js' /}
 #{set title:'New Page' /}
 
 
@@ -20,7 +23,6 @@
         if (field.flash == null && otherPage != null)
             field.flash = otherPage.title;
     }%
-    *{ TODO: waxzce, aloha here ! }*
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
@@ -64,14 +66,6 @@
         #{/list}
     </select>
     #{/else}
-    <span class="error">${field.error}</span>
-</p>
-#{/}
-
-#{field 'menus'}
-<p>
-    <label>Add to menus: </label>
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}

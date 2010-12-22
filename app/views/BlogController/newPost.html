@@ -1,4 +1,7 @@
 #{extends 'main.html' /}
+#{script 'ckeditor/ckeditor.js' /}
+#{script 'ckeditor/adapters/jquery.js' /}
+#{script 'ckeditor.js' /}
 #{set title:'New Post' /}
 
 
@@ -44,7 +47,6 @@
     if (field.flash == null && otherPost != null)
     field.flash = otherPost.content;
     }%
-    *{ TODO: waxzce, aloha here ! }*
     <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
     <span class="error">${field.error}</span>
 </p>
