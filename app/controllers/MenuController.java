@@ -31,7 +31,7 @@ public class MenuController extends Controller {
    }
 
    public static void doEdit(String action) {
-      Menu.findOrCreateByName(params.get("menu.name"));
+      Menu.findOrCreateByName(params.get("menu.name").replaceAll("[ #\\.]", "-"));
    }
 
    public static void addItem(String name) {

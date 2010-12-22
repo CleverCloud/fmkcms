@@ -1,5 +1,5 @@
 #{if _menu}
-<ul class="menu">
+<ul class="menu" id="${_menu.name}-menu">
    #{list items:_menu.items, as:'item'}
    #{displayMenuItem menuItem:item /}
    #{/list}
