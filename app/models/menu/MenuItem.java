@@ -12,6 +12,7 @@ public abstract class MenuItem extends MongoEntity {
    @Reference
    public Menu menu;
    public String displayStr;
+   public String cssLinkClass;
 
    public MenuItem(String displayStr) {
       this.displayStr = displayStr;

@@ -33,6 +33,14 @@ You are adding an item to &{name} <br />
 </p>
 #{/}
 
+#{field 'item.cssLink'}
+<p>
+    <label>Additionnal css class for the link: </label>
+    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <span class="error">${field.error}</span>
+</p>
+#{/}
+
 #{field 'item.subMenu'}
 <p>
     <label>SubMenu: </label>
