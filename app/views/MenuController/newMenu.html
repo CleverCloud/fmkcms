@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'New Menu' /}
 
-#{form @MenuController.doEdit(action) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @MenuController.newMenu_end() , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'menu.name'}
 <p>

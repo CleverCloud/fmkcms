@@ -6,7 +6,7 @@
     #{list items:menus, as:'m'}
     <tr>
         <td>${m.name}</td>
-        <td>#{a @MenuController.edit("",m.name)}&{'admin.menu.edit'}#{/a}</td>
+        <td>#{a @MenuController.edit(m.id.toStringMongod())}&{'admin.menu.edit'}#{/a}</td>
         <td>#{a @MenuController.delete(m.id.toStringMongod())}&{'admin.menu.delete'}#{/a}</td>
     </tr>
     #{/list}

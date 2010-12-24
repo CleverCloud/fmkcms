@@ -1,16 +1,12 @@
 #{extends 'main.html' /}
 #{set title:'Edit Menu' /}
 
-#{form @MenuController.doEdit(action) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @MenuController.edit_end(menu.id.toStringMongod()) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'menu.name'}
 <p>
     <label>Name: </label>
-    %{
-        if (field.flash == null && name)
-            field.flash = name;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+    <input type="text" id="${field.id}" name="${field.name}" value="${menu.name}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
 </p>
 #{/}
@@ -18,6 +14,4 @@
 <input type="submit" value="ok" />
 #{/form}
 
-#{if action.equals("edit")}
 <a href="@{MenuController.addItem(name)}">Add menu item</a>
-#{/if}
