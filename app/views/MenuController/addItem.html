@@ -1,9 +1,9 @@
 #{extends 'main.html' /}
 #{set title:'Edit Menu' /}
 
-You are adding an item to &{name} <br />
+You are adding an item to &{menu.name} <br />
 
-#{form @MenuController.doAddItem(name) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @MenuController.doAddItem(menu.id.toStringMongod()) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'item.type'}
 <p>

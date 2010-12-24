@@ -25,10 +25,17 @@ public class MenuController extends Controller {
 
     public static void edit(String id) {
         Menu menu = Menu.getByMongodStringId(id);
+        if (menu == null) {
+            notFound();
+        }
         render(menu);
     }
+
     public static void edit_end(String id) {
         Menu menu = Menu.getByMongodStringId(id);
+        if (menu == null) {
+            notFound();
+        }
         menu.name = params.get("menu.name");
         menu.save();
         list();
@@ -48,8 +55,9 @@ public class MenuController extends Controller {
         list();
     }
 
-    public static void addItem(String name) {
-        if (name == null || name.isEmpty()) {
+    public static void addItem(String id) {
+        Menu menu = Menu.getByMongodStringId(id);
+        if (menu == null) {
             notFound();
         }
         List<String> types = new ArrayList<String>();
@@ -57,11 +65,14 @@ public class MenuController extends Controller {
         types.add("LinkToPage");
         types.add("OutgoingURL");
         types.add("Title");
-        render(name, types);
+        render(menu, types);
     }
 
-    public static void doAddItem(String name) {
-        Menu menu = Menu.findOrCreateByName(name);
+    public static void doAddItem(String id) {
+        Menu menu = Menu.getByMongodStringId(id);
+        if (menu == null) {
+            notFound();
+        }
         MenuItem item;
         String type = params.get("item.type");
         String value = params.get("item.value");
@@ -87,5 +98,6 @@ public class MenuController extends Controller {
         item.cssLinkClass = params.get("item.cssLink");
         item.save();
         menu.addItem(item);
+        edit(id);
     }
 }

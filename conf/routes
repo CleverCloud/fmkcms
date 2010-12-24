@@ -24,10 +24,11 @@ GET     /menus/new                                            MenuController.new
 GET     /menus/create                                         MenuController.newMenu
 GET     /menus/list                                           MenuController.list
 GET     /menus/delete/{id}                                    MenuController.delete
+GET     /menus/edit/{id}                                      MenuController.edit
 GET     /menus/{action}/{name}                                MenuController.edit
 POST    /menus/{action}/{name}                                MenuController.doEdit
-GET     /menu/{name}/add                                      MenuController.addItem
-POST    /menu/{name}/add                                      MenuController.doAddItem
+GET     /menu/{id}/add                                        MenuController.addItem
+POST    /menu/{id}/add                                        MenuController.doAddItem
 
 # Captcha generator
 GET     /captcha/{randomID}                                   BlogViewer.captcha
