@@ -14,13 +14,14 @@
 <input type="submit" value="ok" />
 #{/form}
 
-<a href="@{MenuController.addItem(menu.id.toStringMongod())}">Add menu item</a>
+<a href="@{MenuController.addItem(menu.id.toStringMongod())}">&{'admin.menu.addMenuItem'}</a>
 
 <table class="listofmenuItems">
     #{list items:menu.items, as:'mi'}
     <tr>
         <td>${mi.displayStr}</td>
         <td>${mi.getLink()}</td>
+        <td>#{a @MenuController.removeItem(menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.removeItem'}#{/a}</td>
     </tr>
     #{/list}
 </table>

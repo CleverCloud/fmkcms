@@ -23,12 +23,12 @@ GET     /page/{urlId}                                         PageViewer.page
 GET     /menus/new                                            MenuController.newMenu
 GET     /menus/create                                         MenuController.newMenu
 GET     /menus/list                                           MenuController.list
-GET     /menus/delete/{id}                                    MenuController.delete
-GET     /menus/edit/{id}                                      MenuController.edit
-GET     /menus/{action}/{name}                                MenuController.edit
-POST    /menus/{action}/{name}                                MenuController.doEdit
-GET     /menu/{id}/add                                        MenuController.addItem
-POST    /menu/{id}/add                                        MenuController.doAddItem
+GET     /menu/{id}/delete                                     MenuController.delete
+GET     /menu/{id}/edit                                       MenuController.edit
+POST    /menu/{id}/edit                                       MenuController.edit_end
+GET     /menu/{id}/items/new                                  MenuController.addItem
+POST    /menu/{id}/items/new                                  MenuController.doAddItem
+GET     /menu/{idMenu}/item/{idMenuItem}/remove               MenuController.removeItem
 
 # Captcha generator
 GET     /captcha/{randomID}                                   BlogViewer.captcha

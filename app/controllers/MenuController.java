@@ -100,4 +100,15 @@ public class MenuController extends Controller {
         menu.addItem(item);
         edit(id);
     }
+
+    public static void removeItem(String idMenu, String idMenuItem) {
+        Menu menu = Menu.getByMongodStringId(idMenu);
+        MenuItem item = MenuItem.getByMongodStringId(idMenuItem);
+        if (menu == null || item == null) {
+            notFound();
+        }
+        System.out.println("zedze " + item);
+        menu.removeItem(item);
+        edit(idMenu);
+    }
 }
