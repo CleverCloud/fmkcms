@@ -1,0 +1,13 @@
+#{extends 'main.html' /}
+#{set title:'list Menus' /}
+
+#{a @MenuController.newMenu()}&{'admin.menu.new'}#{/a}
+<table class="listofmenus">
+    #{list items:menus, as:'m'}
+    <tr>
+        <td>${m.name}</td>
+        <td>#{a @MenuController.edit("",m.name)}&{'admin.menu.edit'}#{/a}</td>
+        <td>#{a @MenuController.delete(m.id.toStringMongod())}&{'admin.menu.delete'}#{/a}</td>
+    </tr>
+    #{/list}
+</table>

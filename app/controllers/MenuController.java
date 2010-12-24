@@ -15,24 +15,34 @@ import play.mvc.With;
  *
  * @author keruspe
  */
-@With(Secure.class)
+//@With(Secure.class)
 public class MenuController extends Controller {
+
+    public static void list() {
+      List<Menu> menus = Menu.findAll();
+      render(menus);
+   }
 
    public static void edit(String action, String name) {
       if (action.equals("delete")) {
-         System.out.println("delete " + name);
-	 Menu.delete(name);
+	 new RuntimeException("a delete menu is find - please replace code");
       } else {
          render(action, name);
       }
    }
 
+   public static void delete(String id){
+       Menu.getByMongodStringId(id).delete();
+       list();
+   }
+
    public static void newMenu() {
-      MenuController.edit("create", null);
+      render();
    }
 
    public static void doEdit(String action) {
       Menu.findOrCreateByName(params.get("menu.name").replaceAll("[ #\\.]", "-"));
+      list();
    }
 
    public static void addItem(String name) {
