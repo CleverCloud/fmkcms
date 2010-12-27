@@ -93,4 +93,9 @@ public class Menu extends MongoEntity {
 
         return MongoEntity.getDs().get(Menu.class, new ObjectId(id));
     }
+
+    public static Menu getById(ObjectId id) {
+
+        return MongoEntity.getDs().get(Menu.class, id);
+    }
 }

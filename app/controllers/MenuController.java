@@ -1,15 +1,25 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import converter.MenuItemConverter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import job.WriteFileMenu;
 import models.menu.Menu;
 import models.menu.MenuItem;
 import models.menu.items.MenuItem_ControllerChain;
 import models.menu.items.MenuItem_LinkToPage;
 import models.menu.items.MenuItem_OutgoingURL;
 import models.menu.items.MenuItem_Title;
+import play.Logger;
+import play.Play;
 import play.mvc.Controller;
 import play.mvc.With;
+import play.vfs.VirtualFile;
 
 /**
  *
@@ -20,7 +30,9 @@ public class MenuController extends Controller {
 
     public static void list() {
         List<Menu> menus = Menu.findAll();
-        render(menus);
+
+        List<VirtualFile> filemenus = Play.getVirtualFile("/data/menus").list();
+        render(menus, filemenus);
     }
 
     public static void edit(String id) {
@@ -110,5 +122,22 @@ public class MenuController extends Controller {
         System.out.println("zedze " + item);
         menu.removeItem(item);
         edit(idMenu);
+    }
+
+    public static void writeMenuFile(String id) {
+        (new WriteFileMenu(Menu.getByMongodStringId(id))).now();
+        list();
+    }
+
+    public static void importMenuFromFile(String path) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).create();
+        try {
+            Menu menu = gson.fromJson(new FileReader(Play.getVirtualFile(path).getRealFile()), Menu.class);
+            menu.save();
+        } catch (FileNotFoundException e) {
+            Logger.error(e.getLocalizedMessage(), null);
+
+        }
+        list();
     }
 }

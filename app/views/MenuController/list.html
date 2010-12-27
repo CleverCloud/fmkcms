@@ -8,6 +8,16 @@
         <td>${m.name}</td>
         <td>#{a @MenuController.edit(m.id.toStringMongod())}&{'admin.menu.edit'}#{/a}</td>
         <td>#{a @MenuController.delete(m.id.toStringMongod())}&{'admin.menu.delete'}#{/a}</td>
+        <td>#{a @MenuController.writeMenuFile(m.id.toStringMongod())}&{'admin.menu.writeFile'}#{/a}</td>
+    </tr>
+    #{/list}
+</table>
+&{'admin.menu.importfromfiletext'}
+<table class="listofmenusfiles">
+#{list items:filemenus, as:'fm'}
+    <tr>
+        <td>${fm.getName()}</td>
+        <td>#{a @MenuController.importMenuFromFile(fm.relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
     </tr>
     #{/list}
 </table>

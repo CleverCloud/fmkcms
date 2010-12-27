@@ -16,3 +16,4 @@ admin.menu.addMenuItem=add a menu item
 admin.menu.new=new menu
 admin.menu.delete=delete
 admin.menu.edit=edit
+admin.menu.writeFile=Write a file
