@@ -25,7 +25,7 @@ import play.vfs.VirtualFile;
  *
  * @author keruspe
  */
-//@With(Secure.class)
+@With(Secure.class)
 public class MenuController extends Controller {
 
     public static void list() {
