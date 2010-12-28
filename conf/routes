@@ -9,12 +9,16 @@ GET     /                                                     PageViewer.index
 # List tagged, search, create, edit, translate...
 # Paths start with /pages to avoid collisions with pages urlIds
 GET     /pages/tagged/{tagName}                               PageViewer.pagesTag
+GET     /pages/list                                           PageController.listPages
 *       /pages/search                                         SearchController.search
 GET     /pages/new                                            PageController.newPage(action:'create',otherUrlId:'',language:'')
 POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
 GET     /pages/confirmDelete/{urlId}/from/{language}          PageController.deletePage_confirm
 GET     /pages/{action}/{otherUrlId}/from/{language}          PageController.newPage
 POST    /pages/{action}/{otherUrlId}/{otherLanguage}          PageController.doNewPage
+
+# Search stuff
+GET     /admin/search                                         SearchController.indexAndStats
 
 # Page accessing stuff
 GET     /page/{urlId}                                         PageViewer.page
