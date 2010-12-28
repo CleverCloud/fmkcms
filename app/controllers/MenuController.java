@@ -124,7 +124,6 @@ public class MenuController extends Controller {
         if (menu == null || item == null) {
             notFound();
         }
-        System.out.println("zedze " + item);
         menu.removeItem(item);
         edit(idMenu);
     }
