@@ -14,11 +14,11 @@
 </table>
 &{'admin.menu.importfromfiletext'}
 <table class="listofmenusfiles">
-#{list items:filemenus, as:'fm'}
+#{list items:mapOfMenusFiles.entrySet(), as:'fm'}
     <tr>
-        <td>${fm.getName()}</td>
-        <td>#{a @MenuController.importMenuFromFile(fm.relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
-        <td>#{a @MenuController.viewMenuFromFile(fm.relativePath())}&{'admin.menu.viewthisfile'}#{/a}</td>
+        <td>${fm.getKey()}</td>
+        <td>#{a @MenuController.importMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
+        <td>#{a @MenuController.viewMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.viewthisfile'}#{/a}</td>
     </tr>
     #{/list}
 </table>
