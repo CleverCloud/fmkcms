@@ -18,6 +18,7 @@
     <tr>
         <td>${fm.getName()}</td>
         <td>#{a @MenuController.importMenuFromFile(fm.relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
+        <td>#{a @MenuController.viewMenuFromFile(fm.relativePath())}&{'admin.menu.viewthisfile'}#{/a}</td>
     </tr>
     #{/list}
 </table>

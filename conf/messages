@@ -17,3 +17,6 @@ admin.menu.new=new menu
 admin.menu.delete=delete
 admin.menu.edit=edit
 admin.menu.writeFile=Write a file
+admin.menu.importfromfiletext=Menu files import
+admin.menu.importthisfile=import this file
+admin.menu.viewthisfile=view

@@ -32,7 +32,7 @@ public class MenuController extends Controller {
         List<Menu> menus = Menu.findAll();
         List<VirtualFile> filemenus;
         try {
-            filemenus = Play.getVirtualFile("/data/menus").list();
+            filemenus = Play.getVirtualFile("data/menus/").list();
         } catch (NullPointerException e) {
             Logger.error(e.getLocalizedMessage(), null);
             filemenus = new ArrayList<VirtualFile>();
@@ -143,5 +143,17 @@ public class MenuController extends Controller {
 
         }
         list();
+    }
+
+    public static void viewMenuFromFile(String path) throws FileNotFoundException {
+        try {
+            Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().setPrettyPrinting().create();
+            Menu m = gson.fromJson(new FileReader(Play.getVirtualFile(path).getRealFile()), Menu.class);
+
+            renderText(gson.toJson(m));
+        } catch (com.google.gson.JsonParseException e) {
+            Logger.error(e.getLocalizedMessage(), null);
+            renderText((Play.getVirtualFile(path).contentAsString()));
+        }
     }
 }
