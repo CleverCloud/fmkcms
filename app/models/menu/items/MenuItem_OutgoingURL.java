@@ -2,6 +2,7 @@ package models.menu.items;
 
 import models.menu.Menu;
 import models.menu.MenuItem;
+import com.google.code.morphia.annotations.Transient;
 
 /**
  *
@@ -9,21 +10,20 @@ import models.menu.MenuItem;
  */
 public class MenuItem_OutgoingURL extends MenuItem {
 
-   public String url;
+    public String url;
 
-   public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
-      super(displayStr, menu);
-      this.url = url;
-   }
+    public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
+        super(displayStr, menu);
+        this.url = url;
+    }
 
-   public MenuItem_OutgoingURL(String url, String displayStr) {
-      super(displayStr);
-      this.url = url;
-   }
+    public MenuItem_OutgoingURL(String url, String displayStr) {
+        super(displayStr);
+        this.url = url;
+    }
 
-   @Override
-   public String getLink() {
-      return this.url;
-   }
-
+    @Override
+    public String getLink() {
+        return this.url;
+    }
 }

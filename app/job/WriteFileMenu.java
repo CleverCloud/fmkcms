@@ -30,9 +30,9 @@ public class WriteFileMenu extends Job {
     @Override
     public void doJob() throws Exception {
 
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
 
-        File f = Play.getFile("data/menus/" + JavaExtensions.slugify(menu.name, true) + ".json");
+        File f = new File(Play.applicationPath + File.separator + "data" + File.separator + "menus" + File.separator + JavaExtensions.slugify(menu.name, true) + ".json");
         f.mkdirs();
         if (f.exists()) {
             f.delete();

@@ -1,6 +1,7 @@
 package models.menu;
 
 import com.google.code.morphia.annotations.Reference;
+import javax.persistence.Transient;
 import models.menu.items.MenuItem_ControllerChain;
 import models.menu.items.MenuItem_LinkToPage;
 import models.menu.items.MenuItem_OutgoingURL;
@@ -18,6 +19,8 @@ public abstract class MenuItem extends MongoEntity {
     public Menu menu;
     public String displayStr;
     public String cssLinkClass;
+    @Transient
+    private String classname = getClass().getCanonicalName();
 
     public MenuItem(String displayStr) {
         this.displayStr = displayStr;

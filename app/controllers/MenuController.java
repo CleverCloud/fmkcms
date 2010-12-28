@@ -30,8 +30,13 @@ public class MenuController extends Controller {
 
     public static void list() {
         List<Menu> menus = Menu.findAll();
-
-        List<VirtualFile> filemenus = Play.getVirtualFile("/data/menus").list();
+        List<VirtualFile> filemenus;
+        try {
+            filemenus = Play.getVirtualFile("/data/menus").list();
+        } catch (NullPointerException e) {
+            Logger.error(e.getLocalizedMessage(), null);
+            filemenus = new ArrayList<VirtualFile>();
+        }
         render(menus, filemenus);
     }
 
