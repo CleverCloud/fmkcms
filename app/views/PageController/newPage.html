@@ -45,7 +45,7 @@
     <label>Url ID: </label>
     %{
         if (field.flash == null)
-            field.flash = otherUrlId;
+            field.flash = otherPage.urlId;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
