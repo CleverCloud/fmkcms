@@ -22,14 +22,7 @@ public abstract class MenuItem extends MongoEntity {
     @Transient
     private String classname = getClass().getCanonicalName();
 
-    public MenuItem(String displayStr) {
-        this.displayStr = displayStr;
-    }
-
-    public MenuItem(String displayStr, Menu menu) {
-        this.displayStr = displayStr;
-        this.menu = menu;
-    }
+    public MenuItem() {}
 
     public abstract String getLink();
 

@@ -18,12 +18,15 @@ public class MenuItem_ControllerChain extends MenuItem {
     public String controllerChain;
 
     public MenuItem_ControllerChain(String controllerChain, String displayStr, Menu menu) {
-        super(displayStr, menu);
-        this.controllerChain = controllerChain.trim();
+        //super(displayStr, menu);
+        this.controllerChain = controllerChain.trim(); // Morphia failure with latest play
+        this.displayStr = displayStr;
+        this.menu = menu;
     }
 
     public MenuItem_ControllerChain(String controllerChain, String displayStr) {
-        super(displayStr);
+        //super(displayStr);
+        this.displayStr = displayStr;
         this.controllerChain = controllerChain.trim();
     }
 

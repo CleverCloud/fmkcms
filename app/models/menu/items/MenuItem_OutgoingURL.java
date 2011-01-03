@@ -12,12 +12,15 @@ public class MenuItem_OutgoingURL extends MenuItem {
     public String url;
 
     public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
-        super(displayStr, menu);
+        //super(displayStr, menu); // Morphia failure with latest play
+        this.displayStr = displayStr;
+        this.menu = menu;
         this.url = url;
     }
 
     public MenuItem_OutgoingURL(String url, String displayStr) {
-        super(displayStr);
+        //super(displayStr);
+        this.displayStr = displayStr;
         this.url = url;
     }
 

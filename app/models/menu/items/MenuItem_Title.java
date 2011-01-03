@@ -14,12 +14,14 @@ public class MenuItem_Title extends MenuItem {
    
 
     public MenuItem_Title(String title, String displayStr, Menu menu) {
-        super(displayStr, menu);
+        //super(displayStr, menu); // Morphia failure with latest play
+        this.displayStr = displayStr;
+        this.menu = menu;
         this.title = title;
     }
 
     public MenuItem_Title(String title, String displayStr) {
-        super(displayStr);
+        this.displayStr = displayStr;
         this.title = title;
     }
 

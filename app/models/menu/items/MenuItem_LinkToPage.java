@@ -15,12 +15,15 @@ public class MenuItem_LinkToPage extends MenuItem {
     public String urlId;
 
     public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {
-        super(displayStr, menu);
+        //super(displayStr, menu); // Morphia failure with latest play
+        this.displayStr = displayStr;
+        this.menu = menu;
         this.urlId = urlId;
     }
 
     public MenuItem_LinkToPage(String urlId, String displayStr) {
-        super(displayStr);
+        //super(displayStr);
+        this.displayStr = displayStr;
         this.urlId = urlId;
     }
 
