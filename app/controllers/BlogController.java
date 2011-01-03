@@ -50,7 +50,7 @@ public class BlogController extends Controller {
       Post otherPost = null;
 
       if (otherUrlId != null) {
-         if (otherUrlId.equals("")) {
+         if (!otherUrlId.equals("")) {
             otherPost = models.blog.Post.getPostByLocale(otherUrlId, new java.util.Locale(language));
          }
       }
