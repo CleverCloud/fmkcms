@@ -48,8 +48,6 @@ public class PageController extends Controller {
 
    public static void newPage() {
       renderArgs.put("action", "create");
-      renderArgs.put("otherUrlId", null);
-      renderArgs.put("language", null);
       render("PageController/newPage.html");
    }
 
@@ -57,8 +55,6 @@ public class PageController extends Controller {
       Page otherPage = Page.getPageByLocale(urlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "edit");
-      renderArgs.put("otherUrlId", urlId);
-      renderArgs.put("language", language);
       render("PageController/newPage.html");
    }
 
@@ -66,8 +62,6 @@ public class PageController extends Controller {
       Page otherPage = Page.getPageByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "translate");
-      renderArgs.put("otherUrlId", otherUrlId);
-      renderArgs.put("language", language);
       render("PageController/newPage.html");
    }
 

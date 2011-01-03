@@ -44,7 +44,6 @@ public class BlogController extends Controller {
 
    public static void newPost() {
       renderArgs.put("action", "create");
-      renderArgs.put("language", null);
       render("BlogController/newPage.html");
    }
 
@@ -52,7 +51,6 @@ public class BlogController extends Controller {
       Post otherPost = Post.getPostByLocale(urlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "edit");
-      renderArgs.put("language", language);
       render("BlogController/newPage.html");
    }
 
@@ -60,7 +58,6 @@ public class BlogController extends Controller {
       Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "translate");
-      renderArgs.put("language", language);
       render("BlogController/newPage.html");
    }
 

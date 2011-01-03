@@ -5,16 +5,16 @@
 #{set title:'New Page' /}
 
 
-#{if otherUrlId}
+#{if otherPage}
 #{if action.equals("translate")}
-<p>You are currently translating ${otherUrlId} from ${language}.</p>
+<p>You are currently translating ${otherPage.urlId} from ${otherPage.language}.</p>
 #{/if}
 #{elseif action.equals("edit")}
-<p>You are currently editing ${otherUrlId}.</p>
+<p>You are currently editing ${otherPage.urlId}.</p>
 #{/elseif}
 #{/if}
 
-#{form @PageController.doNewPage(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @PageController.doNewPage(action, otherPage?.urlId, otherPage?.language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'page.title'}
 <p>
