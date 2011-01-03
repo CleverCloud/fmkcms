@@ -63,3 +63,4 @@ public abstract class MenuItem extends MongoEntity {
         return mi;
     }
 }
+ 
