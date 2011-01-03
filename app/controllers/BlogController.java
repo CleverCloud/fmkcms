@@ -42,20 +42,29 @@ public class BlogController extends Controller {
       BlogViewer.index();
    }
 
-   public static void newPost(String action, String otherUrlId, String language) {
-      if (action.equals("delete")) {
-         BlogController.deletePost_confirm(otherUrlId, language);
-      }
+   public static void newPage() {
+      renderArgs.put("action", "create");
+      renderArgs.put("otherUrlId", null);
+      renderArgs.put("language", null);
+      render("BlogController/newPage.html");
+   }
 
-      Post otherPost = null;
+   public static void edit(String urlId, String language) {
+      Post otherPost = Post.getPostByLocale(urlId, new Locale(language));
+      renderArgs.put("otherPost", otherPost);
+      renderArgs.put("action", "edit");
+      renderArgs.put("otherUrlId", urlId);
+      renderArgs.put("language", language);
+      render("BlogController/newPage.html");
+   }
 
-      if (otherUrlId != null) {
-         if (!otherUrlId.equals("")) {
-            otherPost = models.blog.Post.getPostByLocale(otherUrlId, new java.util.Locale(language));
-         }
-      }
-
-      render(action, otherUrlId, language);
+   public static void translate(String otherUrlId, String language) {
+      Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
+      renderArgs.put("otherPost", otherPost);
+      renderArgs.put("action", "translate");
+      renderArgs.put("otherUrlId", otherUrlId);
+      renderArgs.put("language", language);
+      render("BlogController/newPage.html");
    }
 
    public static void doNewPost(String action, String otherUrlId, String otherLanguage) {

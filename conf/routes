@@ -45,11 +45,13 @@ GET     /blog                                                 BlogViewer.index
 # Posts handling stuff, see Pages handling stuff
 GET     /blog/posts/tagged/{tagName}                          BlogViewer.listTagged
 GET     /blog/posts/last                                      BlogViewer.last
-GET     /blog/posts/new                                       BlogController.newPost(action:'create',otherUrlId:'',language:'')
+GET     /blog/posts/new                                       BlogController.newPost
 POST    /blog/posts/new                                       BlogController.doNewPost(action:'create',otherUrlId:'',otherLanguage:'')
-GET     /blog/confirmDelete/{urlId}/from/{language}           BlogController.deletePost_confirm
-GET     /blog/posts/{action}/{otherUrlId}/from/{language}     BlogController.newPost
-POST    /blog/posts/{action}/{otherUrlId}/{otherLanguage}     BlogController.doNewPost
+GET     /blog/posts/edit/{otherUrlId}/from/{language}         BlogController.edit
+POST    /blog/posts/edit/{otherUrlId}/{otherLanguage}         BlogController.doNewPost(action:'edit')
+GET     /blog/posts/translate/{otherUrlId}/from/{language}    BlogController.translate
+POST    /blog/posts/translate/{otherUrlId}/{otherLanguage}    BlogController.doNewPost(action:'translate')
+GET     /blog/delete/{urlId}/from/{language}                  BlogController.deletePost_confirm
 
 # Post accessing stuff + Comments posting stuff
 GET     /blog/post/{urlId}                                    BlogViewer.show
