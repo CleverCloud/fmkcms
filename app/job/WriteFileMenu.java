@@ -6,9 +6,11 @@ package job;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import converter.MenuItemConverter;
 import java.io.File;
 import java.io.FileWriter;
 import models.menu.Menu;
+import models.menu.MenuItem;
 import org.bson.types.ObjectId;
 import play.Play;
 import play.exceptions.JavaException;
@@ -30,7 +32,7 @@ public class WriteFileMenu extends Job {
     @Override
     public void doJob() throws Exception {
 
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().create();
 
         File f = new File(Play.applicationPath + File.separator + "data" + File.separator + "menus" + File.separator + JavaExtensions.slugify(menu.name, true) + ".json");
         f.mkdirs();
