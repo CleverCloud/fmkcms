@@ -46,20 +46,29 @@ public class PageController extends Controller {
       PageViewer.index();
    }
 
-   public static void newPage_impl(String action, String otherUrlId, String language) {
-      render("PageController/newPage.html", action, otherUrlId, language);
-   }
-
    public static void newPage() {
-      PageController.newPage_impl("create", null, null);
+      renderArgs.put("action", "create");
+      renderArgs.put("otherUrlId", null);
+      renderArgs.put("language", null);
+      render("PageController/newPage.html");
    }
 
    public static void edit(String urlId, String language) {
-      PageController.newPage_impl("edit", urlId, language);
+      Page otherPage = Page.getPageByLocale(urlId, new Locale(language));
+      renderArgs.put("otherPage", otherPage);
+      renderArgs.put("action", "create");
+      renderArgs.put("otherUrlId", urlId);
+      renderArgs.put("language", language);
+      render("PageController/newPage.html");
    }
 
    public static void translate(String otherUrlId, String language) {
-      PageController.newPage_impl("translate", otherUrlId, language);
+      Page otherPage = Page.getPageByLocale(otherUrlId, new Locale(language));
+      renderArgs.put("otherPage", otherPage);
+      renderArgs.put("action", "create");
+      renderArgs.put("otherUrlId", otherUrlId);
+      renderArgs.put("language", language);
+      render("PageController/newPage.html");
    }
 
    public static void doNewPage(String action, String otherUrlId, String otherLanguage) {

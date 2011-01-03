@@ -15,7 +15,7 @@ GET     /pages/new                                            PageController.new
 POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
 GET     /pages/edit/{urlId}/from/{language}                   PageController.edit
 POST    /pages/edit/{otherUrlId}/{otherLanguage}              PageController.doNewPage(action:'edit')
-GET     /pages/translate/{urlId}/from/{language}              PageController.translate
+GET     /pages/translate/{otherUrlId}/from/{language}         PageController.translate
 POST    /pages/translate/{otherUrlId}/{otherLanguage}         PageController.doNewPage(action:'translate')
 GET     /pages/delete/{urlId}/from/{language}                 PageController.deletePage_confirm
 
