@@ -13,9 +13,9 @@
         <td>${pp.language}</td>
         <td>${pp.title}</td>
         <td>${pp.urlId}</td>
-        <td>#{a @PageController.newPage("edit", pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
-        <td>#{a @PageController.newPage("delete", pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
-        <td>#{a @PageController.newPage("translate", pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
+        <td>#{a @PageController.edit(pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
+        <td>#{a @PageController.delete(pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
+        <td>#{a @PageController.translate(pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
         <td>#{a @PageViewer.page(pp.urlId)}&{'admin.see'}#{/a}</td>
     </tr>
     #{/list}
