@@ -5,7 +5,6 @@ import java.util.Map;
 import models.menu.Menu;
 import models.menu.MenuItem;
 import play.mvc.Router;
-import com.google.code.morphia.annotations.Transient;
 
 /**
  *

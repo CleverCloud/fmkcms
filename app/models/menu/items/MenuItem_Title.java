@@ -1,7 +1,5 @@
 package models.menu.items;
 
-import com.google.code.morphia.annotations.PostLoad;
-import com.google.code.morphia.annotations.Transient;
 import models.menu.Menu;
 import models.menu.MenuItem;
 

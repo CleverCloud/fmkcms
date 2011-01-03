@@ -2,7 +2,6 @@ package models.menu.items;
 
 import models.menu.Menu;
 import models.menu.MenuItem;
-import com.google.code.morphia.annotations.Transient;
 
 /**
  *
