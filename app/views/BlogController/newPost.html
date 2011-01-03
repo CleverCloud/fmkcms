@@ -56,7 +56,7 @@
 <p>
    <label for="${field.name}">Language: </label>
     #{if action.equals("edit")}
-    <input type="hidden" id="${field.id}" name="${field.name}" value="${language}" class="${field.errorClass}" />
+    <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPost?.language}" class="${field.errorClass}" />
     ${language}
     #{/if}
     #{else}
