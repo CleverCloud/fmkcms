@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -38,6 +39,8 @@ public class MenuItemConverter implements JsonDeserializer<MenuItem> {
                 Field f = c.getField(entry.getKey());
                 f.set(obj, gson.fromJson(entry.getValue(), f.getType()));
             }
+            Method m = c.getMethod("save", new Class[]{});
+            m.invoke(obj, new Object[]{});
             return (MenuItem) obj;
         } catch (NoSuchFieldException ex) {
             Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
