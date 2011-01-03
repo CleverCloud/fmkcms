@@ -60,6 +60,7 @@ public class Menu extends MongoEntity {
     }
 
     public Menu removeItem(MenuItem item) {
+        item.delete();
         this.items.remove(item);
         return this.save();
     }
