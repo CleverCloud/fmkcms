@@ -61,7 +61,7 @@ public class BlogController extends Controller {
       render("BlogController/newPost.html");
    }
 
-   public static void doNewPost(String action, String otherUrlId, String otherLanguage) {
+   public static void doNewPost(String actionz, String otherUrlId, String otherLanguage) {
       String urlId = params.get("post.urlId");
       String title = params.get("post.title");
       String content = params.get("post.content");
@@ -91,12 +91,11 @@ public class BlogController extends Controller {
       if (post != null) {
          postRef = post.postReference;
       } else {
-         postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, action, otherUrlId, otherLanguage);
+         postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, actionz, otherUrlId, otherLanguage);
       }
 
-      if (!action.equals("edit")) {
+      if (!actionz.equals("edit"))
          post = new Post();
-      }
       post.postReference = postRef;
       post.author = author;
       post.content = content;
@@ -109,9 +108,9 @@ public class BlogController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         if (action.equals("edit")) {
+         if (actionz.equals("edit")) {
             BlogController.edit(urlId, otherLanguage);
-         } else if (action.equals("translate")) {
+         } else if (actionz.equals("translate")) {
             BlogController.translate(urlId, otherLanguage);
          } else {
             BlogController.newPost();

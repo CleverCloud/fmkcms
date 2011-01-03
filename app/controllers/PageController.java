@@ -65,7 +65,7 @@ public class PageController extends Controller {
       render("PageController/newPage.html");
    }
 
-   public static void doNewPage(String action, String otherUrlId, String otherLanguage) {
+   public static void doNewPage(String actionz, String otherUrlId, String otherLanguage) {
       String urlId = otherUrlId;
       Page page = null;
       PageRef pageRef = null;
@@ -89,7 +89,7 @@ public class PageController extends Controller {
       }
       pageRef.tags = tags;
 
-      if (!action.equals("edit")) {
+      if (!actionz.equals("edit")) {
          page = new Page();
       }
       page.pageReference = pageRef;
@@ -103,9 +103,9 @@ public class PageController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         if (action.equals("edit")) {
+         if (actionz.equals("edit")) {
             PageController.edit(otherUrlId, otherLanguage);
-         } else if (action.equals("translate")) {
+         } else if (actionz.equals("translate")) {
             PageController.translate(otherUrlId, otherLanguage);
          } else {
             PageController.newPage();
