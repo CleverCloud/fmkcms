@@ -109,7 +109,13 @@ public class BlogController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         BlogController.newPost(action, otherUrlId, otherLanguage);
+         if (action.equals("edit")) {
+            BlogController.edit(urlId, otherLanguage);
+         } else if (action.equals("translate")) {
+            BlogController.translate(urlId, otherLanguage);
+         } else {
+            BlogController.newPost();
+         }
       }
       post.postReference.save();
       post.save();
@@ -139,7 +145,13 @@ public class BlogController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         BlogController.newPost(action, otherUrlId, otherLanguage);
+         if (action.equals("edit")) {
+            BlogController.edit(otherUrlId, otherLanguage);
+         } else if (action.equals("translate")) {
+            BlogController.translate(otherUrlId, otherLanguage);
+         } else {
+            BlogController.newPost();
+         }
       }
 
       return postRef;
