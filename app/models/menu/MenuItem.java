@@ -1,7 +1,7 @@
 package models.menu;
 
 import com.google.code.morphia.annotations.Reference;
-import javax.persistence.Transient;
+import com.google.code.morphia.annotations.Transient;
 import models.menu.items.MenuItem_ControllerChain;
 import models.menu.items.MenuItem_LinkToPage;
 import models.menu.items.MenuItem_OutgoingURL;
