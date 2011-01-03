@@ -57,7 +57,7 @@
    <label for="${field.name}">Language: </label>
     #{if action.equals("edit")}
     <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPost?.language}" class="${field.errorClass}" />
-    ${language}
+    ${otherPost?.language}
     #{/if}
     #{else}
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
