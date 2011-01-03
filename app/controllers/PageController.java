@@ -46,19 +46,20 @@ public class PageController extends Controller {
       PageViewer.index();
    }
 
-   public static void newPage(String action, String otherUrlId, String language) {
-      if (action.equals("delete")) {
-         PageController.deletePage_confirm(otherUrlId, language);
-      }
-      Page otherPage = null;
+   public static void newPage_impl(String action, String otherUrlId, String language) {
+      render("PageController/newPage.html", action, otherUrlId, language);
+   }
 
-      if (otherUrlId != null) {
-         if (!otherUrlId.equals("")) {
-            otherPage = models.Page.getPageByLocale(otherUrlId, new java.util.Locale(language));
-         }
-      }
+   public static void newPage() {
+      PageController.newPage_impl("create", null, null);
+   }
 
-      render(action, otherUrlId, language, otherPage);
+   public static void edit(String urlId, String language) {
+      PageController.newPage_impl("edit", urlId, language);
+   }
+
+   public static void translate(String otherUrlId, String language) {
+      PageController.newPage_impl("translate", otherUrlId, language);
    }
 
    public static void doNewPage(String action, String otherUrlId, String otherLanguage) {
@@ -73,7 +74,7 @@ public class PageController extends Controller {
       if (page != null) {
          pageRef = page.pageReference;
       } else {
-         pageRef = PageController.doNewPageRef(action, otherUrlId, otherLanguage);
+         pageRef = PageController.doNewPageRef("edit", otherUrlId, otherLanguage);
       }
       urlId = params.get("page.urlId");
 
@@ -99,7 +100,13 @@ public class PageController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         PageController.newPage(action, otherUrlId, otherLanguage);
+         if (action.equals("edit")) {
+            PageController.edit(otherUrlId, otherLanguage);
+         } else if (action.equals("translate")) {
+            PageController.translate(otherUrlId, otherLanguage);
+         } else {
+            PageController.newPage();
+         }
       }
       page.pageReference.save();
       page.save();
@@ -118,7 +125,13 @@ public class PageController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep(); // keep the errors for the next request
-         PageController.newPage(action, otherUrlId, otherLanguage);
+         if (action.equals("edit")) {
+            PageController.edit(otherUrlId, otherLanguage);
+         } else if (action.equals("translate")) {
+            PageController.translate(otherUrlId, otherLanguage);
+         } else {
+            PageController.newPage();
+         }
       }
 
       return pageRef;

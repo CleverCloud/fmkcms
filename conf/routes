@@ -11,11 +11,13 @@ GET     /                                                     PageViewer.index
 GET     /pages/tagged/{tagName}                               PageViewer.pagesTag
 GET     /pages/list                                           PageController.listPages
 *       /pages/search                                         SearchController.search
-GET     /pages/new                                            PageController.newPage(action:'create',otherUrlId:'',language:'')
+GET     /pages/new                                            PageController.newPage
 POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
-GET     /pages/confirmDelete/{urlId}/from/{language}          PageController.deletePage_confirm
-GET     /pages/{action}/{otherUrlId}/from/{language}          PageController.newPage
-POST    /pages/{action}/{otherUrlId}/{otherLanguage}          PageController.doNewPage
+GET     /pages/edit/{urlId}/from/{language}                   PageController.edit
+POST    /pages/edit/{otherUrlId}/{otherLanguage}              PageController.doNewPage(action:'edit')
+GET     /pages/translate/{urlId}/from/{language}              PageController.translate
+POST    /pages/translate/{otherUrlId}/{otherLanguage}         PageController.doNewPage(action:'translate')
+GET     /pages/delete/{urlId}/from/{language}                 PageController.deletePage_confirm
 
 # Search stuff
 GET     /admin/search                                         SearchController.indexAndStats
