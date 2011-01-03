@@ -32,7 +32,7 @@ public class MenuItemConverter implements JsonDeserializer<MenuItem> {
             Gson gson = new Gson();
             while (it.hasNext()) {
                 Entry<String, JsonElement> entry = it.next();
-                if (entry.getKey().equals("classname")) {
+                if (entry.getKey().equals("classname") || entry.getKey().equals("id")) {
                     continue;
                 }
                 Field f = c.getField(entry.getKey());
