@@ -44,21 +44,21 @@ public class BlogController extends Controller {
 
    public static void newPost() {
       renderArgs.put("action", "create");
-      render("BlogController/newPage.html");
+      render();
    }
 
    public static void edit(String urlId, String language) {
       Post otherPost = Post.getPostByLocale(urlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "edit");
-      render("BlogController/newPage.html");
+      render("BlogController/newPost.html");
    }
 
    public static void translate(String otherUrlId, String language) {
       Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "translate");
-      render("BlogController/newPage.html");
+      render("BlogController/newPost.html");
    }
 
    public static void doNewPost(String action, String otherUrlId, String otherLanguage) {
