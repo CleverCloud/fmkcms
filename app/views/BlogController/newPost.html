@@ -6,15 +6,15 @@
 
 
 #{if otherUrlId}
-#{if action.equals("translate")}
-<p>You are currently translating ${otherUrlId} from ${language}.</p>
+#{if action.equals("translate") && otherPost}
+<p>You are currently translating ${otherPost.urlId} from ${language}.</p>
 #{/if}
-#{elseif action.equals("edit")}
-<p>You are currently editing ${otherUrlId}.</p>
+#{elseif action.equals("edit") && otherPost}
+<p>You are currently editing ${otherPost.urlId}.</p>
 #{/elseif}
 #{/if}
 
-#{form @BlogController.doNewPost(action, otherUrlId, language) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @BlogController.doNewPost(action, otherPost?.urlId, language) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'post.urlId'}
 <p>
