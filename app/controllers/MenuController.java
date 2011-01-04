@@ -20,6 +20,7 @@ import models.menu.items.MenuItem_OutgoingURL;
 import models.menu.items.MenuItem_Title;
 import play.Logger;
 import play.Play;
+import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
 import play.vfs.VirtualFile;
@@ -117,7 +118,12 @@ public class MenuController extends Controller {
         } else {
             return;
         }
-
+        validation.valid(item);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep();
+            addItem(id);
+        }
         item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
         item.cssLinkClass = params.get("item.cssLink");
         item.save();

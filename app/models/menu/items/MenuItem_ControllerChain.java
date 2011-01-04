@@ -8,6 +8,7 @@ import java.util.Map;
 import jregex.Matcher;
 import jregex.Pattern;
 import play.Logger;
+import val.ControllerChain;
 
 /**
  *
@@ -15,6 +16,7 @@ import play.Logger;
  */
 public class MenuItem_ControllerChain extends MenuItem {
 
+    @ControllerChain
     public String controllerChain;
 
     public MenuItem_ControllerChain(String controllerChain, String displayStr, Menu menu) {

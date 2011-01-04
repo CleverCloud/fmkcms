@@ -2,6 +2,7 @@ package models.menu.items;
 
 import models.menu.Menu;
 import models.menu.MenuItem;
+import play.data.validation.URL;
 
 /**
  *
@@ -9,6 +10,7 @@ import models.menu.MenuItem;
  */
 public class MenuItem_OutgoingURL extends MenuItem {
 
+    @URL
     public String url;
 
     public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
