@@ -34,7 +34,7 @@ public class BlogController extends Controller {
       if (post == null) {
          return;
       }
-      PostRef postRef = post.postReference;
+      PostRef postRef = post.reference;
       post.delete();
       if (Post.getFirstPostByPostRef(postRef) == null) {
          postRef.delete();
@@ -89,14 +89,14 @@ public class BlogController extends Controller {
       Post post = Post.getPostByUrlId(otherUrlId);
       PostRef postRef = null;
       if (post != null) {
-         postRef = post.postReference;
+         postRef = post.reference;
       } else {
          postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, actionz, otherUrlId, otherLanguage);
       }
 
       if (!actionz.equals("edit"))
          post = new Post();
-      post.postReference = postRef;
+      post.reference = postRef;
       post.author = author;
       post.content = content;
       post.urlId = urlId;
@@ -116,7 +116,7 @@ public class BlogController extends Controller {
             BlogController.newPost();
          }
       }
-      post.postReference.save();
+      post.reference.save();
       post.save();
 
       BlogViewer.index();

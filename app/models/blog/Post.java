@@ -10,6 +10,7 @@ import java.util.ListIterator;
 import java.util.Locale;
 import javax.persistence.Lob;
 import models.Tag;
+import models.i18n.Translatable;
 import mongo.MongoEntity;
 import play.data.validation.Required;
 
@@ -18,12 +19,9 @@ import play.data.validation.Required;
  * @author keruspe
  */
 @Entity
-public class Post extends MongoEntity {
+public class Post extends Translatable<Post, PostRef> {
 
     public Date postedAt;
-
-    @Required
-    public String urlId;
     
     @Required
     public String title;
@@ -31,13 +29,6 @@ public class Post extends MongoEntity {
     @Lob
     @Required
     public String content;
-
-    @Reference
-    @Required
-    public PostRef postReference;
-
-    @Required
-    public Locale language;
 
     @Reference
     @Required
@@ -56,10 +47,10 @@ public class Post extends MongoEntity {
             return null;
         Post post = new Post();
         post.urlId = other.urlId;
-	post.title = other.title;
+        post.title = other.title;
         post.content = other.content;
         post.language = other.language;
-        post.postReference = other.postReference;
+        post.reference = other.reference;
         post.postedAt = other.postedAt;
         post.author = other.author;
         post.comments = other.comments;
@@ -114,8 +105,8 @@ public class Post extends MongoEntity {
     //
     public Post tagItWith(String name) {
         if (name != null && !name.isEmpty()) {
-            this.postReference.tags.add(Tag.findOrCreateByName(name));
-            this.postReference.save();
+            this.reference.tags.add(Tag.findOrCreateByName(name));
+            this.reference.save();
         }
         return this;
     }
@@ -125,16 +116,16 @@ public class Post extends MongoEntity {
     //
     public static Post getPostByLocale(String urlId, Locale language) {
         Post post = Post.getPostByUrlId(urlId);
-        return (post == null) ? null : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).filter("language =", language).get();
+        return (post == null) ? null : MongoEntity.getDs().find(Post.class, "reference", post.reference).filter("language =", language).get();
     }
 
-    public static List<Post> getPostsByPostRef(PostRef postReference) {
-        return MongoEntity.getDs().find(Post.class, "postReference", postReference).asList();
+    public static List<Post> getPostsByPostRef(PostRef reference) {
+        return MongoEntity.getDs().find(Post.class, "reference", reference).asList();
     }
 
     public static List<Post> getPostsByUrlId(String urlId) {
         Post post = Post.getPostByUrlId(urlId);
-        return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "postReference", post.postReference).asList();
+        return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "reference", post.reference).asList();
     }
 
     public static Post getPostByUrlId(String urlId) {
@@ -150,8 +141,8 @@ public class Post extends MongoEntity {
         return (posts == null) ? new ArrayList<Post>() : posts;
     }
 
-    public static Object getFirstPostByPostRef(PostRef postRef) {
-        return MongoEntity.getDs().find(Post.class, "postReference", postRef).get();
+    public static Object getFirstPostByPostRef(PostRef reference) {
+        return MongoEntity.getDs().find(Post.class, "reference", reference).get();
     }
 
 }

@@ -6,10 +6,10 @@ import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
+import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 
 /**
@@ -17,7 +17,7 @@ import mongo.MongoEntity;
  * @author keruspe
  */
 @Entity
-public class PostRef extends MongoEntity {
+public class PostRef extends TranslatableRef<Post, PostRef> {
 
     @Reference
     public User author;
@@ -45,18 +45,6 @@ public class PostRef extends MongoEntity {
         for (Tag tag : new TreeSet<Tag>(this.tags))
             tagsString += (tagsString.isEmpty() ? "" : ", ") + tag.toString();
         return tagsString;
-    }
-
-    public List<Locale> getAvailableLocales() {
-        List<Post> posts = MongoEntity.getDs().find(Post.class, "postReference", this).asList();
-        List<Locale> locales = new ArrayList<Locale>();
-
-        if (posts != null && !posts.isEmpty()) {
-            for (Post post : posts)
-                locales.add(post.language);
-        }
-
-        return locales;
     }
 
     public static List<PostRef> findTaggedWith(Tag ... tags) {

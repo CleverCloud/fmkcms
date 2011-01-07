@@ -75,11 +75,11 @@ public class BlogViewer extends Controller {
         }
         Post postNext = null;
         Post postPrevious = null;
-        if (post.postReference.next() != null) {
-            postNext = controllers.BlogViewer.getTranslation(post.postReference.next());
+        if (post.reference.next() != null) {
+            postNext = controllers.BlogViewer.getTranslation(post.reference.next());
         }
-        if (post.postReference.previous() != null) {
-            postPrevious = controllers.BlogViewer.getTranslation(post.postReference.previous());
+        if (post.reference.previous() != null) {
+            postPrevious = controllers.BlogViewer.getTranslation(post.reference.previous());
         }
 
         render(post, randomID, isConnected, postNext, postPrevious);
