@@ -13,7 +13,7 @@ import org.elasticsearch.common.Required;
  *
  * @author keruspe
  */
-public abstract class Translatable<T extends Translatable, R extends TranslatableRef> extends MongoEntity {
+public abstract class Translatable<T extends Translatable, R extends TranslatableRef<T, R>> extends MongoEntity {
 
    @Required
    public String urlId;
@@ -23,13 +23,9 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
 
    @Required
    @Reference
-   public TranslatableRef<T, R> reference;
+   public R reference;
 
    public Translatable() {}
-
-   public R getCastedRef() {
-      return (R) this.reference;
-   }
 
     public List<Locale> getAvailableLocales() {
         List<T> items = (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).asList();

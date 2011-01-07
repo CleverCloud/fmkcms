@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Lob;
 import models.i18n.Translatable;
+import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import org.elasticsearch.search.SearchHit;
@@ -66,7 +67,7 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    //
    public Page tagItWith(String name) {
       if (name != null && !name.isEmpty()) {
-         this.getCastedRef().tags.add(Tag.findOrCreateByName(name));
+         this.reference.tags.add(Tag.findOrCreateByName(name));
          this.reference.save();
       }
       return this;

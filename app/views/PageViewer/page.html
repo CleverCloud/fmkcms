@@ -16,7 +16,7 @@ ${page.content}
 #{/if}
 
 <ul>
-#{list items:page.getCastedRef().tags, as:'tag'}
+#{list items:page.reference.tags, as:'tag'}
     <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>
     #{/list}
 </ul>

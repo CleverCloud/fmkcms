@@ -75,7 +75,7 @@
     <label>Tags: </label>
     %{
         if (field.flash == null && otherPage != null)
-            field.flash = otherPage.getCastedRef().getTagsAsString();
+            field.flash = otherPage.reference.getTagsAsString();
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
