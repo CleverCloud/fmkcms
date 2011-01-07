@@ -1,20 +1,13 @@
 package controllers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import models.Tag;
-import models.blog.Comment;
 import models.blog.Post;
 import models.blog.PostRef;
-import models.user.CommentUser;
 import mongo.MongoEntity;
-import play.cache.Cache;
-import play.data.validation.Validation;
 import play.libs.Codec;
-import play.libs.Images;
-import play.libs.Images.Captcha;
 import play.mvc.Controller;
 
 /**
@@ -22,12 +15,6 @@ import play.mvc.Controller;
  * @author keruspe
  */
 public class BlogViewer extends Controller {
-
-    public static void captcha(String randomID) {
-        Captcha captcha = Images.captcha();
-        Cache.set(randomID, captcha.getText().toLowerCase(), "10min");
-        renderBinary(captcha);
-    }
 
     public static Post getGoodPost(List<Post> posts) {
         if (posts == null) {
@@ -127,50 +114,6 @@ public class BlogViewer extends Controller {
             }
         }
         render(posts, tag);
-    }
-
-    public static void postComment(String urlId, String email, String userName, String webSite, String content, String code, String randomID) {
-        Post post = Post.getPostByUrlId(urlId);
-        if (post == null) {
-            return;
-        }
-
-        validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
-        if (Validation.hasErrors()) {
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(urlId);
-        }
-
-        CommentUser user = new CommentUser();
-        user.email = email;
-        user.userName = userName;
-        user.webSite = webSite;
-
-        validation.valid(user);
-        if (Validation.hasErrors()) {
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(urlId);
-        }
-
-        Comment comment = new Comment();
-        comment.content = content;
-        comment.user = user;
-        comment.postedAt = new Date();
-
-        validation.valid(comment);
-        if (Validation.hasErrors()) {
-            params.flash(); // add http parameters to the flash scope
-            Validation.keep(); // keep the errors for the next request
-            BlogViewer.show(urlId);
-        }
-        comment.user.save();
-        comment.save();
-
-        post.addComment(comment);
-        Cache.delete(randomID);
-        BlogViewer.show(post.urlId);
     }
 
     public static Post getTranslation(PostRef postRef) {

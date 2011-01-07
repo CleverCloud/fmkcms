@@ -11,15 +11,6 @@
             <span class="post-translator">, translated by ${_post.author}</span>
             <span class="post-translation-date">${_post.postedAt.format('dd MMM yy')}</span>
         #{/if}
-        #{if _as != 'full'}
-            <span class="post-comments">
-                &nbsp;|&nbsp; ${_post.comments?.size() ?: 'no'}
-                comment${_post.comments?.size()?.pluralize()}
-                #{if _post.comments}
-                    , latest by ${_post.comments[_post.comments.size()-1].user.raw()}
-                #{/if}
-            </span>
-        #{/if}
         #{elseif _post.postReference.tags}
             <span class="post-tags">
                 - Tagged
@@ -47,28 +38,4 @@
         <a href="@{BlogController.deletePost_confirm(_post.urlId, _post.language)}">Delete me !</a>
     </div>
     #{/if}
-    <div class="comments">
-        <h3>
-            ${_post.comments?.size() ?: 'no'}
-            comment${_post.comments?.size()?.pluralize()}
-        </h3>
-
-        #{list items:_post.comments, as:'comment'}
-            <div class="comment">
-                <div class="comment-metadata">
-                    <span class="comment-author">
-                        by ${comment.user.raw()},
-                    </span>
-                    <span class="comment-date">
-                        ${comment.postedAt.format('dd MMM yy')}
-                    </span>
-                </div>
-                <div class="comment-content">
-                    <div class="about">Detail: </div>
-                    ${comment.content.escape().nl2br()}
-                </div>
-            </div>
-        #{/list}
-
-    </div>
 #{/if}

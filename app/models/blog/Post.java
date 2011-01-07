@@ -6,7 +6,6 @@ import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import javax.persistence.Lob;
 import models.Tag;
@@ -43,8 +42,6 @@ public class Post extends MongoEntity {
     @Required
     public User author;
 
-    public List<Comment> comments;
-
     //
     // Constructor
     //
@@ -62,51 +59,7 @@ public class Post extends MongoEntity {
         post.postReference = other.postReference;
         post.postedAt = other.postedAt;
         post.author = other.author;
-        post.comments = other.comments;
         return post;
-    }
-
-    //
-    // Comments handling
-    //
-    public Post addComment(Comment comment) {
-        if (this.comments == null)
-            this.comments = new ArrayList<Comment>();
-        this.comments.add(comment);
-        return this.save();
-    }
-
-    public Post removeComment(String userName, String content, Boolean removeAll) {
-        // We want to get through it the reverse way to delete most recent comment first (duplicates)
-        ListIterator<Comment> iterator = this.comments.listIterator(this.comments.size());
-        Comment current = null;
-        while (iterator.hasPrevious()) {
-            current = iterator.previous();
-            // Continue if it's not the one we're looking for
-            if (!(current.user.userName.equalsIgnoreCase(userName) && current.content.equalsIgnoreCase(content)))
-                continue;
-            iterator.remove();
-            current.delete();
-
-            // Quit if we only want to remove one occurence of the comment
-            if (!removeAll)
-                break;
-        }
-
-        return this.save();
-    }
-
-    public Post removeComment(String userName, String content) {
-        return this.removeComment(userName, content, false);
-    }
-
-    public List<Comment> getComments(String userName) {
-        List<Comment> returnList = new ArrayList<Comment>();
-        for (Comment current : this.comments) {
-            if (current.user.userName.equalsIgnoreCase(userName))
-                returnList.add(current);
-        }
-        return returnList;
     }
 
     //
