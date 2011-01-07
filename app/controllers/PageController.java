@@ -38,7 +38,7 @@ public class PageController extends Controller {
       if (page == null) {
          return;
       }
-      PageRef pageRef = page.getPageRef();
+      PageRef pageRef = page.getCastedRef();
       page.delete();
       if (Page.getFirstPageByPageRef(pageRef) == null) {
          pageRef.delete();
@@ -75,7 +75,7 @@ public class PageController extends Controller {
          page = Page.getPageByUrlId(urlId);
       }
       if (page != null) {
-         pageRef = page.getPageRef();
+         pageRef = page.getCastedRef();
       } else {
          pageRef = PageController.doNewPageRef("edit", otherUrlId, otherLanguage);
       }
@@ -111,7 +111,7 @@ public class PageController extends Controller {
             PageController.newPage();
          }
       }
-      page.getPageRef().save();
+      page.getCastedRef().save();
       page.save();
 
       if (page.published) {

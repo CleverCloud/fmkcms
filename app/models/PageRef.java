@@ -18,7 +18,7 @@ import org.bson.types.ObjectId;
  * @author keruspe
  */
 @Entity
-public class PageRef extends TranslatableRef<Page> {
+public class PageRef extends TranslatableRef<PageRef> {
 
     @Reference
     public Set<Tag> tags;

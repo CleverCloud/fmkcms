@@ -19,8 +19,12 @@ public abstract class Translatable<T> extends MongoEntity {
 
    @Required
    @Reference
-   public TranslatableRef<T> reference;
+   public T reference;
 
    public Translatable() {}
+
+   public T getCastedRef() {
+      return (T) this.reference;
+   }
 
 }

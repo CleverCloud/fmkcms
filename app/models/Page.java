@@ -25,7 +25,7 @@ import play.mvc.Router;
  */
 @Entity
 @SuppressWarnings("unchecked")
-public class Page extends Translatable<Page> implements Searchable {
+public class Page extends Translatable<PageRef> implements Searchable {
 
    @Required
    public String title;
@@ -39,13 +39,6 @@ public class Page extends Translatable<Page> implements Searchable {
 
    @Transient
    private float score;
-
-   @Transient
-   private PageRef pageReference = (PageRef) this.reference;
-
-   public PageRef getPageRef() {
-      return this.pageReference;
-   }
 
    //
    // Constructor
@@ -73,8 +66,8 @@ public class Page extends Translatable<Page> implements Searchable {
    //
    public Page tagItWith(String name) {
       if (name != null && !name.isEmpty()) {
-         this.pageReference.tags.add(Tag.findOrCreateByName(name));
-         this.pageReference.save();
+         this.getCastedRef().tags.add(Tag.findOrCreateByName(name));
+         this.reference.save();
       }
       return this;
    }
