@@ -6,6 +6,6 @@ import mongo.MongoEntity;
  *
  * @author keruspe
  */
-public abstract class TranslatableRef<T> extends MongoEntity {
+public abstract class TranslatableRef<T extends Translatable, R extends TranslatableRef> extends MongoEntity {
 
 }

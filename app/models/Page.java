@@ -25,7 +25,7 @@ import play.mvc.Router;
  */
 @Entity
 @SuppressWarnings("unchecked")
-public class Page extends Translatable<PageRef> implements Searchable {
+public class Page extends Translatable<Page, PageRef> implements Searchable {
 
    @Required
    public String title;

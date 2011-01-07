@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +25,13 @@ public class PageController extends Controller {
       if (pagenumber == null) {
          pagenumber = 0;
       }
-      List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
+      List<PageRef> pageRefs = PageRef.getPageRefsWithPagination(pagenumber, 20);
+      List<Page> pages = new ArrayList<Page>();
+
+      for (PageRef pr : pageRefs) {
+         pages.add(Page.getFirstPageByPageRef(pr));
+      }
+
       render(pages, pagenumber);
    }
 
