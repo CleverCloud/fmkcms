@@ -6,12 +6,10 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
-import models.blog.Comment;
 import models.blog.Post;
 import models.blog.PostRef;
 import models.user.GAppUser;
 import models.user.User;
-import play.cache.Cache;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -156,49 +154,4 @@ public class BlogController extends Controller {
       return postRef;
    }
 
-   public static void postComment(String urlId, String content, String code, String randomID) {
-      Post post = Post.getPostByUrlId(urlId);
-      if (post == null) {
-         return;
-      }
-
-      validation.equals(code.toLowerCase(), Cache.get(randomID)).message("Wrong validation code. Please reload a nother code.");
-      if (Validation.hasErrors()) {
-         render("BlogController/show.html", post, randomID);
-      }
-
-      GAppUser user = GAppUser.getByOpenId(session.get("username"));
-      if (user == null) {
-         user = new GAppUser();
-         user.openId = session.get("username");
-         user.firstName = session.get("firstName");
-         user.lastName = session.get("lastName");
-         user.userName = user.firstName + " " + user.lastName;
-         user.email = session.get("email");
-         user.language = new Locale(session.get("language"));
-
-         validation.valid(user);
-         if (Validation.hasErrors()) {
-            unauthorized("Could not authenticate you");
-         }
-         user.save();
-      }
-
-      Comment comment = new Comment();
-      comment.content = content;
-      comment.user = user.save();
-      comment.postedAt = new Date();
-
-      validation.valid(comment);
-      if (Validation.hasErrors()) {
-         params.flash(); // add http parameters to the flash scope
-         Validation.keep(); // keep the errors for the next request
-         render("BlogController/show.html", post, randomID);
-      }
-      comment.save();
-
-      post.addComment(comment);
-      Cache.delete(randomID);
-      BlogViewer.show(post.urlId);
-   }
 }
