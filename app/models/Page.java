@@ -1,7 +1,6 @@
 package models;
 
 import com.google.code.morphia.annotations.Entity;
-import com.google.code.morphia.annotations.Reference;
 import com.google.code.morphia.annotations.Transient;
 import elasticsearch.IndexJob;
 import elasticsearch.Searchable;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Lob;
+import models.i18n.Translatable;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import org.elasticsearch.search.SearchHit;
@@ -25,10 +25,7 @@ import play.mvc.Router;
  */
 @Entity
 @SuppressWarnings("unchecked")
-public class Page extends MongoEntity implements Searchable {
-
-   @Required
-   public String urlId;
+public class Page extends Translatable<Page> implements Searchable {
 
    @Required
    public String title;
@@ -38,18 +35,17 @@ public class Page extends MongoEntity implements Searchable {
    public String content;
 
    @Required
-   public Locale language;
-
-   @Required
-   @Reference
-   public PageRef pageReference;
-
-   @Required
    public Boolean published = false;
 
    @Transient
    private float score;
 
+   @Transient
+   private PageRef pageReference = (PageRef) this.reference;
+
+   public PageRef getPageRef() {
+      return this.pageReference;
+   }
 
    //
    // Constructor
@@ -67,7 +63,7 @@ public class Page extends MongoEntity implements Searchable {
       page.title = other.title;
       page.content = other.content;
       page.language = other.language;
-      page.pageReference = other.pageReference;
+      page.reference = other.reference;
       page.published = other.published;
       return page;
    }
@@ -88,7 +84,7 @@ public class Page extends MongoEntity implements Searchable {
    //
    public static List<Page> getPagesByUrlId(String urlId) {
       Page page = Page.getPageByUrlId(urlId);
-      return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).asList();
+      return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "reference", page.reference).asList();
    }
 
    public static Page getPageByUrlId(String urlId) {
@@ -97,15 +93,15 @@ public class Page extends MongoEntity implements Searchable {
 
    public static Page getPageByLocale(String urlId, Locale locale) {
       Page page = Page.getPageByUrlId(urlId);
-      return (page == null) ? null : MongoEntity.getDs().find(Page.class, "pageReference", page.pageReference).filter("language =", locale).get();
+      return (page == null) ? null : MongoEntity.getDs().find(Page.class, "reference", page.reference).filter("language =", locale).get();
    }
 
    public static Page getFirstPageByPageRef(PageRef pageRef) {
-      return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).get();
+      return MongoEntity.getDs().find(Page.class, "reference", pageRef).get();
    }
 
    public static List<Page> getPagesByPageRef(PageRef pageRef) {
-      return MongoEntity.getDs().find(Page.class, "pageReference", pageRef).asList();
+      return MongoEntity.getDs().find(Page.class, "reference", pageRef).asList();
    }
 
    //

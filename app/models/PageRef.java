@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 
@@ -17,7 +18,7 @@ import org.bson.types.ObjectId;
  * @author keruspe
  */
 @Entity
-public class PageRef extends MongoEntity {
+public class PageRef extends TranslatableRef<Page> {
 
     @Reference
     public Set<Tag> tags;
@@ -39,7 +40,7 @@ public class PageRef extends MongoEntity {
     }
 
     public List<Locale> getAvailableLocales() {
-        List<Page> pages = MongoEntity.getDs().find(Page.class, "pageReference", this).asList();
+        List<Page> pages = MongoEntity.getDs().find(Page.class, "reference", this).asList();
         List<Locale> locales = new ArrayList<Locale>();
 
         if (pages != null && !pages.isEmpty()) {
@@ -52,7 +53,7 @@ public class PageRef extends MongoEntity {
 
     public Map<Locale,Page> getAvailableLocalesAndPages() {
         Map<Locale,Page> localepages = new HashMap<Locale, Page>();
-        List<Page> pages = MongoEntity.getDs().find(Page.class, "pageReference", this).asList();
+        List<Page> pages = MongoEntity.getDs().find(Page.class, "reference", this).asList();
 
         if (pages != null && !pages.isEmpty()) {
             for (Page page : pages)
