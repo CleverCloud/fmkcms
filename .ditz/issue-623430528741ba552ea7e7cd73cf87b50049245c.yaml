@@ -5,14 +5,20 @@ type: :task
 component: fmkcms
 release: 
 reporter: Quentin ADAM <quentin.adam@waxzce.org>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :wontfix
 creation_time: 2010-12-14 13:12:05.607161 Z
 references: []
 
 id: 623430528741ba552ea7e7cd73cf87b50049245c
 log_events: 
-- - 2010-12-14 13:12:07.662836 Z
-  - Quentin ADAM <quentin.adam@waxzce.org>
-  - created
-  - ""
+  - - 2010-12-14 13:12:07.662836 Z
+    - Quentin ADAM <quentin.adam@waxzce.org>
+    - created
+    - ""
+  - - 2011-01-07 13:00:10.985000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - closed with disposition wontfix
+    - morphia 0.98 is buggy, waiting for 0.99
+git_branch: 
+claimer: 
