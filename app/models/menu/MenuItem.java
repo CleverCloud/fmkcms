@@ -8,6 +8,7 @@ import models.menu.items.MenuItem_OutgoingURL;
 import models.menu.items.MenuItem_Title;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
+import play.data.validation.Required;
 
 /**
  *
@@ -17,12 +18,27 @@ public abstract class MenuItem extends MongoEntity {
 
     @Reference
     public Menu menu;
+    @Required
     public String displayStr;
     public String cssLinkClass;
     @Transient
     private String classname = getClass().getCanonicalName();
 
-    public MenuItem() {}
+    public MenuItem() {
+    }
+
+    public String getClassname() {
+        return classname;
+    }
+
+    public MenuItem(String displayStr) {
+        this.displayStr = displayStr;
+    }
+
+    public MenuItem(String displayStr, Menu menu) {
+        this.displayStr = displayStr;
+        this.menu = menu;
+    }
 
     public abstract String getLink();
 
@@ -49,3 +65,4 @@ public abstract class MenuItem extends MongoEntity {
         return mi;
     }
 }
+ 

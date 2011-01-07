@@ -5,6 +5,7 @@ import java.util.Map;
 import models.menu.Menu;
 import models.menu.MenuItem;
 import play.mvc.Router;
+import val.PageUrlID;
 
 /**
  *
@@ -12,6 +13,7 @@ import play.mvc.Router;
  */
 public class MenuItem_LinkToPage extends MenuItem {
 
+    @PageUrlID
     public String urlId;
 
     public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {

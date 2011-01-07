@@ -21,7 +21,7 @@
     <label>Title: </label>
     %{
         if (field.flash == null && otherPage != null)
-            field.flash = otherPage.title;
+            field.flash = otherPage?.title;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
@@ -45,7 +45,7 @@
     <label>Url ID: </label>
     %{
         if (field.flash == null)
-            field.flash = otherPage.urlId;
+            field.flash = otherPage?.urlId;
     }%
     <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
     <span class="error">${field.error}</span>
