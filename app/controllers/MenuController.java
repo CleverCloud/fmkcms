@@ -160,10 +160,11 @@ public class MenuController extends Controller {
 
     public static void viewMenuFromFile(String path) throws FileNotFoundException {
         try {
-            Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().setPrettyPrinting().create();
-            Menu m = gson.fromJson(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()), Menu.class);
+            //Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().setPrettyPrinting().create();
+            //Menu m = gson.fromJson(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()), Menu.class);
 
-            renderText(gson.toJson(m));
+            //renderText(gson.toJson(m));
+           renderText(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()));
         } catch (com.google.gson.JsonParseException e) {
             Logger.error(e.getLocalizedMessage(), null);
             renderText((Play.getVirtualFile(path).contentAsString()));
