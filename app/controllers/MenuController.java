@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import converter.MenuItemConverter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -164,7 +165,7 @@ public class MenuController extends Controller {
             //Menu m = gson.fromJson(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()), Menu.class);
 
             //renderText(gson.toJson(m));
-           renderText(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()));
+           renderText(new FileInputStream(VirtualFile.fromRelativePath(path).getRealFile()));
         } catch (com.google.gson.JsonParseException e) {
             Logger.error(e.getLocalizedMessage(), null);
             renderText((Play.getVirtualFile(path).contentAsString()));
