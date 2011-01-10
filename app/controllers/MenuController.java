@@ -167,7 +167,7 @@ public class MenuController extends Controller {
 
             //renderText(gson.toJson(m));
            InputStream json = new FileInputStream(VirtualFile.fromRelativePath(path).getRealFile());
-           renderText(json);
+           renderBinary(json);
         } catch (com.google.gson.JsonParseException e) {
             Logger.error(e.getLocalizedMessage(), null);
             renderText((Play.getVirtualFile(path).contentAsString()));
