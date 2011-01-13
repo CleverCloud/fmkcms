@@ -5,6 +5,7 @@
 package converter;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -32,7 +33,7 @@ public class MenuItemConverter implements JsonDeserializer<MenuItem>, JsonSerial
             Class c = Class.forName(je.getAsJsonObject().get("classname").getAsString());
             Object obj = c.getConstructor(new Class[]{}).newInstance();
             Iterator<Entry<String, JsonElement>> it = je.getAsJsonObject().entrySet().iterator();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).create();
             while (it.hasNext()) {
                 Entry<String, JsonElement> entry = it.next();
                 if (entry.getKey().equals("classname") || entry.getKey().equals("id")) {
