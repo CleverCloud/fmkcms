@@ -9,14 +9,28 @@ type: :feature
 component: fmkcms
 release: 
 reporter: Quentin ADAM <quentin.adam@waxzce.org>
-status: :unstarted
-disposition: 
+status: :closed
+disposition: :fixed
 creation_time: 2010-11-10 17:41:52.375208 Z
 references: []
 
 id: 2e8e199ebb82e195d40ff447cad2e8a219e372e7
 log_events: 
-- - 2010-11-10 17:41:54.702783 Z
-  - Quentin ADAM <quentin.adam@waxzce.org>
-  - created
-  - ""
+  - - 2010-11-10 17:41:54.702783 Z
+    - Quentin ADAM <quentin.adam@waxzce.org>
+    - created
+    - ""
+  - - 2011-01-18 09:10:19.080000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - issue claimed
+    - ""
+  - - 2011-01-18 09:13:07.280000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - changed status from unstarted to in_progress
+    - ""
+  - - 2011-01-18 09:27:36.073000 Z
+    - Marc-Antoine Perennou <Marc-Antoine@Perennou.com>
+    - closed with disposition fixed
+    - ""
+git_branch: 
+claimer: Marc-Antoine Perennou <Marc-Antoine@Perennou.com>

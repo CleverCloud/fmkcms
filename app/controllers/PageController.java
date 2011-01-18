@@ -12,6 +12,7 @@ import models.Tag;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
+import play.vfs.VirtualFile;
 
 /**
  *
@@ -62,14 +63,28 @@ public class PageController extends Controller {
       Page otherPage = Page.getPageByLocale(urlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "edit");
-      render("PageController/newPage.html");
+
+      String overrider = "view/PageEvent/edit/" + urlId + ".html";
+
+      if (VirtualFile.fromRelativePath(overrider).getRealFile().exists()) {
+         render(overrider);
+      } else {
+         render("PageController/newPage.html");
+      }
    }
 
    public static void translate(String otherUrlId, String language) {
       Page otherPage = Page.getPageByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "translate");
-      render("PageController/newPage.html");
+
+      String overrider = "view/PageEvent/translate/" + otherUrlId + ".html";
+
+      if (VirtualFile.fromRelativePath(overrider).getRealFile().exists()) {
+         render(overrider);
+      } else {
+         render("PageController/newPage.html");
+      }
    }
 
    public static void doNewPage(String actionz, String otherUrlId, String otherLanguage) {
