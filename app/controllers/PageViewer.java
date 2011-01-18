@@ -74,9 +74,8 @@ public class PageViewer extends Controller {
       }
 
       Boolean isConnected = session.contains("username");
-      String overrider = "view/PageEvent/view/" + urlId + ".html";
-
-      if (VirtualFile.fromRelativePath(overrider).getRealFile().exists()) {
+      String overrider = "/view/PageEvent/view/" + urlId + ".html";
+      if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          render(overrider, page, isConnected);
       } else {
          render(page, isConnected);
