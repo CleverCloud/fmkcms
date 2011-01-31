@@ -56,10 +56,6 @@ public class BlogViewer extends Controller {
         String randomID = Codec.UUID();
         Boolean isConnected = session.contains("username");
 
-        if (isConnected) {
-
-            render("BlogController/show.html", post, randomID);
-        }
         Post postNext = null;
         Post postPrevious = null;
         if (post.postReference.next() != null) {
