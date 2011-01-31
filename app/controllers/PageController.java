@@ -64,7 +64,13 @@ public class PageController extends Controller {
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "edit");
 
-      String overrider = "/view/PageEvent/edit/" + urlId + ".html";
+      String overrider = null;
+      
+      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+         overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
+            break;
+      }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          render(overrider);
@@ -78,7 +84,13 @@ public class PageController extends Controller {
       renderArgs.put("otherPage", otherPage);
       renderArgs.put("action", "translate");
 
-      String overrider = "/view/PageEvent/translate/" + otherUrlId + ".html";
+      String overrider = null;
+
+      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+         overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
+            break;
+      }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          render(overrider);
