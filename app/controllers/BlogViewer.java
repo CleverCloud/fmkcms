@@ -26,31 +26,25 @@ public class BlogViewer extends Controller {
       switch (posts.size()) {
          case 0:
             return null;
-        }
-
-        Post post = null;
-        switch (posts.size()) {
-            case 0:
-                return null;
-            case 1:
-                return posts.get(0);
-            default:
-                List<Locale> locales = I18nController.getLanguages();
-                for (Locale locale : locales) {
-                    // Try exact Locale or exact language no matter the country
-                    for (Post candidat : posts) {
-                        if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
-                            return candidat;
-                        }
-                    }
-                }
-                post = posts.get(0);
-                if (post == null) {
-                    return null;
-                }
-                return post;
-        }
-    }
+         case 1:
+            return posts.get(0);
+         default:
+            List<Locale> locales = I18nController.getLanguages();
+            for (Locale locale : locales) {
+               // Try exact Locale or exact language no matter the country
+               for (Post candidat : posts) {
+                  if (candidat.language.equals(locale) || (!locale.getCountry().equals("") && candidat.language.getLanguage().equals(locale.getLanguage()))) {
+                     return candidat;
+                  }
+               }
+            }
+            post = posts.get(0);
+            if (post == null) {
+               return null;
+            }
+            return post;
+      }
+   }
 
    public static void show(String urlId) {
       List<Post> posts = Post.getPostsByUrlId(urlId);
@@ -96,7 +90,7 @@ public class BlogViewer extends Controller {
 
       String randomID = Codec.UUID();
       Boolean isConnected = session.contains("username");
-      
+
       String overrider = null;
       for (Post p : Post.getPostsByPostRef(post.reference)) {
          overrider = "/view/PageEvent/view/" + p.urlId + ".html";
@@ -104,7 +98,7 @@ public class BlogViewer extends Controller {
             break;
          }
       }
-      if (! VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+      if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          overrider = "BlogViewer/show.html";
       }
       render(overrider, post, randomID, isConnected);

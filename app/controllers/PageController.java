@@ -66,7 +66,7 @@ public class PageController extends Controller {
 
       String overrider = null;
       
-      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
          overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
@@ -86,7 +86,7 @@ public class PageController extends Controller {
 
       String overrider = null;
 
-      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
          overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;

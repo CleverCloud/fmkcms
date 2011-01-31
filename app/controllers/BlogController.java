@@ -51,7 +51,7 @@ public class BlogController extends Controller {
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "edit");
       String overrider = null;
-      for (Post p : Post.getPostsByPostRef(otherPost.postReference)) {
+      for (Post p : Post.getPostsByPostRef(otherPost.reference)) {
          overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
@@ -68,7 +68,7 @@ public class BlogController extends Controller {
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "translate");
       String overrider = null;
-      for (Post p : Post.getPostsByPostRef(otherPost.postReference)) {
+      for (Post p : Post.getPostsByPostRef(otherPost.reference)) {
          overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
