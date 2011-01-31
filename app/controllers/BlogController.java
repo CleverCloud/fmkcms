@@ -13,6 +13,7 @@ import models.user.User;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
+import play.vfs.VirtualFile;
 
 /**
  *
@@ -49,14 +50,34 @@ public class BlogController extends Controller {
       Post otherPost = Post.getPostByLocale(urlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "edit");
-      render("BlogController/newPost.html");
+      String overrider = null;
+      for (Post p : Post.getPostsByPostRef(otherPost.postReference)) {
+         overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+            break;
+         }
+      }
+      if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+         overrider = "BlogController/newPost.html";
+      }
+      render(overrider);
    }
 
    public static void translate(String otherUrlId, String language) {
       Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
       renderArgs.put("action", "translate");
-      render("BlogController/newPost.html");
+      String overrider = null;
+      for (Post p : Post.getPostsByPostRef(otherPost.postReference)) {
+         overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+            break;
+         }
+      }
+      if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+         overrider = "BlogController/newPost.html";
+      }
+      render(overrider);
    }
 
    public static void doNewPost(String actionz, String otherUrlId, String otherLanguage) {
