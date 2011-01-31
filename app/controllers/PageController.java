@@ -60,7 +60,7 @@ public class PageController extends Controller {
       String overrider = null;
       
       for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
-         overrider = "/view/PageEvent/edit/" + urlId + ".html";
+         overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
       }
@@ -80,7 +80,7 @@ public class PageController extends Controller {
       String overrider = null;
 
       for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
-         overrider = "/view/PageEvent/edit/" + otherUrlId + ".html";
+         overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
       }
