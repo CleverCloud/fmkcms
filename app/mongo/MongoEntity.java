@@ -36,7 +36,6 @@ public abstract class MongoEntity {
 
     public <T extends MongoEntity> T create() {
        MongoEntity.getDs().save(this);
-       System.out.println("saved : " + this);
        return (T) MongoEntity.getDs().get(this.getClass(), this.id);
     }
 
