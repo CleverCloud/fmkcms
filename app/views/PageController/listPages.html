@@ -7,7 +7,7 @@
     <tr>
         <td>----------</td>
     </tr>
-    #{list items:p.getAvailableLocalesAndPages(), as:'ppp'}
+    #{list items:p.getAvailableLocalesAndTranslatables(), as:'ppp'}
     <tr>
         #{set pp:ppp.getValue()/}
         <td>${pp.language}</td>

@@ -59,15 +59,15 @@ public class BlogViewer extends Controller {
 
       Post postNext = null;
       Post postPrevious = null;
-      if (post.postReference.next() != null) {
-         postNext = controllers.BlogViewer.getTranslation(post.postReference.next());
+      if (post.reference.next() != null) {
+         postNext = controllers.BlogViewer.getTranslation(post.reference.next());
       }
-      if (post.postReference.previous() != null) {
-         postPrevious = controllers.BlogViewer.getTranslation(post.postReference.previous());
+      if (post.reference.previous() != null) {
+         postPrevious = controllers.BlogViewer.getTranslation(post.reference.previous());
       }
 
       String overrider = null;
-      for (Post p : Post.getPostsByPostRef(post.postReference)) {
+      for (Post p : Post.getPostsByPostRef(post.reference)) {
          overrider = "/view/PageEvent/view/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
@@ -90,15 +90,15 @@ public class BlogViewer extends Controller {
 
       String randomID = Codec.UUID();
       Boolean isConnected = session.contains("username");
-      
+
       String overrider = null;
-      for (Post p : Post.getPostsByPostRef(post.postReference)) {
+      for (Post p : Post.getPostsByPostRef(post.reference)) {
          overrider = "/view/PageEvent/view/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
          }
       }
-      if (! VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
+      if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          overrider = "BlogViewer/show.html";
       }
       render(overrider, post, randomID, isConnected);

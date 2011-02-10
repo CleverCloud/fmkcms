@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +26,13 @@ public class PageController extends Controller {
       if (pagenumber == null) {
          pagenumber = 0;
       }
-      List<PageRef> pages = PageRef.getPageRefPage(pagenumber, 20);
+      List<PageRef> pageRefs = PageRef.getPageRefsWithPagination(pagenumber, 20);
+      List<Page> pages = new ArrayList<Page>();
+
+      for (PageRef pr : pageRefs) {
+         pages.add(Page.getFirstPageByPageRef(pr));
+      }
+
       render(pages, pagenumber);
    }
 
@@ -39,7 +46,7 @@ public class PageController extends Controller {
       if (page == null) {
          return;
       }
-      PageRef pageRef = page.pageReference;
+      PageRef pageRef = page.reference;
       page.delete();
       if (Page.getFirstPageByPageRef(pageRef) == null) {
          pageRef.delete();
@@ -59,7 +66,7 @@ public class PageController extends Controller {
 
       String overrider = null;
       
-      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
          overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
@@ -79,7 +86,7 @@ public class PageController extends Controller {
 
       String overrider = null;
 
-      for (Page p : Page.getPagesByPageRef(otherPage.pageReference)) {
+      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
          overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
@@ -102,7 +109,7 @@ public class PageController extends Controller {
          page = Page.getPageByUrlId(urlId);
       }
       if (page != null) {
-         pageRef = page.pageReference;
+         pageRef = page.reference;
       } else {
          pageRef = PageController.doNewPageRef("edit", otherUrlId, otherLanguage);
       }
@@ -119,7 +126,7 @@ public class PageController extends Controller {
       if (!actionz.equals("edit")) {
          page = new Page();
       }
-      page.pageReference = pageRef;
+      page.reference = pageRef;
       page.urlId = urlId;
       page.title = params.get("page.title");
       page.content = params.get("page.content");
@@ -138,7 +145,7 @@ public class PageController extends Controller {
             PageController.newPage();
          }
       }
-      page.pageReference.save();
+      page.reference.save();
       page.save();
 
       if (page.published) {

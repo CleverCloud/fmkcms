@@ -3,12 +3,10 @@ package models;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 
@@ -17,7 +15,7 @@ import org.bson.types.ObjectId;
  * @author keruspe
  */
 @Entity
-public class PageRef extends MongoEntity {
+public class PageRef extends TranslatableRef<Page, PageRef> {
 
     @Reference
     public Set<Tag> tags;
@@ -38,30 +36,6 @@ public class PageRef extends MongoEntity {
         return tagsString;
     }
 
-    public List<Locale> getAvailableLocales() {
-        List<Page> pages = MongoEntity.getDs().find(Page.class, "pageReference", this).asList();
-        List<Locale> locales = new ArrayList<Locale>();
-
-        if (pages != null && !pages.isEmpty()) {
-            for (Page page : pages)
-                locales.add(page.language);
-        }
-
-        return locales;
-    }
-
-    public Map<Locale,Page> getAvailableLocalesAndPages() {
-        Map<Locale,Page> localepages = new HashMap<Locale, Page>();
-        List<Page> pages = MongoEntity.getDs().find(Page.class, "pageReference", this).asList();
-
-        if (pages != null && !pages.isEmpty()) {
-            for (Page page : pages)
-                localepages.put(page.language, page);
-        }
-
-        return localepages;
-    }
-
     public static List<PageRef> findTaggedWith(Tag ... tags) {
         List<PageRef> pageRefs = new ArrayList<PageRef>();
         for (Tag tag : tags)
@@ -69,7 +43,7 @@ public class PageRef extends MongoEntity {
         return pageRefs;
     }
 
-    public static List<PageRef> getPageRefPage(Integer pageNumber, Integer pageItemsNumber){
+    public static List<PageRef> getPageRefsWithPagination(Integer pageNumber, Integer pageItemsNumber){
         return MongoEntity.getDs().find(PageRef.class).offset(pageItemsNumber * pageNumber).limit(pageItemsNumber).asList();
     }
 }
