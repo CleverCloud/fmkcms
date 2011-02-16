@@ -104,7 +104,7 @@ public class PageController extends Controller {
       if (page != null) {
          pageRef = page.pageReference;
       } else {
-         pageRef = PageController.doNewPageRef("edit", otherUrlId, otherLanguage);
+         pageRef = PageController.doNewPageRef(actionz, otherUrlId, otherLanguage);
       }
       urlId = params.get("page.urlId");
 
