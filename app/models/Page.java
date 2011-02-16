@@ -74,31 +74,6 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    }
 
    //
-   // Accessing stuff
-   //
-   public static List<Page> getPagesByUrlId(String urlId) {
-      Page page = Page.getPageByUrlId(urlId);
-      return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "reference", page.reference).asList();
-   }
-
-   public static Page getPageByUrlId(String urlId) {
-      return MongoEntity.getDs().find(Page.class, "urlId", urlId).get();
-   }
-
-   public static Page getPageByLocale(String urlId, Locale locale) {
-      Page page = Page.getPageByUrlId(urlId);
-      return (page == null) ? null : MongoEntity.getDs().find(Page.class, "reference", page.reference).filter("language =", locale).get();
-   }
-
-   public static Page getFirstPageByPageRef(PageRef pageRef) {
-      return MongoEntity.getDs().find(Page.class, "reference", pageRef).get();
-   }
-
-   public static List<Page> getPagesByPageRef(PageRef pageRef) {
-      return MongoEntity.getDs().find(Page.class, "reference", pageRef).asList();
-   }
-
-   //
    // Managing stuff
    //
    public Page publish() {

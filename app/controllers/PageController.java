@@ -30,7 +30,7 @@ public class PageController extends Controller {
       List<Page> pages = new ArrayList<Page>();
 
       for (PageRef pr : pageRefs) {
-         pages.add(Page.getFirstPageByPageRef(pr));
+         pages.add(Page.getFirstPageByReference(pr));
       }
 
       render(pages, pagenumber);
@@ -48,7 +48,7 @@ public class PageController extends Controller {
       }
       PageRef pageRef = page.reference;
       page.delete();
-      if (Page.getFirstPageByPageRef(pageRef) == null) {
+      if (Page.getFirstPageByReference(pageRef) == null) {
          pageRef.delete();
       }
       PageViewer.index();
@@ -66,7 +66,7 @@ public class PageController extends Controller {
 
       String overrider = null;
       
-      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
+      for (Page p : Page.getPagesByReference(otherPage.reference)) {
          overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
@@ -86,7 +86,7 @@ public class PageController extends Controller {
 
       String overrider = null;
 
-      for (Page p : Page.getPagesByPageRef(otherPage.reference)) {
+      for (Page p : Page.getPagesByReference(otherPage.reference)) {
          overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;

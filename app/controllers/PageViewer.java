@@ -75,7 +75,7 @@ public class PageViewer extends Controller {
 
       Boolean isConnected = session.contains("username");
       String overrider = null;
-      for (Page p : Page.getPagesByPageRef(page.reference)) {
+      for (Page p : Page.getPagesByReference(page.reference)) {
          overrider = "/view/PageEvent/view/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
             break;
@@ -93,7 +93,7 @@ public class PageViewer extends Controller {
       List<Page> pages = new ArrayList<Page>();
       Page page = null;
       for (PageRef pageRef : pageRefs) {
-         page = PageViewer.getGoodPage(Page.getPagesByPageRef(pageRef));
+         page = PageViewer.getGoodPage(Page.getPagesByReference(pageRef));
          if (page != null) {
             pages.add(page);
          }
