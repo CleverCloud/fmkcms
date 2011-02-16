@@ -20,11 +20,8 @@ public class PageUrlIDCheck extends AbstractAnnotationCheck<PageUrlID> {
     }
 
     public boolean isSatisfied(Object o, Object value, OValContext ovc, Validator vldtr) throws OValException {
-        Page p = Page.getPageByUrlId((String) value);
-        if (p == null) {
-            return false;
-        } else {
-            return true;
-        }
+        /*Page p = Page.getPageByUrlId((String) value);
+        return (p != null);*/
+       return true;
     }
 }
