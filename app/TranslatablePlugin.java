@@ -1,8 +1,5 @@
 
 import enhancer.TranslatableEnhancer;
-import java.lang.annotation.Annotation;
-import java.util.Map;
-import models.i18n.Translatable;
 import play.PlayPlugin;
 import play.classloading.ApplicationClasses.ApplicationClass;
 
@@ -12,16 +9,21 @@ import play.classloading.ApplicationClasses.ApplicationClass;
  */
 public class TranslatablePlugin extends PlayPlugin {
 
-   @Override
+
+
+   private TranslatableEnhancer enhancer = new TranslatableEnhancer();
+
+
+/*   @Override
    public Object bind(String name, Object o, Map<String, String[]> params) {
       if (o instanceof Translatable) {
          return o;
       }
       return null;
-   }
+   }*/
 
    @Override
    public void enhance(ApplicationClass applicationClass) throws Exception {
-      new TranslatableEnhancer().enhanceThisClass(applicationClass);
+      enhancer.enhanceThisClass(applicationClass);
    }
 }
