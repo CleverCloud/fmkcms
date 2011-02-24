@@ -14,11 +14,14 @@ public class TranslatableEnhancer extends Enhancer {
    @Override
    public void enhanceThisClass(ApplicationClass ac) throws Exception {
       CtClass ctClass = makeClass(ac);
-      if (!ctClass.subtypeOf(classPool.get("models.i18n.Translatable"))) {
+      if (!ctClass.subclassOf(classPool.get("models.i18n.Translatable")) || ctClass.equals(classPool.get("models.i18n.Translatable"))) {
+         System.out.println("Not enhancing " + ctClass.getName());
          return;
       }
 
       String className = ctClass.getName();
+
+      System.out.println("Enhancing " + className);
 
       CtMethod getTranslatablesByUrlId = CtMethod.make(
               "public static java.util.List<" + className + "> get" + className + "sByUrlId(String urlId) {"
