@@ -21,7 +21,7 @@ public class TranslatableEnhancer extends Enhancer {
       String className = ctClass.getName();
 
       CtMethod getTranslatablesByUrlId = CtMethod.make(
-              "public static List<" + className + "> get" + className + "sByUrlId(String urlId) {"
+              "public static java.util.List<" + className + "> get" + className + "sByUrlId(String urlId) {"
               + className + " translatable = " + className + ".get" + className + "ByUrlId(urlId);"
               + "return (translatable == null) ? new ArrayList<" + className + ">() "
               + ": MongoEntity.getDs().find(" + className + ".class, \"reference\", translatable.reference).asList();"
@@ -49,7 +49,7 @@ public class TranslatableEnhancer extends Enhancer {
       ctClass.addMethod(getFirstTranslatableByReference);
 
       CtMethod getTranslatablesByReference = CtMethod.make(
-              "public static List<" + className + "> get" + className + "sByReference(TranslatableRef translatableRef) {"
+              "public static java.util.List<" + className + "> get" + className + "sByReference(TranslatableRef translatableRef) {"
               + "return MongoEntity.getDs().find(" + className + ".class, \"reference\", translatableRef).asList();"
               + "}", ctClass);
       ctClass.addMethod(getTranslatablesByReference);
