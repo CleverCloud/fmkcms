@@ -1,0 +1,23 @@
+
+
+
+{
+    
+    
+    "cluster" : 
+    
+    {
+        
+        
+        "name" : "fmkcms"
+    
+    
+    },
+
+		"network" :
+		{
+			"host" : "localhost"
+		}
+
+            
+}
