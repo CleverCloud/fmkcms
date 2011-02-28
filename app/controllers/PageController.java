@@ -73,7 +73,7 @@ public class PageController extends Controller {
       }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
-         render(overrider);
+         renderTemplate(overrider);
       } else {
          render("PageController/newPage.html");
       }
@@ -93,7 +93,7 @@ public class PageController extends Controller {
       }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
-         render(overrider);
+         renderTemplate(overrider);
       } else {
          render("PageController/newPage.html");
       }

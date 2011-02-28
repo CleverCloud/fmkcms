@@ -81,7 +81,7 @@ public class PageViewer extends Controller {
             break;
       }
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
-         render(overrider, page, isConnected);
+         renderTemplate(overrider, page, isConnected);
       } else {
          render(page, isConnected);
       }

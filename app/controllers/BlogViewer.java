@@ -74,7 +74,7 @@ public class BlogViewer extends Controller {
          }
       }
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
-         render(overrider, post, randomID, isConnected, postNext, postPrevious);
+         renderTemplate(overrider, post, randomID, isConnected, postNext, postPrevious);
       } else {
          render(post, randomID, isConnected, postNext, postPrevious);
       }
@@ -101,7 +101,7 @@ public class BlogViewer extends Controller {
       if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          overrider = "BlogViewer/show.html";
       }
-      render(overrider, post, randomID, isConnected);
+      renderTemplate(overrider, post, randomID, isConnected);
    }
 
    public static void index() {
