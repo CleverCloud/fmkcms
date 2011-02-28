@@ -33,6 +33,7 @@ public abstract class MongoEntity {
             play.Logger.error(e, "");
          }
       }
+
       return MongoEntity.datastore;
    }
 
