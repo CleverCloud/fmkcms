@@ -60,7 +60,7 @@ public class BlogController extends Controller {
       if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          overrider = "BlogController/newPost.html";
       }
-      render(overrider);
+      renderTemplate(overrider);
    }
 
    public static void translate(String otherUrlId, String language) {
@@ -77,7 +77,7 @@ public class BlogController extends Controller {
       if (!VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          overrider = "BlogController/newPost.html";
       }
-      render(overrider);
+      renderTemplate(overrider);
    }
 
    public static void doNewPost(String actionz, String otherUrlId, String otherLanguage) {
