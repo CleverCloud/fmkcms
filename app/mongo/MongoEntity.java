@@ -38,7 +38,6 @@ public abstract class MongoEntity {
    }
 
    public <T extends MongoEntity> T save() {
-      play.Logger.info("save entity");
       MongoEntity.getDs().save(this);
       MongoEntity.getDs().ensureIndexes(this.getClass());
       return (T) MongoEntity.getDs().get(this);
