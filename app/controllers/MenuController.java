@@ -152,7 +152,6 @@ public class MenuController extends Controller {
         if (item == null || menu == null) {
             notFound();
         }
-        String type = params.get("item.type");
         String value = params.get("item.value");
         String displayStr = params.get("item.display");
 
