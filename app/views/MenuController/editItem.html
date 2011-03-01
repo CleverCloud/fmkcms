@@ -46,7 +46,7 @@
 #{field 'item.subMenu'}
 <p>
     <label>SubMenu: </label>
-    %{ if (field.flash == null) field.flash = item?.menu; }%
+    %{ if (field.flash == null) field.flash = item?.menu?.name; }%
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
         #{list items:models.menu.Menu.getAllNames(), as:'m'}
             <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="true"'.raw() : ''}>${m}</option>
