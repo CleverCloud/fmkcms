@@ -40,4 +40,9 @@ public class MenuItem_OutgoingURL extends MenuItem {
    public String getType() {
       return "OutgoingURL";
    }
+
+   @Override
+   public void setValue(String value) {
+      this.url = value;
+   }
 }
