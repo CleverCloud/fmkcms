@@ -73,4 +73,9 @@ public class MenuItem_ControllerChain extends MenuItem {
    public String getType() {
       return "ControllerChain";
    }
+
+   @Override
+   public void setValue(String value) {
+      this.controllerChain = value;
+   }
 }

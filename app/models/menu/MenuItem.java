@@ -72,6 +72,7 @@ public abstract class MenuItem extends MongoEntity {
     }
 
     public abstract String getValue();
+    public abstract void setValue(String value);
 
     public abstract String getType();
 }

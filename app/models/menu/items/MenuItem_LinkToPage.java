@@ -45,4 +45,9 @@ public class MenuItem_LinkToPage extends MenuItem {
    public String getType() {
       return "LinkToPage";
    }
+
+   @Override
+   public void setValue(String value) {
+      this.urlId = value;
+   }
 }

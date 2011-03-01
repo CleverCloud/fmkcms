@@ -159,6 +159,8 @@ public class MenuController extends Controller {
         }
         item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
         item.cssLinkClass = params.get("item.cssLink");
+        item.displayStr = params.get("item.displayStr");
+        item.setValue(params.get("item.value"));
         validation.valid(item);
         if (Validation.hasErrors()) {
             params.flash(); // add http parameters to the flash scope

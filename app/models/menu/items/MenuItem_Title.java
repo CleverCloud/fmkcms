@@ -39,4 +39,9 @@ public class MenuItem_Title extends MenuItem {
    public String getType() {
       return "Title";
    }
+
+   @Override
+   public void setValue(String value) {
+      this.title = value;
+   }
 }
