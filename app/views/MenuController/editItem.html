@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Edit MenuItem' /}
 
-#{form @MenuController.doEditItem(menuId, item.id.toStringMongod()) , id:'creationForm', enctype:'multipart/form-data' }
+#{form @MenuController.doEditItem(idMenu, item.id.toStringMongod()) , id:'creationForm', enctype:'multipart/form-data' }
 
 #{field 'item.type'}
 <p>
