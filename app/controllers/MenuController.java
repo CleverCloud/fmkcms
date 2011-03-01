@@ -138,7 +138,12 @@ public class MenuController extends Controller {
         if (item == null) {
             notFound();
         }
-        render(idMenu, item);
+        List<String> types = new ArrayList<String>();
+        types.add("ControllerChain");
+        types.add("LinkToPage");
+        types.add("OutgoingURL");
+        types.add("Title");
+        render(idMenu, item, types);
     }
 
     public static void doEditItem(String idMenu, String id) {
