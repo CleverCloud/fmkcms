@@ -67,7 +67,8 @@ public abstract class MenuItem extends MongoEntity {
     }
 
     public String getDisplayStr() {
-       return Messages.get(this.displayStr, new Object[]());
+       Object[] dummy = new Object[]();
+       return Messages.get(this.displayStr, dummy);
     }
 }
  
