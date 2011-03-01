@@ -166,7 +166,7 @@ public class MenuController extends Controller {
             Validation.keep();
             editItem(idMenu, id);
         }
-        item.save();
+        item.refresh();
         edit(idMenu);
     }
 
