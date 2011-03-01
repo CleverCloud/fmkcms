@@ -30,4 +30,14 @@ public class MenuItem_OutgoingURL extends MenuItem {
     public String getLink() {
         return this.url;
     }
+
+   @Override
+   public String getValue() {
+      return url;
+   }
+
+   @Override
+   public String getType() {
+      return "OutgoingURL";
+   }
 }

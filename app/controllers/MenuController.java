@@ -133,6 +133,51 @@ public class MenuController extends Controller {
         edit(id);
     }
 
+    public static void editItem(String idMenu, String idMenuItem) {
+        MenuItem item = MenuItem.getByMongodStringId(idMenuItem);
+        if (item == null) {
+            notFound();
+        }
+        render(idMenu, item);
+    }
+
+    public static void doEditItem(String idMenu, String id) {
+        MenuItem item = MenuItem.getByMongodStringId(id);
+        Menu menu = Menu.getByMongodStringId(id);
+        if (item == null || menu == null) {
+            notFound();
+        }
+        String type = params.get("item.type");
+        String value = params.get("item.value");
+        String displayStr = params.get("item.display");
+
+        if (displayStr == null || displayStr.isEmpty()) {
+            displayStr = value;
+        }
+
+        if (type.equals("ControllerChain")) {
+            item = new MenuItem_ControllerChain(value, displayStr);
+        } else if (type.equals("LinkToPage")) {
+            item = new MenuItem_LinkToPage(value, displayStr);
+        } else if (type.equals("OutgoingURL")) {
+            item = new MenuItem_OutgoingURL(value, displayStr);
+        } else if (type.equals("Title")) {
+            item = new MenuItem_Title(value, displayStr);
+        } else {
+            return;
+        }
+        validation.valid(item);
+        if (Validation.hasErrors()) {
+            params.flash(); // add http parameters to the flash scope
+            Validation.keep();
+            editItem(idMenu, id);
+        }
+        item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
+        item.cssLinkClass = params.get("item.cssLink");
+        item.save();
+        edit(id);
+    }
+
     public static void removeItem(String idMenu, String idMenuItem) {
         Menu menu = Menu.getByMongodStringId(idMenu);
         MenuItem item = MenuItem.getByMongodStringId(idMenuItem);
