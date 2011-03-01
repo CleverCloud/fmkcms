@@ -42,6 +42,8 @@ public class MenuItem_Title extends MenuItem {
 
    @Override
    public void setValue(String value) {
-      this.title = value;
+      if (value != null) {
+         this.title = value;
+      }
    }
 }

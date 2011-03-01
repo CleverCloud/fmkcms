@@ -103,7 +103,7 @@ public class BlogController extends Controller {
             unauthorized("Could not authenticate you");
          }
          if (actionz.equals("edit")) {
-            author.refresh();
+            author.refresh().save();
          } else {
             author.save();
          }
@@ -140,8 +140,8 @@ public class BlogController extends Controller {
          }
       }
       if (actionz.equals("edit")) {
-         post.reference.refresh();
-         post.refresh();
+         post.reference.refresh().save();
+         post.refresh().save();
       } else {
          post.reference.save();
          post.save();
