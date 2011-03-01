@@ -48,6 +48,8 @@ public class MenuItem_LinkToPage extends MenuItem {
 
    @Override
    public void setValue(String value) {
-      this.urlId = value;
+      if (value != null) {
+         this.urlId = value;
+      }
    }
 }

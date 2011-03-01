@@ -146,8 +146,8 @@ public class PageController extends Controller {
          }
       }
       if (actionz.equals("edit")) {
-         page.reference.refresh();
-         page.refresh();
+         page.reference.refresh().save();
+         page.refresh().save();
       } else {
          page.reference.save();
          page.save();

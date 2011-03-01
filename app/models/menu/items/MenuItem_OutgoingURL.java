@@ -43,6 +43,8 @@ public class MenuItem_OutgoingURL extends MenuItem {
 
    @Override
    public void setValue(String value) {
-      this.url = value;
+      if (value != null) {
+         this.url = value;
+      }
    }
 }

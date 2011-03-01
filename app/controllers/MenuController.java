@@ -159,11 +159,9 @@ public class MenuController extends Controller {
       }
       item.setMenu(Menu.findByName(params.get("item.subMenu")), menu);
       item.cssLinkClass = params.get("item.cssLink");
+      item.setValue(value);
       if (displayStr != null) {
          item.displayStr = displayStr;
-      }
-      if (value != null) {
-         item.setValue(value);
       }
       validation.valid(item);
       if (Validation.hasErrors()) {
@@ -171,7 +169,7 @@ public class MenuController extends Controller {
          Validation.keep();
          editItem(idMenu, id);
       }
-      item.refresh();
+      item.refresh().save();
       edit(idMenu);
    }
 
