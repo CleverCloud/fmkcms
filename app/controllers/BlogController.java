@@ -102,7 +102,11 @@ public class BlogController extends Controller {
          if (Validation.hasErrors()) {
             unauthorized("Could not authenticate you");
          }
-         author.save();
+         if (actionz.equals("edit")) {
+            author.refresh();
+         } else {
+            author.save();
+         }
       }
 
       Post post = Post.getPostByUrlId(otherUrlId);
@@ -135,8 +139,13 @@ public class BlogController extends Controller {
             BlogController.newPost();
          }
       }
-      post.reference.save();
-      post.save();
+      if (actionz.equals("edit")) {
+         post.reference.refresh();
+         post.refresh();
+      } else {
+         post.reference.save();
+         post.save();
+      }
 
       BlogViewer.index();
    }

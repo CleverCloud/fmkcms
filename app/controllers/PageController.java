@@ -145,8 +145,13 @@ public class PageController extends Controller {
             PageController.newPage();
          }
       }
-      page.reference.save();
-      page.save();
+      if (actionz.equals("edit")) {
+         page.reference.refresh();
+         page.refresh();
+      } else {
+         page.reference.save();
+         page.save();
+      }
 
       if (page.published) {
          PageViewer.page(urlId);

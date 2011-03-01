@@ -147,11 +147,10 @@ public class MenuController extends Controller {
 
     public static void doEditItem(String idMenu, String id) {
         MenuItem item = MenuItem.getByMongodStringId(id);
-        Menu menu = Menu.getByMongodStringId(id);
+        Menu menu = Menu.getByMongodStringId(idMenu);
         if (item == null || menu == null) {
             notFound();
         }
-        String type = params.get("item.type");
         String value = params.get("item.value");
         String displayStr = params.get("item.display");
 
@@ -166,7 +165,7 @@ public class MenuController extends Controller {
             Validation.keep();
             editItem(idMenu, id);
         }
-        item.save();
+        item.refresh();
         edit(idMenu);
     }
 
