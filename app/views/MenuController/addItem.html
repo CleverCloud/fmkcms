@@ -10,7 +10,7 @@ You are adding an item to &{menu.name} <br />
     <label>Type: </label>
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
         #{list items:types, as:'t'}
-            <option value="${t}" ${(field.flash?.toString()?.equals(t))? 'selected="true"'.raw() : ''}>${t}</option>
+            <option value="${t}" ${(field.flash?.toString()?.equals(t))? 'selected="selected"'.raw() : ''}>${t}</option>
         #{/list}
     </select>
     <span class="error">${field.error}</span>
@@ -46,7 +46,7 @@ You are adding an item to &{menu.name} <br />
     <label>SubMenu: </label>
     <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
         #{list items:models.menu.Menu.getAllNames(), as:'m'}
-            <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="true"'.raw() : ''}>${m}</option>
+            <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="selected"'.raw() : ''}>${m}</option>
         #{/list}
     </select>
     <span class="error">${field.error}</span>
