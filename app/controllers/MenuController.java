@@ -148,7 +148,7 @@ public class MenuController extends Controller {
 
     public static void doEditItem(String idMenu, String id) {
         MenuItem item = MenuItem.getByMongodStringId(id);
-        Menu menu = Menu.getByMongodStringId(id);
+        Menu menu = Menu.getByMongodStringId(idMenu);
         if (item == null || menu == null) {
             notFound();
         }
