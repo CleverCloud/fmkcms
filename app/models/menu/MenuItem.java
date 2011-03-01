@@ -9,6 +9,7 @@ import models.menu.items.MenuItem_Title;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import play.data.validation.Required;
+import play.i18n.Messages;
 
 /**
  *
@@ -63,6 +64,10 @@ public abstract class MenuItem extends MongoEntity {
             mi = MongoEntity.getDs().get(MenuItem_Title.class, new ObjectId(id));
         }
         return mi;
+    }
+
+    public String getDisplayStr() {
+       return Messages.get(this.displayStr, (Object[])null);
     }
 }
  
