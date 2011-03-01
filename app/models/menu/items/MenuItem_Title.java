@@ -29,4 +29,14 @@ public class MenuItem_Title extends MenuItem {
     public String getLink() {
         return null;
     }
+
+   @Override
+   public String getValue() {
+      return title;
+   }
+
+   @Override
+   public String getType() {
+      return "Title";
+   }
 }

@@ -63,4 +63,14 @@ public class MenuItem_ControllerChain extends MenuItem {
         }
         return Router.reverse(this.controllerChain).url;
     }
+
+   @Override
+   public String getValue() {
+      return controllerChain;
+   }
+
+   @Override
+   public String getType() {
+      return "ControllerChain";
+   }
 }
