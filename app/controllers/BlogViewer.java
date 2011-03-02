@@ -17,6 +17,11 @@ import play.vfs.VirtualFile;
  */
 public class BlogViewer extends Controller {
 
+   /**
+    * Get the good translation of a Post for the user within a List of translation
+    * @param posts The list a translations
+    * @return The good translation
+    */
    public static Post getGoodPost(List<Post> posts) {
       if (posts == null) {
          return null;
@@ -46,6 +51,10 @@ public class BlogViewer extends Controller {
       }
    }
 
+   /**
+    * Display a Post given its urlId
+    * @param urlId the urlId of the Post
+    */
    public static void show(String urlId) {
       List<Post> posts = Post.getPostsByUrlId(urlId);
       Post post = BlogViewer.getGoodPost(posts);
@@ -80,6 +89,9 @@ public class BlogViewer extends Controller {
       }
    }
 
+   /**
+    * Display the last Post
+    */
    public static void last() {
       PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
       Post post = BlogViewer.getTranslation(frontPostRef);
@@ -104,6 +116,9 @@ public class BlogViewer extends Controller {
       renderTemplate(overrider, post, randomID, isConnected);
    }
 
+   /**
+    * Display the index
+    */
    public static void index() {
       PostRef frontPostRef = MongoEntity.getDs().find(PostRef.class).order("-postedAt").get();
       List<PostRef> olderPostRefs = MongoEntity.getDs().find(PostRef.class).order("-postedAt").offset(1).limit(10).asList();
@@ -116,6 +131,10 @@ public class BlogViewer extends Controller {
       render(frontPost, olderPosts);
    }
 
+   /**
+    * Display a list of Posts tagged by a tag
+    * @param tagName The name of the tag
+    */
    public static void listTagged(String tagName) {
       Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
       List<PostRef> postRefs = PostRef.findTaggedWith(tag);
@@ -130,6 +149,11 @@ public class BlogViewer extends Controller {
       render(posts, tag);
    }
 
+   /**
+    * Get the good translation of a Post for the user given a PostRef
+    * @param postRef The PostRef
+    * @return The good translation
+    */
    public static Post getTranslation(PostRef postRef) {
       List<Post> posts = Post.getPostsByPostRef(postRef);
       if (posts == null) {

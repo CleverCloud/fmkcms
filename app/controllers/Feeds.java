@@ -29,6 +29,10 @@ import utils.LangProperties;
 @SuppressWarnings("unchecked")
 public class Feeds extends Controller {
 
+   /**
+    * Get the blog feed
+    * @param lang The lang
+    */
     public static void main(String lang) {
         if (lang == null)
             return;
