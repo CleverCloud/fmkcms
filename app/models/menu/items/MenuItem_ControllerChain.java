@@ -19,6 +19,11 @@ public class MenuItem_ControllerChain extends MenuItem {
     @ControllerChain
     public String controllerChain;
 
+    /**
+     * @param controllerChain The controllerChain (ex: Application.index)
+     * @param displayStr The string to display (play i18n key)
+     * @param menu The subMenu belonging to this item
+     */
     public MenuItem_ControllerChain(String controllerChain, String displayStr, Menu menu) {
         //super(displayStr, menu);
         this.controllerChain = controllerChain.trim(); // Morphia failure with latest play
@@ -26,12 +31,20 @@ public class MenuItem_ControllerChain extends MenuItem {
         this.menu = menu;
     }
 
+    /**
+     * @param controllerChain The controllerChain (ex: Application.index)
+     * @param displayStr The string to display (play i18n key)
+     */
     public MenuItem_ControllerChain(String controllerChain, String displayStr) {
         //super(displayStr);
         this.displayStr = displayStr;
         this.controllerChain = controllerChain.trim();
     }
 
+    /**
+     * Just a wrapper to trim the controllerChain
+     * @param controllerChain The controllerChain
+     */
     public void setControllerChain(String controllerChain) {
         this.controllerChain = controllerChain.trim();
     }

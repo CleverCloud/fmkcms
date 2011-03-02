@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Lob;
 import models.i18n.Translatable;
-import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import org.elasticsearch.search.SearchHit;
@@ -65,7 +64,12 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    //
    // Tags handling
    //
-   public Page tagItWith(String name) {
+   /**
+     * Tag this post
+     * @param name The name of the Tag
+     * @return self
+     */
+    public Page tagItWith(String name) {
       if (name != null && !name.isEmpty()) {
          this.reference.tags.add(Tag.findOrCreateByName(name));
          this.reference.save();
@@ -76,11 +80,19 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    //
    // Managing stuff
    //
+   /**
+    * Publish the Page
+    * @return self
+    */
    public Page publish() {
       this.published = true;
       return this.save();
    }
 
+   /**
+    * Unpublish the Page
+    * @return self
+    */
    public Page unPublish() {
       this.published = false;
       return this.save();
