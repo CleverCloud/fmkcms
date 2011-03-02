@@ -17,6 +17,11 @@ import play.vfs.VirtualFile;
 @SuppressWarnings("unchecked")
 public class PageViewer extends Controller {
 
+   /**
+    * Get the good translation of a Page for the user within a List of translation
+    * @param pages The list a translations
+    * @return The good translation
+    */
    public static Page getGoodPage(List<Page> pages) {
       if (pages == null || pages.isEmpty()) {
          return null;
@@ -54,14 +59,26 @@ public class PageViewer extends Controller {
       }
    }
 
+   /**
+    * Get the good translation for a given urlId
+    * @param urlId The urlId of the Page
+    * @return The good translation
+    */
    public static Page getGoodPageByUrlId(String urlId) {
       return PageViewer.getGoodPage(Page.getPagesByUrlId(urlId));
    }
 
+   /**
+    * Display the index
+    */
    public static void index() {
       PageViewer.page(Play.configuration.getProperty("fmkcms.index", "index"));
    }
 
+   /**
+    * Display a Page given its urlId
+    * @param urlId the urlId of the Page
+    */
    public static void page(String urlId) {
       List<Page> pages = Page.getPagesByUrlId(urlId);
       Page page = PageViewer.getGoodPage(pages);
@@ -87,6 +104,10 @@ public class PageViewer extends Controller {
       }
    }
 
+   /**
+    * Display a list of Pages tagged by a tag
+    * @param tagName The name of the tag
+    */
    public static void pagesTag(String tagName) {
       Tag tag = Tag.findOrCreateByName(tagName); /* avoid NPE in view ... */
       List<PageRef> pageRefs = PageRef.findTaggedWith(tag);

@@ -23,11 +23,21 @@ import play.vfs.VirtualFile;
 @With(Secure.class)
 public class BlogController extends Controller {
 
+   /**
+    * Ask confirmation for deleting a Post
+    * @param urlId The urlId of the Post
+    * @param language The lang of the Post
+    */
    public static void deletePost_confirm(String urlId, String language) {
       Post post = Post.getPostByLocale(urlId, new Locale(language));
       render(post);
    }
 
+   /**
+    * Delete a Post
+    * @param urlId The urlId of the Post
+    * @param language The lang of the Post
+    */
    public static void deletePost(String urlId, String language) {
       Post post = Post.getPostByLocale(urlId, new Locale(language));
       if (post == null) {
@@ -41,11 +51,19 @@ public class BlogController extends Controller {
       BlogViewer.index();
    }
 
+   /**
+    * Create a new Post
+    */
    public static void newPost() {
       renderArgs.put("action", "create");
       render();
    }
 
+   /**
+    * Edit a Post
+    * @param urlId The urlId of the Post
+    * @param language The lang of the Post
+    */
    public static void edit(String urlId, String language) {
       Post otherPost = Post.getPostByLocale(urlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
@@ -63,6 +81,11 @@ public class BlogController extends Controller {
       renderTemplate(overrider);
    }
 
+   /**
+    * Translate a Post
+    * @param otherUrlId The urlId of the Post to translate
+    * @param language The lang of the Post
+    */
    public static void translate(String otherUrlId, String language) {
       Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPost", otherPost);
@@ -80,6 +103,12 @@ public class BlogController extends Controller {
       renderTemplate(overrider);
    }
 
+   /**
+    * Create/Edit/Translate a Post
+    * @param actionz The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId The urlId of the Post we're translating or editing (may be null)
+    * @param otherLanguage The lang of the Post we're translating or editing (may be null)
+    */
    public static void doNewPost(String actionz, String otherUrlId, String otherLanguage) {
       String urlId = params.get("post.urlId");
       String title = params.get("post.title");
@@ -150,6 +179,13 @@ public class BlogController extends Controller {
       BlogViewer.index();
    }
 
+   /**
+    * Create a PostRef for a new Post
+    * @param actionz The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId The urlId of the Post we're translating or editing (may be null)
+    * @param otherLanguage The lang of the Post we're translating or editing (may be null)
+    * @return The PostRef
+    */
    private static PostRef doNewPostRef(String tagsString, Date postedAt, User author, String action, String otherUrlId, String otherLanguage) {
       PostRef postRef = new PostRef();
       Set<Tag> tags = new TreeSet<Tag>();

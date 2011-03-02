@@ -22,6 +22,10 @@ import play.vfs.VirtualFile;
 @With(Secure.class)
 public class PageController extends Controller {
 
+   /**
+    * Display a list of Pages
+    * @param pagenumber The number of the page to display (20 Page by page)
+    */
    public static void listPages(Integer pagenumber) {
       if (pagenumber == null) {
          pagenumber = 0;
@@ -36,11 +40,21 @@ public class PageController extends Controller {
       render(pages, pagenumber);
    }
 
+   /**
+    * Ask confirmation for deleting a Page
+    * @param urlId The urlId of the Page
+    * @param language The lang of the Page
+    */
    public static void deletePage_confirm(String urlId, String language) {
       Page page = Page.getPageByLocale(urlId, new Locale(language));
       render(page);
    }
 
+   /**
+    * Delete a Page
+    * @param urlId The urlId of the Page
+    * @param language The lang of the Page
+    */
    public static void deletePage(String urlId, String language) {
       Page page = Page.getPageByLocale(urlId, new Locale(language));
       if (page == null) {
@@ -54,11 +68,19 @@ public class PageController extends Controller {
       PageViewer.index();
    }
 
+   /**
+    * Create a new Page
+    */
    public static void newPage() {
       renderArgs.put("action", "create");
       render("PageController/newPage.html");
    }
 
+   /**
+    * Edit a Page
+    * @param urlId The urlId of the Page
+    * @param language The lang of the Page
+    */
    public static void edit(String urlId, String language) {
       Page otherPage = Page.getPageByLocale(urlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
@@ -79,6 +101,11 @@ public class PageController extends Controller {
       }
    }
 
+   /**
+    * Translate a page
+    * @param otherUrlId The urlId of the Page to translate
+    * @param language The lang of the Page
+    */
    public static void translate(String otherUrlId, String language) {
       Page otherPage = Page.getPageByLocale(otherUrlId, new Locale(language));
       renderArgs.put("otherPage", otherPage);
@@ -99,6 +126,12 @@ public class PageController extends Controller {
       }
    }
 
+   /**
+    * Create/Edit/Translate a Page
+    * @param actionz The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId The urlId of the Page we're translating or editing (may be null)
+    * @param otherLanguage The lang of the Page we're translating or editing (may be null)
+    */
    public static void doNewPage(String actionz, String otherUrlId, String otherLanguage) {
       String urlId = otherUrlId;
       Page page = null;
@@ -160,6 +193,13 @@ public class PageController extends Controller {
       }
    }
 
+   /**
+    * Create a PageRef for a new Page
+    * @param actionz The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId The urlId of the Page we're translating or editing (may be null)
+    * @param otherLanguage The lang of the Page we're translating or editing (may be null)
+    * @return The PageRef
+    */
    private static PageRef doNewPageRef(String action, String otherUrlId, String otherLanguage) {
       PageRef pageRef = new PageRef();
 
