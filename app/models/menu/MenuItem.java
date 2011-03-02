@@ -81,15 +81,6 @@ public abstract class MenuItem extends MongoEntity {
    }
 
    /**
-    * Transforms the displayStr of the item into a play i18n key
-    * @return The play i18n value
-    */
-   public String getDisplayStr() {
-      Object[] dummy = new Object[]{};
-      return Messages.get(this.displayStr, dummy);
-   }
-
-   /**
     * Get the value of the item (controllerChain, title, ...)
     * @return The value
     */
