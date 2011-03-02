@@ -27,6 +27,10 @@ public class PageRef extends TranslatableRef<Page, PageRef> {
         return MongoEntity.getDs().find(PageRef.class, "id", id).get();
     }
 
+    /**
+     * Get all tags as a String ("tag1, tag2, ...")
+     * @return The list of Tags as a String
+     */
     public String getTagsAsString() {
         String tagsString = new String();
         if (this.tags == null)
@@ -36,6 +40,11 @@ public class PageRef extends TranslatableRef<Page, PageRef> {
         return tagsString;
     }
 
+    /**
+     * Find all PageRefs tagged with given Tags
+     * @param tags Tags to match
+     * @return The list of PageRefs
+     */
     public static List<PageRef> findTaggedWith(Tag ... tags) {
         List<PageRef> pageRefs = new ArrayList<PageRef>();
         for (Tag tag : tags)
@@ -43,6 +52,12 @@ public class PageRef extends TranslatableRef<Page, PageRef> {
         return pageRefs;
     }
 
+    /**
+     * Get PageRefs with pagination
+     * @param pageNumber The number of the page
+     * @param pageItemsNumber The number of item by page
+     * @return The list of PageRefs
+     */
     public static List<PageRef> getPageRefsWithPagination(Integer pageNumber, Integer pageItemsNumber){
         return MongoEntity.getDs().find(PageRef.class).offset(pageItemsNumber * pageNumber).limit(pageItemsNumber).asList();
     }

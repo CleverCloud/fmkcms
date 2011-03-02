@@ -12,6 +12,9 @@ public class Tag extends MongoEntity implements Comparable<Tag> {
 
     public String name;
 
+    /**
+     * @param name The name of the Tag
+     */
     private Tag(String name) {
         this.name = name;
     }
@@ -25,6 +28,11 @@ public class Tag extends MongoEntity implements Comparable<Tag> {
         return this.name.compareTo(otherTag.name);
     }
 
+    /**
+     * Find a tag by its name or create it if it doesn't exist
+     * @param name The name of the Tag
+     * @return The Tag
+     */
     public static Tag findOrCreateByName(String name) {
         if (name.isEmpty())
             return null;

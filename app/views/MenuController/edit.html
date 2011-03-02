@@ -21,8 +21,8 @@
     <tr>
         <td>${mi.displayStr}</td>
         <td>${mi.getLink()}</td>
-        <td>#{a @MenuController.editItem(menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.editItem'}#{/a}</td>
-        <td>#{a @MenuController.removeItem(menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.removeItem'}#{/a}</td>
+        <td>#{a @MenuController.editItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.editItem'}#{/a}</td>
+        <td>#{a @MenuController.removeItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.removeItem'}#{/a}</td>
     </tr>
     #{/list}
 </table>

@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Lob;
 import models.i18n.Translatable;
-import models.i18n.TranslatableRef;
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 import org.elasticsearch.search.SearchHit;
@@ -65,7 +64,12 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    //
    // Tags handling
    //
-   public Page tagItWith(String name) {
+   /**
+     * Tag this post
+     * @param name The name of the Tag
+     * @return self
+     */
+    public Page tagItWith(String name) {
       if (name != null && !name.isEmpty()) {
          this.reference.tags.add(Tag.findOrCreateByName(name));
          this.reference.save();
@@ -76,36 +80,70 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    //
    // Accessing stuff
    //
-   public static List<Page> getPagesByUrlId(String urlId) {
+   /**
+     * Get all Pages for a given UrlId (all translations)
+     * @param urlId The urlId
+     * @return The list of Pages
+     */
+    public static List<Page> getPagesByUrlId(String urlId) {
       Page page = Page.getPageByUrlId(urlId);
       return (page == null) ? new ArrayList<Page>() : MongoEntity.getDs().find(Page.class, "reference", page.reference).asList();
    }
 
-   public static Page getPageByUrlId(String urlId) {
+   /**
+     * Get the first Page for a given UrlId
+     * @param urlId The urlId
+     * @return The Page
+     */
+    public static Page getPageByUrlId(String urlId) {
       return MongoEntity.getDs().find(Page.class, "urlId", urlId).get();
    }
 
-   public static Page getPageByLocale(String urlId, Locale locale) {
+   /**
+     * Get a Page matching a urlId and a Locale
+     * @param urlId The urlid
+     * @param language The Locale
+     * @return The Page
+     */
+    public static Page getPageByLocale(String urlId, Locale locale) {
       Page page = Page.getPageByUrlId(urlId);
       return (page == null) ? null : MongoEntity.getDs().find(Page.class, "reference", page.reference).filter("language =", locale).get();
    }
 
-   public static Page getFirstPageByPageRef(PageRef pageRef) {
+   /**
+     * Get the first Page for a given PageRef
+     * @param reference The PageRef
+     * @return The Page
+     */
+    public static Page getFirstPageByPageRef(PageRef pageRef) {
       return MongoEntity.getDs().find(Page.class, "reference", pageRef).get();
    }
 
-   public static List<Page> getPagesByPageRef(PageRef pageRef) {
+   /**
+     * Get all Pages for a given PageRef
+     * @param reference The PageRef
+     * @return THe list of Pages
+     */
+    public static List<Page> getPagesByPageRef(PageRef pageRef) {
       return MongoEntity.getDs().find(Page.class, "reference", pageRef).asList();
    }
 
    //
    // Managing stuff
    //
+   /**
+    * Publish the Page
+    * @return self
+    */
    public Page publish() {
       this.published = true;
       return this.save();
    }
 
+   /**
+    * Unpublish the Page
+    * @return self
+    */
    public Page unPublish() {
       this.published = false;
       return this.save();

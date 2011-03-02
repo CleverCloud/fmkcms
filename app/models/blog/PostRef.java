@@ -30,14 +30,26 @@ public class PostRef extends TranslatableRef<Post, PostRef> {
     //
     // Accessing stuff
     //
+    /**
+     * Get the previous PostRef from the blog
+     * @return The previous PostRef
+     */
     public PostRef previous() {
         return MongoEntity.getDs().find(PostRef.class, "postedAt <", this.postedAt).order("-postedAt").get();
     }
 
+    /**
+     * Get the next PostRef from the blog
+     * @return The next PostRef
+     */
     public PostRef next() {
         return MongoEntity.getDs().find(PostRef.class, "postedAt >", this.postedAt).order("postedAt").get();
     }
 
+    /**
+     * Get all tags as a String ("tag1, tag2, ...")
+     * @return The list of Tags as a String
+     */
     public String getTagsAsString() {
         String tagsString = new String();
         if (this.tags == null)
@@ -47,6 +59,11 @@ public class PostRef extends TranslatableRef<Post, PostRef> {
         return tagsString;
     }
 
+    /**
+     * Find all PostRefs tagged with given Tags
+     * @param tags Tags to match
+     * @return The list of PostRefs
+     */
     public static List<PostRef> findTaggedWith(Tag ... tags) {
         List<PostRef> postRefs = new ArrayList<PostRef>();
         for (Tag tag : tags)

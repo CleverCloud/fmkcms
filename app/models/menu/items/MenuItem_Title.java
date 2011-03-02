@@ -10,9 +10,12 @@ import models.menu.MenuItem;
 public class MenuItem_Title extends MenuItem {
 
     public String title;
-    
-   
 
+    /**
+     * @param title The title
+     * @param displayStr The string to display (play i18n key)
+     * @param menu The subMenu belonging to this item
+     */
     public MenuItem_Title(String title, String displayStr, Menu menu) {
         //super(displayStr, menu); // Morphia failure with latest play
         this.displayStr = displayStr;
@@ -20,6 +23,10 @@ public class MenuItem_Title extends MenuItem {
         this.title = title;
     }
 
+    /**
+     * @param title The title
+     * @param displayStr The string to display (play i18n key)
+     */
     public MenuItem_Title(String title, String displayStr) {
         this.displayStr = displayStr;
         this.title = title;

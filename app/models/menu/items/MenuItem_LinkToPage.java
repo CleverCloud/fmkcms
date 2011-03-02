@@ -16,6 +16,11 @@ public class MenuItem_LinkToPage extends MenuItem {
     @PageUrlID
     public String urlId;
 
+    /**
+     * @param urlId The urlId of the page
+     * @param displayStr The string to display (play i18n key)
+     * @param menu The subMenu belonging to this item
+     */
     public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {
         //super(displayStr, menu); // Morphia failure with latest play
         this.displayStr = displayStr;
@@ -23,6 +28,10 @@ public class MenuItem_LinkToPage extends MenuItem {
         this.urlId = urlId;
     }
 
+    /**
+     * @param urlid The urlid of the page
+     * @param displayStr The string to display (play i18n key)
+     */
     public MenuItem_LinkToPage(String urlId, String displayStr) {
         //super(displayStr);
         this.displayStr = displayStr;

@@ -25,28 +25,38 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
    @Reference
    public R reference;
 
-   public Translatable() {}
+   public Translatable() {
+   }
 
-    public List<Locale> getAvailableLocales() {
-        List<T> items = (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).asList();
-        List<Locale> locales = new ArrayList<Locale>();
+   /**
+    * Get all available locales for this Translatable
+    * @return The list of Locale
+    */
+   public List<Locale> getAvailableLocales() {
+      List<T> items = (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).asList();
+      List<Locale> locales = new ArrayList<Locale>();
 
-        if (items != null && !items.isEmpty()) {
-            for (T item : items)
-                locales.add(item.language);
-        }
-        return locales;
-    }
+      if (items != null && !items.isEmpty()) {
+         for (T item : items) {
+            locales.add(item.language);
+         }
+      }
+      return locales;
+   }
 
-    public Map<Locale,T> getAvailableLocalesAndTranslatables() {
-        Map<Locale,T> returnMap = new HashMap<Locale, T>();
-        List<T> items = (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).asList();
+   /**
+    * Get all available locales for this Translatable + the corresponding Translatables
+    * @return A Map<Locale, Translatable>
+    */
+   public Map<Locale, T> getAvailableLocalesAndTranslatables() {
+      Map<Locale, T> returnMap = new HashMap<Locale, T>();
+      List<T> items = (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).asList();
 
-        if (items != null && !items.isEmpty()) {
-            for (T item : items)
-                returnMap.put(item.language, item);
-        }
-        return returnMap;
-    }
-
+      if (items != null && !items.isEmpty()) {
+         for (T item : items) {
+            returnMap.put(item.language, item);
+         }
+      }
+      return returnMap;
+   }
 }

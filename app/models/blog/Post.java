@@ -56,6 +56,11 @@ public class Post extends Translatable<Post, PostRef> {
     //
     // Tags handling
     //
+    /**
+     * Tag this post
+     * @param name The name of the Tag
+     * @return self
+     */
     public Post tagItWith(String name) {
         if (name != null && !name.isEmpty()) {
             this.reference.tags.add(Tag.findOrCreateByName(name));
@@ -67,24 +72,52 @@ public class Post extends Translatable<Post, PostRef> {
     //
     // Accessing stuff
     //
+    /**
+     * Get a Post matching a urlId and a Locale
+     * @param urlId The urlid
+     * @param language The Locale
+     * @return The Post
+     */
     public static Post getPostByLocale(String urlId, Locale language) {
         Post post = Post.getPostByUrlId(urlId);
         return (post == null) ? null : MongoEntity.getDs().find(Post.class, "reference", post.reference).filter("language =", language).get();
     }
 
+    /**
+     * Get all Posts for a given PostRef
+     * @param reference The PostRef
+     * @return THe list of Posts
+     */
     public static List<Post> getPostsByPostRef(PostRef reference) {
         return MongoEntity.getDs().find(Post.class, "reference", reference).asList();
     }
 
+    /**
+     * Get all Posts for a given UrlId (all translations)
+     * @param urlId The urlId
+     * @return The list of Posts
+     */
     public static List<Post> getPostsByUrlId(String urlId) {
         Post post = Post.getPostByUrlId(urlId);
         return (post == null) ? new ArrayList<Post>() : MongoEntity.getDs().find(Post.class, "reference", post.reference).asList();
     }
 
+    /**
+     * Get the first Post for a given UrlId
+     * @param urlId The urlId
+     * @return The Post
+     */
     public static Post getPostByUrlId(String urlId) {
         return MongoEntity.getDs().find(Post.class, "urlId", urlId).get();
     }
 
+    /**
+     * Get the latest Posts for a given Locale
+     * @param locale The Locale
+     * @param number The number of posts
+     * @param page The page (for pagination)
+     * @return The list of posts
+     */
     public static List<Post> getLatestPostsByLocale(Locale locale, Integer number, Integer page) {
         if (number == null)
             number = 10;
@@ -94,7 +127,12 @@ public class Post extends Translatable<Post, PostRef> {
         return (posts == null) ? new ArrayList<Post>() : posts;
     }
 
-    public static Object getFirstPostByPostRef(PostRef reference) {
+    /**
+     * Get the first Post for a given PostRef
+     * @param reference The PostRef
+     * @return The Post
+     */
+    public static Post getFirstPostByPostRef(PostRef reference) {
         return MongoEntity.getDs().find(Post.class, "reference", reference).get();
     }
 

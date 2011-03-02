@@ -17,63 +17,93 @@ import play.i18n.Messages;
  */
 public abstract class MenuItem extends MongoEntity {
 
-    @Reference
-    public Menu menu;
-    @Required
-    public String displayStr;
-    public String cssLinkClass;
-    @Transient
-    private String classname = getClass().getCanonicalName();
+   @Reference
+   public Menu menu;
 
-    public MenuItem() {
-    }
+   @Required
+   public String displayStr;
 
-    public String getClassname() {
-        return classname;
-    }
+   public String cssLinkClass;
 
-    public MenuItem(String displayStr) {
-        this.displayStr = displayStr;
-    }
+   @Transient
+   private String classname = getClass().getCanonicalName();
 
-    public MenuItem(String displayStr, Menu menu) {
-        this.displayStr = displayStr;
-        this.menu = menu;
-    }
+   public MenuItem() {
+   }
 
-    public abstract String getLink();
+   public String getClassname() {
+      return classname;
+   }
 
-    public void setMenu(Menu menu, Menu parent) {
-        if (menu != null && menu.isTree(this, parent)) {
-            this.menu = menu;
-        }
-    }
+   public MenuItem(String displayStr) {
+      this.displayStr = displayStr;
+   }
 
-    public static MenuItem getByMongodStringId(String id) {
-        MenuItem mi = MongoEntity.getDs().get(MenuItem.class, new ObjectId(id));
-        if (mi == null) {
-            mi = MongoEntity.getDs().get(MenuItem_ControllerChain.class, new ObjectId(id));
-        }
-        if (mi == null) {
-            mi = MongoEntity.getDs().get(MenuItem_LinkToPage.class, new ObjectId(id));
-        }
-        if (mi == null) {
-            mi = MongoEntity.getDs().get(MenuItem_OutgoingURL.class, new ObjectId(id));
-        }
-        if (mi == null) {
-            mi = MongoEntity.getDs().get(MenuItem_Title.class, new ObjectId(id));
-        }
-        return mi;
-    }
+   public MenuItem(String displayStr, Menu menu) {
+      this.displayStr = displayStr;
+      this.menu = menu;
+   }
 
-    public String getDisplayStr() {
-       Object[] dummy = new Object[]{};
-       return Messages.get(this.displayStr, dummy);
-    }
+   /**
+    * @return The link to put in an anchor
+    */
+   public abstract String getLink();
 
-    public abstract String getValue();
-    public abstract void setValue(String value);
+   /**
+    * Set the menu as submenu from this item if no recursion is found
+    * @param menu The submenu
+    * @param parent The parent menu
+    */
+   public void setMenu(Menu menu, Menu parent) {
+      if (menu != null && menu.isTree(this, parent)) {
+         this.menu = menu;
+      }
+   }
 
-    public abstract String getType();
+   /**
+    * @param type The type of the menuItem
+    * @param id The id of the menuItem
+    * @return The MenuItem
+    */
+   public static MenuItem getByMongodStringId(String type, String id) {
+
+      if (type.equals("ControllerChain")) {
+         return MongoEntity.getDs().get(MenuItem_ControllerChain.class, new ObjectId(id));
+      } else if (type.equals("LinkToPage")) {
+         return MongoEntity.getDs().get(MenuItem_LinkToPage.class, new ObjectId(id));
+      } else if (type.equals("OutgoingURL")) {
+         return MongoEntity.getDs().get(MenuItem_OutgoingURL.class, new ObjectId(id));
+      } else if (type.equals("Title")) {
+         return MongoEntity.getDs().get(MenuItem_Title.class, new ObjectId(id));
+      } else {
+         return null;
+      }
+   }
+
+   /**
+    * Transforms the displayStr of the item into a play i18n key
+    * @return The play i18n value
+    */
+   public String getDisplayStr() {
+      Object[] dummy = new Object[]{};
+      return Messages.get(this.displayStr, dummy);
+   }
+
+   /**
+    * Get the value of the item (controllerChain, title, ...)
+    * @return The value
+    */
+   public abstract String getValue();
+
+   /**
+    * Set the value of the item (controllerChain, title, ...)
+    * @param value The value
+    */
+   public abstract void setValue(String value);
+
+   /**
+    * Get the type of the item
+    * @return The type ("ControllerChain", "Title", ...)
+    */
+   public abstract String getType();
 }
- 

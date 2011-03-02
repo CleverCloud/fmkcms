@@ -133,8 +133,8 @@ public class MenuController extends Controller {
       edit(id);
    }
 
-   public static void editItem(String idMenu, String idMenuItem) {
-      MenuItem item = MenuItem.getByMongodStringId(idMenuItem);
+   public static void editItem(String type, String idMenu, String idMenuItem) {
+      MenuItem item = MenuItem.getByMongodStringId(type, idMenuItem);
       if (item == null) {
          notFound();
       }
@@ -146,8 +146,8 @@ public class MenuController extends Controller {
       render(idMenu, item, types);
    }
 
-   public static void doEditItem(String idMenu, String id) {
-      MenuItem item = MenuItem.getByMongodStringId(id);
+   public static void doEditItem(String type, String idMenu, String id) {
+      MenuItem item = MenuItem.getByMongodStringId(type, id);
       Menu menu = Menu.getByMongodStringId(idMenu);
       if (item == null || menu == null) {
          notFound();
@@ -168,15 +168,15 @@ public class MenuController extends Controller {
       if (Validation.hasErrors()) {
          params.flash(); // add http parameters to the flash scope
          Validation.keep();
-         editItem(idMenu, id);
+         editItem(type, idMenu, id);
       }
       item.refresh().save();
       edit(idMenu);
    }
 
-   public static void removeItem(String idMenu, String idMenuItem) {
+   public static void removeItem(String type, String idMenu, String idMenuItem) {
       Menu menu = Menu.getByMongodStringId(idMenu);
-      MenuItem item = MenuItem.getByMongodStringId(idMenuItem);
+      MenuItem item = MenuItem.getByMongodStringId(type, idMenuItem);
       if (menu == null || item == null) {
          notFound();
       }

@@ -24,6 +24,10 @@ public abstract class MongoEntity {
    @Transient
    private static Datastore datastore;
 
+   /**
+    * Get the Datastore used to store the data
+    * @return The Datastore
+    */
    public static Datastore getDs() {
       if (MongoEntity.datastore == null) {
          try {
@@ -37,6 +41,10 @@ public abstract class MongoEntity {
       return MongoEntity.datastore;
    }
 
+   /**
+    * Save the Entity
+    * @return self
+    */
    public <T extends MongoEntity> T save() {
       MongoEntity.getDs().save(this);
       MongoEntity.getDs().ensureIndexes(this.getClass());
@@ -48,6 +56,10 @@ public abstract class MongoEntity {
       return (T) MongoEntity.getDs().get(this.getClass(), this.id);
    }
 
+   /**
+    * Refresh the Entity (fill missing field with values from BDD)
+    * @return self, refreshed
+    */
    public <T extends MongoEntity> T refresh() {
       if (this.id == null) {
          return null;
@@ -71,6 +83,9 @@ public abstract class MongoEntity {
       }
    }
 
+   /**
+    * Delete the Entity
+    */
    public void delete() {
       MongoEntity.getDs().delete(this);
    }
