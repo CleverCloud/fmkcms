@@ -1,12 +1,10 @@
 <script type="text/javascript">
    $(document).ready(function(){
-      $("#langSwitcher").children().map(function(){
+      $("#langSwitcher").change(function(){
          var newLang = $(this).val();
-         $(this).select(function(){
-            alert(newLang);
-            $.post("@{I18nController.changeLang}", {lang: newLang}, function(){
-               location.reload();
-            });
+         alert(newLang);
+         $.post("@{I18nController.changeLang}", {lang: newLang}, function(){
+            location.reload();
          });
       });
    });
