@@ -2,9 +2,9 @@
 <script type="text/javascript">
    $(document).ready(function(){
       $('#langSwitcher option').each(function(){
-         var newLang = $(this).attr('value');
+         alert("hop");
          $(this).select(function(){
-            alert(newLang);
+            var newLang = $(this).attr('value');
             $.post("@{I18nController.changeLang}", {lang: newLang});
             location.reload();
          });
