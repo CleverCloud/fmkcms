@@ -1,7 +1,7 @@
 #{set 'moreScripts'}
 <script type="text/javascript">
    $(document).ready(function(){
-      $('#langSwitcher option').each(function(){
+      $('#langSwitcher > option').each(function(){
          alert("hop");
          $(this).select(function(){
             var newLang = $(this).attr('value');
