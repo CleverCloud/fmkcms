@@ -2,8 +2,10 @@
 <script type="text/javascript">
    $(document).ready(function(){
       $('#langSwitcher option').each(function(){
+         var newLang = $(this).attr('value');
          $(this).select(function(){
-            $.post("@{I18nController.changeLang}", {lang: $(this).attr('value')});
+            alert(newLang);
+            $.post("@{I18nController.changeLang}", {lang: newLang});
             location.reload();
          });
       });
