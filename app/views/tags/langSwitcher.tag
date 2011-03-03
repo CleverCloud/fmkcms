@@ -4,6 +4,7 @@
       $('#langSwitcher option').each(function(){
          $(this).select(function(){
             $.post("@{I18nController.changeLang}", {lang: $(this).attr('value')});
+            location.reload();
          });
       });
    });
