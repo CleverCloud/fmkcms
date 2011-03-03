@@ -1,11 +1,12 @@
 <script type="text/javascript">
    $(document).ready(function(){
       $("#langSwitcher").children().map(function(){
-         alert("hop");
          $(this).select(function(){
             var newLang = $(this).attr('value');
-            $.post("@{I18nController.changeLang}", {lang: newLang});
-            location.reload();
+            alert(newLang);
+            $.post("@{I18nController.changeLang}", {lang: newLang}, function(){
+               location.reload();
+            });
          });
       });
    });

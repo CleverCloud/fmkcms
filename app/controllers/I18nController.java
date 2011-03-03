@@ -151,5 +151,6 @@ public class I18nController extends Controller {
    public static void changeLang(String lang) {
       System.out.println("changing lang: " + lang);
       Lang.change(lang);
+      ok();
    }
 }
