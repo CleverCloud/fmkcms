@@ -143,4 +143,12 @@ public class I18nController extends Controller {
       }
       return locales;
    }
+
+   /**
+    * Change the lang for the next requests
+    * @param lang The new lang
+    */
+   public static void changeLang(String lang) {
+      Lang.change(lang);
+   }
 }
