@@ -1,4 +1,3 @@
-#{set 'moreScripts'}
 <script type="text/javascript">
    $(document).ready(function(){
       $("#langSwitcher").children().map(function(){
@@ -11,7 +10,6 @@
       });
    });
 </script>
-#{/set}
 <select id="langSwitcher">
    #{list items:play.Play.langs, as:'l'}
    <option value="${l}" ${play.i18n.Lang.get().equals(l) ? 'selected="selected"'.raw() : ''}>
