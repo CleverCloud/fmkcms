@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import play.Play;
+import play.i18n.Lang;
 import play.mvc.Controller;
 import play.mvc.Http;
 
@@ -30,6 +31,7 @@ public class I18nController extends Controller {
       if (tldLocale != null) {
          locales.add(tldLocale);
       }
+      locales.add(Lang.getLocale());
       locales.addAll(I18nController.getBrowserLanguages());
 
       return locales;
@@ -125,7 +127,7 @@ public class I18nController extends Controller {
    }
 
    /**
-    * Get all user spported Locales as a List of String
+    * Get all supported Locales as a List of String
     * @param blacklist The Locales to blacklist
     * @return The list of Locales
     */
@@ -140,5 +142,14 @@ public class I18nController extends Controller {
          }
       }
       return locales;
+   }
+
+   /**
+    * Change the lang for the next requests
+    * @param lang The new lang
+    */
+   public static void changeLang(String lang) {
+      Lang.change(lang);
+      ok();
    }
 }
