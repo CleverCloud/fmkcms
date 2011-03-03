@@ -2,7 +2,6 @@
    $(document).ready(function(){
       $("#langSwitcher").change(function(){
          var newLang = $(this).val();
-         alert(newLang);
          $.post("@{I18nController.changeLang}", {lang: newLang}, function(){
             location.reload();
          });

@@ -149,7 +149,6 @@ public class I18nController extends Controller {
     * @param lang The new lang
     */
    public static void changeLang(String lang) {
-      System.out.println("changing lang: " + lang);
       Lang.change(lang);
       ok();
    }
