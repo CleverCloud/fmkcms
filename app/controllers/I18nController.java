@@ -31,7 +31,7 @@ public class I18nController extends Controller {
       if (tldLocale != null) {
          locales.add(tldLocale);
       }
-      locales.add(Lang.getLocale());
+      locales.add(new Locale(Lang.get()));
       locales.addAll(I18nController.getBrowserLanguages());
 
       return locales;
