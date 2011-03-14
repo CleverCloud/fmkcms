@@ -6,3 +6,5 @@ test-result
 test-result/application.log
 html
 .ditz-config
+*.backup
+

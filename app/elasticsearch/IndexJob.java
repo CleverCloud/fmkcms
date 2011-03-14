@@ -12,26 +12,25 @@ import play.jobs.Job;
  */
 public class IndexJob extends Job<String> {
 
-    private Object indexable;
-    private String indexname;
-    private String id;
+   private Object indexable;
+   private String indexname;
+   private String id;
 
-    public IndexJob(Object indexable, String indexname, String id) {
-        this.indexable = indexable;
-        this.indexname = indexname;
-        this.id = id;
-    }
+   public IndexJob(Object indexable, String indexname, String id) {
+      this.indexable = indexable;
+      this.indexname = indexname;
+      this.id = id;
+   }
 
-    @Override
-    public String doJobWithResult() throws Exception {
-	
-        Gson gson = new Gson();
-        Client c = new ElasticSearchClient();
-        String t = gson.toJson(indexable);
+   @Override
+   public String doJobWithResult() throws Exception {
 
-        IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
-        c.close();
-        return response.toString();
-    }
-    
+      Gson gson = new Gson();
+      Client c = new ElasticSearchClient();
+      String t = gson.toJson(indexable);
+
+      IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
+      c.close();
+      return response.toString();
+   }
 }

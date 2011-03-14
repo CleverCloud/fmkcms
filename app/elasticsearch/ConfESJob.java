@@ -24,7 +24,6 @@ import play.vfs.VirtualFile;
 public class ConfESJob extends Job {
 
    static Client c;
-
    static AdminClient admin;
 
    @Override

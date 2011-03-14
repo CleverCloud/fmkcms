@@ -5,48 +5,48 @@
 
 #{field 'item.value'}
 <p>
-    <label>Value: </label>
-     %{ if (field.flash == null) field.flash = item?.getValue(); }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Value: </label>
+   %{ if (field.flash == null) field.flash = item?.getValue(); }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'item.display'}
 <p>
-    <label>Display string: </label>
-     %{ if (field.flash == null) field.flash = item?.displayStr; }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Display string: </label>
+   %{ if (field.flash == null) field.flash = item?.displayStr; }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'item.cssLink'}
 <p>
-    <label>Additionnal css class for the link: </label>
-    %{ if (field.flash == null) field.flash = item?.cssLinkClass; }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Additionnal css class for the link: </label>
+   %{ if (field.flash == null) field.flash = item?.cssLinkClass; }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'item.subMenu'}
 <p>
-    <label>SubMenu: </label>
-    %{ if (field.flash == null) field.flash = item?.menu?.name; }%
-    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-        #{list items:models.menu.Menu.getAllNames(), as:'m'}
-            <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="selected"'.raw() : ''}>${m}</option>
-        #{/list}
-    </select>
-    <span class="error">${field.error}</span>
+   <label>SubMenu: </label>
+   %{ if (field.flash == null) field.flash = item?.menu?.name; }%
+   <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+      #{list items:models.menu.Menu.getAllNames(), as:'m'}
+      <option value="${m}" ${(field.flash?.toString()?.equals(m))? 'selected="selected"'.raw() : ''}>${m}</option>
+      #{/list}
+   </select>
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 <ul>
-#{errors}
-    <li>${error}</li>
-#{/errors}
+   #{errors}
+   <li>${error}</li>
+   #{/errors}
 </ul>
 
 

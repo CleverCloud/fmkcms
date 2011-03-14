@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package val;
 
 import java.util.HashMap;
@@ -13,8 +9,6 @@ import net.sf.oval.configuration.annotation.AbstractAnnotationCheck;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.exception.OValException;
 import play.Logger;
-import play.exceptions.ActionNotFoundException;
-import play.exceptions.NoRouteFoundException;
 import play.mvc.Router;
 
 /**
@@ -23,46 +17,44 @@ import play.mvc.Router;
  */
 public class ControllerChainCheck extends AbstractAnnotationCheck<ControllerChain> {
 
-    final static String mes = "validation.controllerchain";
+   final static String mes = "validation.controllerchain";
 
-    @Override
-    public void configure(ControllerChain controllerchain) {
-        setMessage(controllerchain.message());
-    }
+   @Override
+   public void configure(ControllerChain controllerchain) {
+      setMessage(controllerchain.message());
+   }
 
-    public boolean isSatisfied(Object o, Object value, OValContext ovc, Validator vldtr) throws OValException {
-        String controllerChain = (String) value;
-        if (!controllerChain.endsWith(")")) {
-            controllerChain = controllerChain + "()";
-        }
-        Matcher m = new Pattern("^({action}[^\\s(]+)({params}.+)?(\\s*)$").matcher(controllerChain);
-        try {
-            if (m.matches()) {
-                String params = m.group("params");
-                Map<String, Object> staticArgs = new HashMap<String, Object>();
+   public boolean isSatisfied(Object o, Object value, OValContext ovc, Validator vldtr) throws OValException {
+      String controllerChain = (String) value;
+      if (!controllerChain.endsWith(")")) {
+         controllerChain = controllerChain + "()";
+      }
+      Matcher m = new Pattern("^({action}[^\\s(]+)({params}.+)?(\\s*)$").matcher(controllerChain);
+      try {
+         if (m.matches()) {
+            String params = m.group("params");
+            Map<String, Object> staticArgs = new HashMap<String, Object>();
 
-                if (params == null || params.length() < 1) {
-                    Router.reverse(m.group("action"));
-                }
-                params = params.substring(1, params.length() - 1);
-                for (String param : params.split(",")) {
-                    Matcher matcher = new Pattern("([a-zA-Z_0-9]+):'(.*)'").matcher(param);
-                    if (matcher.matches()) {
-                        staticArgs.put(matcher.group(1), matcher.group(2));
-                    } else {
-                        Logger.warn("Ignoring %s (static params must be specified as key:'value',...)", params);
-                    }
-                }
-
-                Router.reverse(m.group("action"), staticArgs);
-
+            if (params == null || params.length() < 1) {
+               Router.reverse(m.group("action"));
             }
-            Router.reverse(controllerChain);
-            return true;
-        } catch (NoRouteFoundException e) {
-            return false;
-        } catch (ActionNotFoundException e) {
-            return false;
-        }
-    }
+            params = params.substring(1, params.length() - 1);
+            for (String param : params.split(",")) {
+               Matcher matcher = new Pattern("([a-zA-Z_0-9]+):'(.*)'").matcher(param);
+               if (matcher.matches()) {
+                  staticArgs.put(matcher.group(1), matcher.group(2));
+               } else {
+                  Logger.warn("Ignoring %s (static params must be specified as key:'value',...)", params);
+               }
+            }
+
+            Router.reverse(m.group("action"), staticArgs);
+
+         }
+         Router.reverse(controllerChain);
+         return true;
+      } catch (Exception e) {
+         return false;
+      }
+   }
 }

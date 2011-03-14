@@ -82,6 +82,7 @@ public class I18nController extends Controller {
       // Add your tld specific locales here
       tldLocales.put("com", Locale.ENGLISH);
       tldLocales.put("org", Locale.ENGLISH);
+      tldLocales.put("us", Locale.ENGLISH);
 
       String[] domainSplitted = Http.Request.current().domain.split("\\.");
       String tld = domainSplitted[domainSplitted.length - 1];

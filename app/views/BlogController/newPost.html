@@ -18,67 +18,67 @@
 
 #{field 'post.urlId'}
 <p>
-    <label for="${field.name}">Url ID: </label>
-    %{
-    if (field.flash == null && otherPost != null)
-    field.flash = otherPost.urlId;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label for="${field.name}">Url ID: </label>
+   %{
+   if (field.flash == null && otherPost != null)
+   field.flash = otherPost.urlId;
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'post.title'}
 <p>
-    <label for="${field.name}">Title: </label>
-    %{
-    if (field.flash == null && otherPost != null)
-    field.flash = otherPost.title;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label for="${field.name}">Title: </label>
+   %{
+   if (field.flash == null && otherPost != null)
+   field.flash = otherPost.title;
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'post.content'}
 <p>
-    <label for="${field.name}">Content: </label>
-    %{
-    if (field.flash == null && otherPost != null)
-    field.flash = otherPost.content;
-    }%
-    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
-    <span class="error">${field.error}</span>
+   <label for="${field.name}">Content: </label>
+   %{
+   if (field.flash == null && otherPost != null)
+   field.flash = otherPost.content;
+   }%
+   <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'post.language'}
 <p>
    <label for="${field.name}">Language: </label>
-    #{if action.equals("edit")}
-    <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPost?.language}" class="${field.errorClass}" />
-    ${otherPost?.language}
-    #{/if}
-    #{else}
-    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-        #{list items:controllers.I18nController.getAllLocales(otherPost?.getAvailableLocales()), as:'l'}
-        <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="selected"'.raw() : ''}>${l}</option>
-        #{/list}
-    </select>
-    #{/else}
-    <span class="error">${field.error}</span>
+   #{if action.equals("edit")}
+   <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPost?.language}" class="${field.errorClass}" />
+   ${otherPost?.language}
+   #{/if}
+   #{else}
+   <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+      #{list items:controllers.I18nController.getAllLocales(otherPost?.getAvailableLocales()), as:'l'}
+      <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="selected"'.raw() : ''}>${l}</option>
+      #{/list}
+   </select>
+   #{/else}
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'postReference.tags'}
 <p>
-    <label for="${field.name}">Tags: </label>
-    %{
-    if (field.flash == null && otherPost != null)
-    field.flash = otherPost.reference.getTagsAsString();
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label for="${field.name}">Tags: </label>
+   %{
+   if (field.flash == null && otherPost != null)
+   field.flash = otherPost.reference.getTagsAsString();
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 

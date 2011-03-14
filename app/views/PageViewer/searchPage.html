@@ -2,10 +2,10 @@
 #{set title:'Home' /}
 <h1>&{'resultfor'}${q}</h1>
 <dl>
-    #{list results, as:'page'}
-    <dt><a href="@{PageViewer.page(page.urlId)}">${page.title}</a></dt>
-    <dd>
-        ${page.content.replaceAll("\\<.*?\\>", "").substring(0,400)}...
-    </dd>
-    #{/list}
+   #{list results, as:'page'}
+   <dt><a href="@{PageViewer.page(page.urlId)}">${page.title}</a></dt>
+   <dd>
+      ${page.content.replaceAll("\\<.*?\\>", "").substring(0,400)}...
+   </dd>
+   #{/list}
 </dl>

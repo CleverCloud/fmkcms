@@ -6,7 +6,6 @@ import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
 import com.mongodb.Mongo;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bson.types.ObjectId;
@@ -21,7 +20,6 @@ public abstract class MongoEntity {
 
    @Id
    public ObjectId id;
-
    @Transient
    private static Datastore datastore;
 

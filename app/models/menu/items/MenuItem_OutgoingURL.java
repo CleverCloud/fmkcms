@@ -10,35 +10,33 @@ import play.data.validation.URL;
  */
 public class MenuItem_OutgoingURL extends MenuItem {
 
-    @URL
-    public String url;
+   @URL
+   public String url;
 
-    /**
-     * @param url The url
-     * @param displayStr The string to display (play i18n key)
-     * @param menu The subMenu belonging to this item
-     */
-    public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
-        //super(displayStr, menu); // Morphia failure with latest play
-        this.displayStr = displayStr;
-        this.menu = menu;
-        this.url = url;
-    }
+   /**
+    * @param url The url
+    * @param displayStr The string to display (play i18n key)
+    * @param menu The subMenu belonging to this item
+    */
+   public MenuItem_OutgoingURL(String url, String displayStr, Menu menu) {
+      this.displayStr = displayStr;
+      this.menu = menu;
+      this.url = url;
+   }
 
-    /**
-     * @param url The url
-     * @param displayStr The string to display (play i18n key)
-     */
-    public MenuItem_OutgoingURL(String url, String displayStr) {
-        //super(displayStr);
-        this.displayStr = displayStr;
-        this.url = url;
-    }
+   /**
+    * @param url The url
+    * @param displayStr The string to display (play i18n key)
+    */
+   public MenuItem_OutgoingURL(String url, String displayStr) {
+      this.displayStr = displayStr;
+      this.url = url;
+   }
 
-    @Override
-    public String getLink() {
-        return this.url;
-    }
+   @Override
+   public String getLink() {
+      return this.url;
+   }
 
    @Override
    public String getValue() {

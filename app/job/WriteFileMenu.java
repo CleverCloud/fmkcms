@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package job;
 
 import com.google.gson.Gson;
@@ -11,9 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import models.menu.Menu;
 import models.menu.MenuItem;
-import org.bson.types.ObjectId;
 import play.Play;
-import play.exceptions.JavaException;
 import play.jobs.Job;
 import play.templates.JavaExtensions;
 
@@ -23,26 +17,26 @@ import play.templates.JavaExtensions;
  */
 public class WriteFileMenu extends Job {
 
-    private Menu menu;
+   private Menu menu;
 
-    public WriteFileMenu(Menu menu) {
-        this.menu = menu;
-    }
+   public WriteFileMenu(Menu menu) {
+      this.menu = menu;
+   }
 
-    @Override
-    public void doJob() throws Exception {
+   @Override
+   public void doJob() throws Exception {
 
-        Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().create();
+      Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().create();
 
-        File f = new File(Play.applicationPath + File.separator + "data" + File.separator + "menus" + File.separator + JavaExtensions.slugify(menu.name, true) + ".json");
-        f.mkdirs();
-        if (f.exists()) {
-            f.delete();
-        }
-        f.createNewFile();
-        FileWriter fw = new FileWriter(f);
-        fw.write(gson.toJson(menu));
-        fw.close();
+      File f = new File(Play.applicationPath + File.separator + "data" + File.separator + "menus" + File.separator + JavaExtensions.slugify(menu.name, true) + ".json");
+      f.mkdirs();
+      if (f.exists()) {
+         f.delete();
+      }
+      f.createNewFile();
+      FileWriter fw = new FileWriter(f);
+      fw.write(gson.toJson(menu));
+      fw.close();
 
-    }
+   }
 }

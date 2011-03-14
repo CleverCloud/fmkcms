@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package converter;
 
 import com.google.gson.Gson;
@@ -28,52 +24,37 @@ import models.menu.MenuItem;
  */
 public class MenuItemConverter implements JsonDeserializer<MenuItem>, JsonSerializer<MenuItem> {
 
-    public MenuItem deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException {
-        try {
-            Class c = Class.forName(je.getAsJsonObject().get("classname").getAsString());
-            Object obj = c.getConstructor(new Class[]{}).newInstance();
-            Iterator<Entry<String, JsonElement>> it = je.getAsJsonObject().entrySet().iterator();
-            Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).create();
-            while (it.hasNext()) {
-                Entry<String, JsonElement> entry = it.next();
-                if (entry.getKey().equals("classname") || entry.getKey().equals("id")) {
-                    continue;
-                }
-                Field f = c.getField(entry.getKey());
-                f.set(obj, gson.fromJson(entry.getValue(), f.getType()));
+   public MenuItem deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) throws JsonParseException {
+      try {
+         Class c = Class.forName(je.getAsJsonObject().get("classname").getAsString());
+         Object obj = c.getConstructor(new Class[]{}).newInstance();
+         Iterator<Entry<String, JsonElement>> it = je.getAsJsonObject().entrySet().iterator();
+         Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).create();
+         while (it.hasNext()) {
+            Entry<String, JsonElement> entry = it.next();
+            if (entry.getKey().equals("classname") || entry.getKey().equals("id")) {
+               continue;
             }
-            Method m = c.getMethod("save", new Class[]{});
-            m.invoke(obj, new Object[]{});
-            return (MenuItem) obj;
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-        return null;
-    }
+            Field f = c.getField(entry.getKey());
+            f.set(obj, gson.fromJson(entry.getValue(), f.getType()));
+         }
+         Method m = c.getMethod("save", new Class[]{});
+         m.invoke(obj, new Object[]{});
+         return (MenuItem) obj;
+      } catch (Exception ex) {
+         Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+   }
 
-    public JsonElement serialize(MenuItem t, Type type, JsonSerializationContext jsc) {
-        try {
-            Gson gson = new Gson();
-            Class c = Class.forName(t.getClassname());
-            return gson.toJsonTree(c.cast(t));
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
+   public JsonElement serialize(MenuItem t, Type type, JsonSerializationContext jsc) {
+      try {
+         Gson gson = new Gson();
+         Class c = Class.forName(t.getClassname());
+         return gson.toJsonTree(c.cast(t));
+      } catch (ClassNotFoundException ex) {
+         Logger.getLogger(MenuItemConverter.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+   }
 }

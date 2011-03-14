@@ -7,16 +7,16 @@ ${page.content}
 
 #{if isConnected}
 <div class="translateMe">
-    <a href="@{PageController.translate(page.urlId, page.language)}">Translate me !</a>
-    &nbsp;|&nbsp;
-    <a href="@{PageController.edit(page.urlId, page.language)}">Edit me !</a>
-    &nbsp;|&nbsp;
-    <a href="@{PageController.deletePage_confirm(page.urlId, page.language)}">Delete me !</a>
+   <a href="@{PageController.translate(page.urlId, page.language)}">Translate me !</a>
+   &nbsp;|&nbsp;
+   <a href="@{PageController.edit(page.urlId, page.language)}">Edit me !</a>
+   &nbsp;|&nbsp;
+   <a href="@{PageController.deletePage_confirm(page.urlId, page.language)}">Delete me !</a>
 </div>
 #{/if}
 
 <ul>
-#{list items:page.reference.tags, as:'tag'}
-    <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>
-    #{/list}
+   #{list items:page.reference.tags, as:'tag'}
+   <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>
+   #{/list}
 </ul>

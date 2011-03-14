@@ -5,9 +5,9 @@
 
 #{field 'menu.name'}
 <p>
-    <label>Name: </label>
-    <input type="text" id="${field.id}" name="${field.name}" value="${menu.name}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Name: </label>
+   <input type="text" id="${field.id}" name="${field.name}" value="${menu.name}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
@@ -17,12 +17,12 @@
 <a href="@{MenuController.addItem(menu.id.toStringMongod())}">&{'admin.menu.addMenuItem'}</a>
 
 <table class="listofmenuItems">
-    #{list items:menu.items, as:'mi'}
-    <tr>
-        <td>${mi.displayStr}</td>
-        <td>${mi.getLink()}</td>
-        <td>#{a @MenuController.editItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.editItem'}#{/a}</td>
-        <td>#{a @MenuController.removeItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.removeItem'}#{/a}</td>
-    </tr>
-    #{/list}
+   #{list items:menu.items, as:'mi'}
+   <tr>
+      <td>${mi.displayStr}</td>
+      <td>${mi.getLink()}</td>
+      <td>#{a @MenuController.editItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.editItem'}#{/a}</td>
+      <td>#{a @MenuController.removeItem(mi.getType(), menu.id.toStringMongod(),mi.id.toStringMongod())}&{'admin.menu.removeItem'}#{/a}</td>
+   </tr>
+   #{/list}
 </table>

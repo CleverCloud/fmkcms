@@ -14,9 +14,7 @@ import net.sf.oval.configuration.annotation.Constraint;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(checkWith = PageUrlIDCheck.class)
-
 public @interface PageUrlID {
 
-    String message() default PageUrlIDCheck.mes;
+   String message() default PageUrlIDCheck.mes;
 }
-

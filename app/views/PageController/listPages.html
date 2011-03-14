@@ -3,25 +3,25 @@
 
 
 <table class="listofpage">
-    #{list items:pages, as:'p'}
-    <tr>
-        <td>----------</td>
-    </tr>
-    #{list items:p.getAvailableLocalesAndTranslatables(), as:'ppp'}
-    <tr>
-        #{set pp:ppp.getValue()/}
-        <td>${pp.language}</td>
-        <td>${pp.title}</td>
-        <td>${pp.urlId}</td>
-        <td>#{a @PageController.edit(pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
-        <td>#{a @PageController.deletePage_confirm(pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
-        <td>#{a @PageController.translate(pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
-        <td>#{a @PageViewer.page(pp.urlId)}&{'admin.see'}#{/a}</td>
-    </tr>
-    #{/list}
+   #{list items:pages, as:'p'}
+   <tr>
+      <td>----------</td>
+   </tr>
+   #{list items:p.getAvailableLocalesAndTranslatables(), as:'ppp'}
+   <tr>
+      #{set pp:ppp.getValue()/}
+      <td>${pp.language}</td>
+      <td>${pp.title}</td>
+      <td>${pp.urlId}</td>
+      <td>#{a @PageController.edit(pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
+      <td>#{a @PageController.deletePage_confirm(pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
+      <td>#{a @PageController.translate(pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
+      <td>#{a @PageViewer.page(pp.urlId)}&{'admin.see'}#{/a}</td>
+   </tr>
+   #{/list}
 
-    #{/list}
+   #{/list}
 
-    #{a @PageController.listPages((pagenumber-1)>0 ? pagenumber - 1 : 0 )} << #{/a} | #{a @PageController.listPages(pagenumber+1)} >> #{/a}
+   #{a @PageController.listPages((pagenumber-1)>0 ? pagenumber - 1 : 0 )} << #{/a} | #{a @PageController.listPages(pagenumber+1)} >> #{/a}
 
 </table>

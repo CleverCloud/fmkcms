@@ -3,22 +3,22 @@
 
 #{a @MenuController.newMenu()}&{'admin.menu.new'}#{/a}
 <table class="listofmenus">
-    #{list items:menus, as:'m'}
-    <tr>
-        <td>${m.name}</td>
-        <td>#{a @MenuController.edit(m.id.toStringMongod())}&{'admin.menu.edit'}#{/a}</td>
-        <td>#{a @MenuController.delete(m.id.toStringMongod())}&{'admin.menu.delete'}#{/a}</td>
-        <td>#{a @MenuController.writeMenuFile(m.id.toStringMongod())}&{'admin.menu.writeFile'}#{/a}</td>
-    </tr>
-    #{/list}
+   #{list items:menus, as:'m'}
+   <tr>
+      <td>${m.name}</td>
+      <td>#{a @MenuController.edit(m.id.toStringMongod())}&{'admin.menu.edit'}#{/a}</td>
+      <td>#{a @MenuController.delete(m.id.toStringMongod())}&{'admin.menu.delete'}#{/a}</td>
+      <td>#{a @MenuController.writeMenuFile(m.id.toStringMongod())}&{'admin.menu.writeFile'}#{/a}</td>
+   </tr>
+   #{/list}
 </table>
 &{'admin.menu.importfromfiletext'}
 <table class="listofmenusfiles">
-#{list items:mapOfMenusFiles.entrySet(), as:'fm'}
-    <tr>
-        <td>${fm.getKey()}</td>
-        <td>#{a @MenuController.importMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
-        <td>#{a @MenuController.viewMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.viewthisfile'}#{/a}</td>
-    </tr>
-    #{/list}
+   #{list items:mapOfMenusFiles.entrySet(), as:'fm'}
+   <tr>
+      <td>${fm.getKey()}</td>
+      <td>#{a @MenuController.importMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.importthisfile'}#{/a}</td>
+      <td>#{a @MenuController.viewMenuFromFile(fm.getValue().relativePath())}&{'admin.menu.viewthisfile'}#{/a}</td>
+   </tr>
+   #{/list}
 </table>

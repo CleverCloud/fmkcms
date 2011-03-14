@@ -146,8 +146,9 @@ public class BlogController extends Controller {
          postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, actionz, otherUrlId, otherLanguage);
       }
 
-      if (!actionz.equals("edit"))
+      if (!actionz.equals("edit")) {
          post = new Post();
+      }
       post.reference = postRef;
       post.author = author;
       post.content = content;
@@ -219,5 +220,4 @@ public class BlogController extends Controller {
 
       return postRef;
    }
-
 }
