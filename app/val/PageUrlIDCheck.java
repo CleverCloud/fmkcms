@@ -12,16 +12,15 @@ import net.sf.oval.exception.OValException;
  */
 public class PageUrlIDCheck extends AbstractAnnotationCheck<PageUrlID> {
 
-    final static String mes = "validation.urlid";
+   final static String mes = "validation.urlid";
 
-    @Override
-    public void configure(PageUrlID urlid) {
-        setMessage(urlid.message());
-    }
+   @Override
+   public void configure(PageUrlID urlid) {
+      setMessage(urlid.message());
+   }
 
-    public boolean isSatisfied(Object o, Object value, OValContext ovc, Validator vldtr) throws OValException {
-        /*Page p = Page.getPageByUrlId((String) value);
-        return (p != null);*/
-       return true;
-    }
+   public boolean isSatisfied(Object o, Object value, OValContext ovc, Validator vldtr) throws OValException {
+      Page p = Page.getPageByUrlId((String) value);
+      return (p != null);
+   }
 }

@@ -94,8 +94,9 @@ public class PageViewer extends Controller {
       String overrider = null;
       for (Page p : Page.getPagesByReference(page.reference)) {
          overrider = "/view/PageEvent/view/" + p.urlId + ".html";
-         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
+         }
       }
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
          renderTemplate(overrider, page, isConnected);
@@ -121,19 +122,4 @@ public class PageViewer extends Controller {
       }
       render(pages, tag);
    }
-
-   /*public static void searchPage(String q) {
-   if (request.isNew) {
-   Future<String> task = new SearchJob(q).now();
-   request.args.put("task", task);
-   waitFor(task);
-   }
-   try {
-   renderText(((Future<String>) request.args.get("task")).get());
-   } catch (InterruptedException ex) {
-   Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
-   } catch (ExecutionException ex) {
-   Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, null, ex);
-   }
-   }*/
 }

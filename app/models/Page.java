@@ -29,14 +29,11 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
 
    @Required
    public String title;
-
    @Required
    @Lob
    public String content;
-
    @Required
    public Boolean published = false;
-
    @Transient
    private float score;
 
@@ -65,11 +62,11 @@ public class Page extends Translatable<Page, PageRef> implements Searchable {
    // Tags handling
    //
    /**
-     * Tag this post
-     * @param name The name of the Tag
-     * @return self
-     */
-    public Page tagItWith(String name) {
+    * Tag this post
+    * @param name The name of the Tag
+    * @return self
+    */
+   public Page tagItWith(String name) {
       if (name != null && !name.isEmpty()) {
          this.reference.tags.add(Tag.findOrCreateByName(name));
          this.reference.save();

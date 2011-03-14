@@ -33,69 +33,69 @@ public class Feeds extends Controller {
     * Get the blog feed
     * @param lang The lang
     */
-    public static void main(String lang) {
-        if (lang == null)
-            return;
+   public static void main(String lang) {
+      if (lang == null) {
+         return;
+      }
 
-        Locale locale = null;
-        String[] s = lang.split("_");
-        switch (s.length) {
-            case 0:
-                break;
-            case 1:
-                locale = new Locale(s[0]);
-                break;
-            case 2:
-                locale = new Locale(s[0], s[1].substring(0, 2));
-                break;
-        }
+      Locale locale = null;
+      String[] s = lang.split("_");
+      switch (s.length) {
+         case 0:
+            break;
+         case 1:
+            locale = new Locale(s[0]);
+            break;
+         case 2:
+            locale = new Locale(s[0], s[1].substring(0, 2));
+            break;
+      }
 
-        SyndFeed feed = new SyndFeedImpl();
-        LangProperties p = new LangProperties();
+      SyndFeed feed = new SyndFeedImpl();
+      LangProperties p = new LangProperties();
 
-        try {
-            p.load(new FileReader(Play.getVirtualFile("conf/feed.properties").getRealFile()));
-        } catch (IOException ex) {
-            Logger.getLogger(Feeds.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      try {
+         p.load(new FileReader(Play.getVirtualFile("conf/feed.properties").getRealFile()));
+      } catch (IOException ex) {
+         Logger.getLogger(Feeds.class.getName()).log(Level.SEVERE, null, ex);
+      }
 
-        feed.setAuthor(p.getProperty("feed.author", locale));
-        feed.setFeedType("rss_2.0");
-        feed.setCopyright(p.getProperty("feed.copyright", locale));
-        feed.setDescription(p.getProperty("feed.description", locale));
-        feed.setLink(request.getBase() + "/" + p.getProperty("feed.link", locale));
-        feed.setTitle(p.getProperty("feed.title", locale));
-        feed.setLanguage(locale.toString());
-        feed.setPublishedDate(new Date());
+      feed.setAuthor(p.getProperty("feed.author", locale));
+      feed.setFeedType("rss_2.0");
+      feed.setCopyright(p.getProperty("feed.copyright", locale));
+      feed.setDescription(p.getProperty("feed.description", locale));
+      feed.setLink(request.getBase() + "/" + p.getProperty("feed.link", locale));
+      feed.setTitle(p.getProperty("feed.title", locale));
+      feed.setLanguage(locale.toString());
+      feed.setPublishedDate(new Date());
 
-        List<Post> posts = Post.getLatestPostsByLocale(locale, 20, 1);
-        List<SyndEntry> entries = new ArrayList<SyndEntry>();
-        SyndEntry item = null;
-        SyndContent content = null;
-        for (Post post : posts) {
-            item = new SyndEntryImpl();
-            item.setPublishedDate(post.postedAt);
-            item.setTitle(post.title);
-            content = new SyndContentImpl();
-            content.setType("text/html");
-            content.setValue(post.content);
-            item.setDescription(content);
-            item.setLink(request.getBase() + "/post/" + post.title);
-            entries.add(item);
-        }
-        feed.setEntries(entries);
+      List<Post> posts = Post.getLatestPostsByLocale(locale, 20, 1);
+      List<SyndEntry> entries = new ArrayList<SyndEntry>();
+      SyndEntry item = null;
+      SyndContent content = null;
+      for (Post post : posts) {
+         item = new SyndEntryImpl();
+         item.setPublishedDate(post.postedAt);
+         item.setTitle(post.title);
+         content = new SyndContentImpl();
+         content.setType("text/html");
+         content.setValue(post.content);
+         item.setDescription(content);
+         item.setLink(request.getBase() + "/post/" + post.title);
+         entries.add(item);
+      }
+      feed.setEntries(entries);
 
-        StringWriter writer = new StringWriter();
-        SyndFeedOutput out = new SyndFeedOutput();
-        try {
-            out.output(feed, writer);
-        } catch (IOException e) {
-            flash("error", "Erreur d'entré/sortie (StringWriter) lors de la sérialisation du flux : " + e.getMessage());
-        } catch (FeedException e) {
-            flash("error", "Erreur lors de la sérialisation du flux : " + e.getMessage());
-        }
-        response.contentType = "application/rss+xml";
-        renderXml(writer.toString());
-    }
-
+      StringWriter writer = new StringWriter();
+      SyndFeedOutput out = new SyndFeedOutput();
+      try {
+         out.output(feed, writer);
+      } catch (IOException e) {
+         flash("error", "Erreur d'entré/sortie (StringWriter) lors de la sérialisation du flux : " + e.getMessage());
+      } catch (FeedException e) {
+         flash("error", "Erreur lors de la sérialisation du flux : " + e.getMessage());
+      }
+      response.contentType = "application/rss+xml";
+      renderXml(writer.toString());
+   }
 }

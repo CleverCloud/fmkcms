@@ -1,0 +1,13 @@
+With fmkcms 0.9, the handling of i18n stuff has slightly changed, and a mongo schema breakage has occured.
+To solve this breakage, a script is shipped, named "convert.bash", to use it, go into your fmkcms folder, and just run "./convert.bash db_name", where db_name is the name of your database.
+Everything should then be fine and you should then ignore the following statements.
+If weird things happen because anything went wrong, don't worry, a backup of your data has been made into the fmkcms directory.
+To solve the problem afeter anything went wrong, launch the "mongo" utility, then type "use db_name;" where db_name is the name of your database.
+Then, type "db.Page.drop();" and "db.Post.drop();". "true" should appear for both commands.
+Once you're done, exit the mongo shell, ensure you're still in the fmkcms directory and run those two commands :
+mongoimport -d db_name -c Post < posts.backup
+mongoimport -d db_name -c Page < pages.backup
+where db_name is still the name of your database.
+
+Please send any comment about problems and/or solutions to marc-antoine.perennou@clever-cloud.com
+

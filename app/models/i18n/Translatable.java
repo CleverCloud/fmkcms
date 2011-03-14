@@ -17,10 +17,8 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
 
    @Required
    public String urlId;
-
    @Required
    public Locale language;
-
    @Required
    @Reference
    public R reference;

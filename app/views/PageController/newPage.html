@@ -18,67 +18,67 @@
 
 #{field 'page.title'}
 <p>
-    <label>Title: </label>
-    %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage?.title;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Title: </label>
+   %{
+   if (field.flash == null && otherPage != null)
+   field.flash = otherPage?.title;
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'page.content'}
 <p>
-    <label>Content: </label>
-    %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.content;
-    }%
-    <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
-    <span class="error">${field.error}</span>
+   <label>Content: </label>
+   %{
+   if (field.flash == null && otherPage != null)
+   field.flash = otherPage.content;
+   }%
+   <textarea id="${field.id}" name="${field.name}" class="${field.errorClass}" cols="50" rows="10">${field.flash}</textarea>
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'page.urlId'}
 <p>
-    <label>Url ID: </label>
-    %{
-        if (field.flash == null)
-            field.flash = otherPage?.urlId;
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Url ID: </label>
+   %{
+   if (field.flash == null)
+   field.flash = otherPage?.urlId;
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'page.language'}
 <p>
-    <label>Language: </label>
-    #{if action.equals("edit")}
-    <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPage?.language}" class="${field.errorClass}" />
-    ${otherPage?.language}
-    #{/if}
-    #{else}
-    <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
-        #{list items:controllers.I18nController.getAllLocales(otherPage?.getAvailableLocales()), as:'l'}
-            <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="selected"'.raw() : ''}>${l}</option>
-        #{/list}
-    </select>
-    #{/else}
-    <span class="error">${field.error}</span>
+   <label>Language: </label>
+   #{if action.equals("edit")}
+   <input type="hidden" id="${field.id}" name="${field.name}" value="${otherPage?.language}" class="${field.errorClass}" />
+   ${otherPage?.language}
+   #{/if}
+   #{else}
+   <select id="${field.id}" name="${field.name}" class="${field.errorClass}">
+      #{list items:controllers.I18nController.getAllLocales(otherPage?.getAvailableLocales()), as:'l'}
+      <option value="${l}" ${field.flash?.toString().equals(l) || (field.flash == null && request.acceptLanguage().get(0)?.substring(0, 2).equals(l.toString()))? 'selected="selected"'.raw() : ''}>${l}</option>
+      #{/list}
+   </select>
+   #{/else}
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
 #{field 'pageReference.tags'}
 <p>
-    <label>Tags: </label>
-    %{
-        if (field.flash == null && otherPage != null)
-            field.flash = otherPage.reference.getTagsAsString();
-    }%
-    <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
-    <span class="error">${field.error}</span>
+   <label>Tags: </label>
+   %{
+   if (field.flash == null && otherPage != null)
+   field.flash = otherPage.reference.getTagsAsString();
+   }%
+   <input type="text" id="${field.id}" name="${field.name}" value="${field.flash}" class="${field.errorClass}" />
+   <span class="error">${field.error}</span>
 </p>
 #{/}
 
@@ -88,13 +88,13 @@
 #{/if}
 #{else}
 <p>
-    <label>Published: </label>
-    %{
-        if(action.equals("edit"))
-            field.flash = otherPage.published;
-    }%
-    <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" #{if field.flash} checked #{/if} />
-    <span class="error">${field.error}</span>
+   <label>Published: </label>
+   %{
+   if(action.equals("edit"))
+   field.flash = otherPage.published;
+   }%
+   <input id="${field.id}" name="${field.name}" class="${field.errorClass}" type="checkbox" #{if field.flash} checked #{/if} />
+          <span class="error">${field.error}</span>
 </p>
 #{/else}
 #{/}

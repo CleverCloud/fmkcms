@@ -262,10 +262,6 @@ public class MenuController extends Controller {
     */
    public static void viewMenuFromFile(String path) throws FileNotFoundException {
       try {
-         //Gson gson = new GsonBuilder().registerTypeAdapter(MenuItem.class, new MenuItemConverter()).serializeNulls().setPrettyPrinting().create();
-         //Menu m = gson.fromJson(new FileReader(VirtualFile.fromRelativePath(path).getRealFile()), Menu.class);
-
-         //renderText(gson.toJson(m));
          InputStream json = new FileInputStream(VirtualFile.fromRelativePath(path).getRealFile());
          renderBinary(json);
       } catch (com.google.gson.JsonParseException e) {

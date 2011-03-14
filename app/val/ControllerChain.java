@@ -14,9 +14,7 @@ import net.sf.oval.configuration.annotation.Constraint;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(checkWith = ControllerChainCheck.class)
-
 public @interface ControllerChain {
 
-    String message() default ControllerChainCheck.mes;
+   String message() default ControllerChainCheck.mes;
 }
-

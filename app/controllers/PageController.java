@@ -90,8 +90,9 @@ public class PageController extends Controller {
       
       for (Page p : Page.getPagesByReference(otherPage.reference)) {
          overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
-         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
+         }
       }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
@@ -115,8 +116,9 @@ public class PageController extends Controller {
 
       for (Page p : Page.getPagesByReference(otherPage.reference)) {
          overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
-         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists())
+         if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
+         }
       }
 
       if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {

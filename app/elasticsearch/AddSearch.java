@@ -26,8 +26,8 @@ public class AddSearch extends Job {
                for (Object src : MongoEntity.getDs().createQuery(acl.javaClass).asList()) {
                   Searchable casted = (Searchable) src;
                   IndexJob indexJob = new IndexJob(casted,
-                                                   acl.javaClass.getCanonicalName(),
-                                                   casted.getEntityId().toStringMongod());
+                          acl.javaClass.getCanonicalName(),
+                          casted.getEntityId().toStringMongod());
                   indexJob.doJobWithResult();
                }
                break; // Oui, c'est sale, et alors ? Au moins ça va vite ;)

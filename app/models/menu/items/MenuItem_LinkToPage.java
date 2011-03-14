@@ -13,37 +13,35 @@ import val.PageUrlID;
  */
 public class MenuItem_LinkToPage extends MenuItem {
 
-    @PageUrlID
-    public String urlId;
+   @PageUrlID
+   public String urlId;
 
-    /**
-     * @param urlId The urlId of the page
-     * @param displayStr The string to display (play i18n key)
-     * @param menu The subMenu belonging to this item
-     */
-    public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {
-        //super(displayStr, menu); // Morphia failure with latest play
-        this.displayStr = displayStr;
-        this.menu = menu;
-        this.urlId = urlId;
-    }
+   /**
+    * @param urlId The urlId of the page
+    * @param displayStr The string to display (play i18n key)
+    * @param menu The subMenu belonging to this item
+    */
+   public MenuItem_LinkToPage(String urlId, String displayStr, Menu menu) {
+      this.displayStr = displayStr;
+      this.menu = menu;
+      this.urlId = urlId;
+   }
 
-    /**
-     * @param urlid The urlid of the page
-     * @param displayStr The string to display (play i18n key)
-     */
-    public MenuItem_LinkToPage(String urlId, String displayStr) {
-        //super(displayStr);
-        this.displayStr = displayStr;
-        this.urlId = urlId;
-    }
+   /**
+    * @param urlid The urlid of the page
+    * @param displayStr The string to display (play i18n key)
+    */
+   public MenuItem_LinkToPage(String urlId, String displayStr) {
+      this.displayStr = displayStr;
+      this.urlId = urlId;
+   }
 
-    @Override
-    public String getLink() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("urlId", urlId);
-        return Router.reverse("PageViewer.page", map).url;
-    }
+   @Override
+   public String getLink() {
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put("urlId", urlId);
+      return Router.reverse("PageViewer.page", map).url;
+   }
 
    @Override
    public String getValue() {

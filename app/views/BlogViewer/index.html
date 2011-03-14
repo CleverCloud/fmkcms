@@ -2,24 +2,24 @@
 
 #{if frontPost}
 
-    #{displayBlogPost post:frontPost, as:'home' /}
+#{displayBlogPost post:frontPost, as:'home' /}
 
-    #{if olderPosts.size()}
+#{if olderPosts.size()}
 
-        <div class="older-posts">
-            <h3>Older posts <span class="from">from this blog</span></h3>
+<div class="older-posts">
+   <h3>Older posts <span class="from">from this blog</span></h3>
 
-            #{list items:olderPosts, as:'oldPost'}
-                #{displayBlogPost post:oldPost, as:'teaser' /}
-            #{/list}
-        </div>
+   #{list items:olderPosts, as:'oldPost'}
+   #{displayBlogPost post:oldPost, as:'teaser' /}
+   #{/list}
+</div>
 
-    #{/if}
+#{/if}
 
 #{/if}
 
 #{else}
-    <div class="empty">
-        There is currently nothing to read here.
-    </div>
+<div class="empty">
+   There is currently nothing to read here.
+</div>
 #{/else}

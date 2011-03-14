@@ -20,7 +20,6 @@ public abstract class MongoEntity {
 
    @Id
    public ObjectId id;
-
    @Transient
    private static Datastore datastore;
 
@@ -65,7 +64,7 @@ public abstract class MongoEntity {
          return null;
       } else {
          T entity = (T) MongoEntity.getDs().get(this.getClass(), this.id);
-         for (Field field : this.getClass().getDeclaredFields()) {
+         for (Field field : this.getClass().getFields()) {
             try {
                if (field.get(this) != null) {
                   field.set(entity, field.get(this));
