@@ -20,7 +20,10 @@ import play.vfs.VirtualFile;
  * @author keruspe
  */
 @With(Secure.class)
+@Check(PageController.CAN_EDIT)
 public class PageController extends Controller {
+
+   public static final String CAN_EDIT = "can_edit_page";
 
    /**
     * Display a list of Pages

@@ -21,7 +21,10 @@ import play.vfs.VirtualFile;
  * @author keruspe
  */
 @With(Secure.class)
+@Check(BlogController.CAN_EDIT)
 public class BlogController extends Controller {
+   
+   public static final String CAN_EDIT = "can_edit_blog";
 
    /**
     * Ask confirmation for deleting a Post
