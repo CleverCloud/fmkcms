@@ -10,6 +10,7 @@ import models.blog.Post;
 import models.blog.PostRef;
 import models.user.GAppUser;
 import models.user.User;
+import play.Logger;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -23,7 +24,7 @@ import play.vfs.VirtualFile;
 @With(Secure.class)
 @Check(BlogController.CAN_EDIT)
 public class BlogController extends Controller {
-   
+
    public static final String CAN_EDIT = "can_edit_blog";
 
    /**
@@ -119,25 +120,31 @@ public class BlogController extends Controller {
       Locale language = params.get("post.language", Locale.class);
       Date postedAt = new Date();
 
-      String openId = session.get("username");
-      GAppUser author = GAppUser.getByOpenId(openId);
+      // Get connected user.
+      User author = AccessManager.getConnected();
       if (author == null) {
-         author = new GAppUser();
-         author.openId = openId;
-         author.firstName = session.get("firstName");
-         author.lastName = session.get("lastName");
-         author.userName = author.firstName + " " + author.lastName;
-         author.email = session.get("email");
-         author.language = language;
+         if (AccessManager.isGAppConnected()) {
+            author = new GAppUser();
+            ((GAppUser) author).firstName = session.get("firstName");
+            ((GAppUser) author).lastName = session.get("lastName");
+            ((GAppUser) author).openId = AccessManager.connected();
+            author.userName = ((GAppUser) author).firstName + " " + ((GAppUser) author).lastName;
+            author.email = session.get("email");
+            ((GAppUser) author).language = language;
 
-         validation.valid(author);
-         if (Validation.hasErrors()) {
-            unauthorized("Could not authenticate you");
-         }
-         if (actionz.equals("edit")) {
-            author.refresh().save();
+            validation.valid(author);
+            if (Validation.hasErrors()) {
+               forbidden("Could not authenticate you");
+            }
+            if (actionz.equals("edit")) {
+               author.refresh().save();
+            } else {
+               author.save();
+            }
+
          } else {
-            author.save();
+            Logger.error("Nobody connected or the authentication method is not yet supported. If the latter is true, please read the UserManager documentation");
+            forbidden("Could not authenticate you");
          }
       }
 

@@ -12,11 +12,11 @@ GET     /pages/tagged/{tagName}                               PageViewer.pagesTa
 GET     /pages/list                                           PageController.listPages
 *       /pages/search                                         SearchController.search
 GET     /pages/new                                            PageController.newPage
-POST    /pages/new                                            PageController.doNewPage(action:'create',otherUrlId:'',otherLanguage:'')
+POST    /pages/new                                            PageController.doNewPage(actionz:'create',otherUrlId:'',otherLanguage:'')
 GET     /pages/edit/{urlId}/from/{language}                   PageController.edit
-POST    /pages/edit/{otherUrlId}/{otherLanguage}              PageController.doNewPage(action:'edit')
+POST    /pages/edit/{otherUrlId}/{otherLanguage}              PageController.doNewPage(actionz:'edit')
 GET     /pages/translate/{otherUrlId}/from/{language}         PageController.translate
-POST    /pages/translate/{otherUrlId}/{otherLanguage}         PageController.doNewPage(action:'translate')
+POST    /pages/translate/{otherUrlId}/{otherLanguage}         PageController.doNewPage(actionz:'translate')
 GET     /pages/delete/{urlId}/from/{language}                 PageController.deletePage_confirm
 
 # Search stuff
@@ -47,15 +47,15 @@ GET     /blog/post/{urlId}                                    BlogViewer.show
 POST    /blog/post/{urlId}/comment/new                        BlogController.postComment
 
 # Posts handling stuff, see Pages handling stuff
-GET     /blog/posts/tagged/{tagName}                          BlogViewer.listTagged
-GET     /blog/posts/last                                      BlogViewer.last
-GET     /blog/posts/new                                       BlogController.newPost
-POST    /blog/posts/new                                       BlogController.doNewPost(action:'create',otherUrlId:'',otherLanguage:'')
-GET     /blog/posts/edit/{urlId}/from/{language}              BlogController.edit
-POST    /blog/posts/edit/{urlId}/{otherLanguage}              BlogController.doNewPost(action:'edit')
-GET     /blog/posts/translate/{otherUrlId}/from/{language}    BlogController.translate
-POST    /blog/posts/translate/{otherUrlId}/{otherLanguage}    BlogController.doNewPost(action:'translate')
-GET     /blog/delete/{urlId}/from/{language}                  BlogController.deletePost_confirm
+GET      /blog/posts/tagged/{tagName}                                        BlogViewer.listTagged
+GET      /blog/posts/last                                                                  BlogViewer.last
+GET      /blog/posts/new                                                                 BlogController.newPost
+POST    /blog/posts/new                                                                BlogController.doNewPost(actionz:'create',otherUrlId:'',otherLanguage:'')
+GET      /blog/posts/edit/{urlId}/from/{language}                         BlogController.edit
+POST    /blog/posts/edit/{otherUrlId}/{otherLanguage}                       BlogController.doNewPost(actionz:'edit')
+GET      /blog/posts/translate/{otherUrlId}/from/{language}        BlogController.translate
+POST    /blog/posts/translate/{otherUrlId}/{otherLanguage}    BlogController.doNewPost(actionz:'translate')
+GET      /blog/delete/{urlId}/from/{language}                  BlogController.deletePost_confirm
 
 # Rss
 GET     /blog/rss/{lang}                                      Feeds.main
