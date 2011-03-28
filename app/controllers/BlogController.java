@@ -125,7 +125,7 @@ public class BlogController extends Controller {
          author.lastName = session.get("lastName");
          author.userName = author.firstName + " " + author.lastName;
          author.email = session.get("email");
-         author.language = new Locale(session.get("language"));
+         author.language = language;
 
          validation.valid(author);
          if (Validation.hasErrors()) {
