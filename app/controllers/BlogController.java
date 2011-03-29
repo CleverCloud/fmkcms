@@ -150,10 +150,19 @@ public class BlogController extends Controller {
 
       Post post = Post.getPostByUrlId(otherUrlId);
       PostRef postRef = null;
+      String tagsString = params.get("postReference.tags");
       if (post != null) {
          postRef = post.reference;
+
+         Set<Tag> tags = new TreeSet<Tag>();
+         if (tagsString != null && !tagsString.isEmpty()) {
+            for (String tag : Arrays.asList(tagsString.split(","))) {
+               tags.add(Tag.findOrCreateByName(tag));
+            }
+         }
+         postRef.tags = tags;
       } else {
-         postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, actionz, otherUrlId, otherLanguage);
+         postRef = BlogController.doNewPostRef(tagsString, postedAt, author, actionz, otherUrlId, otherLanguage);
       }
 
       if (!actionz.equals("edit")) {
