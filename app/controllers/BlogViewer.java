@@ -77,7 +77,7 @@ public class BlogViewer extends Controller {
 
       String overrider = null;
       for (Post p : Post.getPostsByPostRef(post.reference)) {
-         overrider = "/view/PageEvent/view/" + p.urlId + ".html";
+         overrider = "/view/PostEvent/view/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
          }
@@ -105,7 +105,7 @@ public class BlogViewer extends Controller {
 
       String overrider = null;
       for (Post p : Post.getPostsByPostRef(post.reference)) {
-         overrider = "/view/PageEvent/view/" + p.urlId + ".html";
+         overrider = "/view/PostEvent/view/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
          }
