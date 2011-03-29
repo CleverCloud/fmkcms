@@ -3,6 +3,7 @@ package models;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -53,6 +54,15 @@ public class PageRef extends TranslatableRef<Page, PageRef> {
          pageRefs.addAll(MongoEntity.getDs().find(PageRef.class).field("tags").hasThisElement(tag).asList());
       }
       return pageRefs;
+   }
+
+   /**
+    * Find all PageRefs not tagged with given Tags
+    * @param tags Tags not to match
+    * @return The list of PageRefs
+    */
+   public static List<PageRef> findNotTaggedWith(Tag... tags) {
+      return MongoEntity.getDs().find(PageRef.class).field("tags").hasNoneOf(Arrays.asList(tags)).asList();
    }
 
    /**
