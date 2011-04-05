@@ -1,6 +1,8 @@
 package elasticsearch;
 
+import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import play.Play;
@@ -15,22 +17,31 @@ public class IndexJob extends Job<String> {
    private Object indexable;
    private String indexname;
    private String id;
+   private final ExclusionStrategy[] strategies;
+
 
    public IndexJob(Object indexable, String indexname, String id) {
       this.indexable = indexable;
       this.indexname = indexname;
       this.id = id;
+      this.strategies = new ExclusionStrategy[]{};
+   }
+
+   public IndexJob(Object indexable, String indexname, String id, ExclusionStrategy... strategies) {
+      this.indexable = indexable;
+      this.indexname = indexname;
+      this.id = id;
+      this.strategies = strategies;
    }
 
    @Override
    public String doJobWithResult() throws Exception {
 
-      Gson gson = new Gson();
-      Client c = new ElasticSearchClient();
-      String t = gson.toJson(indexable);
+      Client client = new ElasticSearchClient();
+      String source = new GsonBuilder().setExclusionStrategies(strategies).create().toJson(indexable);
 
-      IndexResponse response = c.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(t).execute().actionGet();
-      c.close();
+      IndexResponse response = client.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(source).execute().actionGet();
+      client.close();
       return response.toString();
    }
 }

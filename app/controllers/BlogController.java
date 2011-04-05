@@ -24,6 +24,7 @@ import play.vfs.VirtualFile;
  *
  * @author clementnivolle
  * @author keruspe
+ * @author judu
  */
 @With(Secure.class)
 @Check(BlogController.CAN_EDIT)
