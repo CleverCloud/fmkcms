@@ -81,4 +81,14 @@ public class PostRef extends TranslatableRef<Post, PostRef> {
    public static List<PostRef> findNotTaggedWith(Tag... tags) {
       return MongoEntity.getDs().find(PostRef.class).field("tags").hasNoneOf(Arrays.asList(tags)).asList();
    }
+   
+   /**
+    * Get PostRefs with pagination
+    * @param pageNumber The number of the page
+    * @param pageItemsNumber The number of item by page
+    * @return The list of PostRefs
+    */
+   public static List<PostRef> getPostRefsWithPagination(Integer pageNumber, Integer pageItemsNumber) {
+      return MongoEntity.getDs().find(PostRef.class).offset(pageItemsNumber * pageNumber).limit(pageItemsNumber).asList();
+   }
 }

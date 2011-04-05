@@ -1,8 +1,12 @@
 package controllers;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import models.Tag;
@@ -26,6 +30,25 @@ import play.vfs.VirtualFile;
 public class BlogController extends Controller {
 
    public static final String CAN_EDIT = "can_edit_blog";
+   
+   
+   /**
+    * Print the list of blog posts and permit to edit or delete them
+    * @param pagenumber The number of the page to display (20 Post by page)
+    **/
+   public static void listPosts(Integer pagenumber) {
+      if (pagenumber == null) {
+         pagenumber = 0;
+      }
+      List<PostRef> postRefs = PostRef.getPostRefsWithPagination(pagenumber, 20);
+      List<Post> posts = new ArrayList<Post>();
+
+      for (PostRef pr : postRefs) {
+         posts.add(Post.getFirstPostByPostRef(pr));
+      }
+
+      render(posts, pagenumber);
+   }
 
    /**
     * Ask confirmation for deleting a Post
@@ -45,7 +68,7 @@ public class BlogController extends Controller {
    public static void deletePost(String urlId, String language) {
       Post post = Post.getPostByLocale(urlId, new Locale(language));
       if (post == null) {
-         return;
+         BlogViewer.index();
       }
       PostRef postRef = post.reference;
       post.delete();

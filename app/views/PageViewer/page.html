@@ -14,7 +14,7 @@ ${page.content}
    <a href="@{PageController.deletePage_confirm(page.urlId, page.language)}">Delete me !</a>
 </div>
 #{/if}
-
+<span>Tags : </span>
 <ul>
    #{list items:page.reference.tags, as:'tag'}
    <li>#{a @PageViewer.pagesTag(tag.name)}${tag.name}#{/a}</li>

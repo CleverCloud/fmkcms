@@ -47,6 +47,7 @@ GET     /blog/post/{urlId}                                    BlogViewer.show
 POST    /blog/post/{urlId}/comment/new                        BlogController.postComment
 
 # Posts handling stuff, see Pages handling stuff
+GET      /blog/posts/list                                      BlogController.listPosts
 GET      /blog/posts/tagged/{tagName}                                        BlogViewer.listTagged
 GET      /blog/posts/last                                                                  BlogViewer.last
 GET      /blog/posts/new                                                                 BlogController.newPost
