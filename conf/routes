@@ -63,3 +63,6 @@ GET     /blog/rss/{lang}                                      Feeds.main
 
 # I18n
 POST    /lang/change                                          I18nController.changeLang
+
+# search
+GET      /search                                               SearchViewer.search
