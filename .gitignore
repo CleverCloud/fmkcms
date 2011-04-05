@@ -8,3 +8,4 @@ html
 .ditz-config
 *.backup
 modules
+*.komodoproject
