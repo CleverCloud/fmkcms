@@ -4,6 +4,7 @@ import models.user.User;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -70,5 +71,14 @@ public class PostRef extends TranslatableRef<Post, PostRef> {
          postRefs.addAll(MongoEntity.getDs().find(PostRef.class).field("tags").hasThisElement(tag).asList());
       }
       return postRefs;
+   }
+
+   /**
+    * Find all PostRefs not tagged with given Tags
+    * @param tags Tags not to match
+    * @return The list of PostRefs
+    */
+   public static List<PostRef> findNotTaggedWith(Tag... tags) {
+      return MongoEntity.getDs().find(PostRef.class).field("tags").hasNoneOf(Arrays.asList(tags)).asList();
    }
 }

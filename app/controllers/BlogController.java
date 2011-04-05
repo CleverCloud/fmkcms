@@ -75,7 +75,7 @@ public class BlogController extends Controller {
       renderArgs.put("action", "edit");
       String overrider = null;
       for (Post p : Post.getPostsByPostRef(otherPost.reference)) {
-         overrider = "/view/PageEvent/edit/" + p.urlId + ".html";
+         overrider = "/view/PostEvent/edit/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
          }
@@ -97,7 +97,7 @@ public class BlogController extends Controller {
       renderArgs.put("action", "translate");
       String overrider = null;
       for (Post p : Post.getPostsByPostRef(otherPost.reference)) {
-         overrider = "/view/PageEvent/translate/" + p.urlId + ".html";
+         overrider = "/view/PostEvent/translate/" + p.urlId + ".html";
          if (VirtualFile.fromRelativePath("app/views" + overrider).getRealFile().exists()) {
             break;
          }
@@ -151,10 +151,19 @@ public class BlogController extends Controller {
 
       Post post = Post.getPostByUrlId(otherUrlId);
       PostRef postRef = null;
+      String tagsString = params.get("postReference.tags");
       if (post != null) {
          postRef = post.reference;
+
+         Set<Tag> tags = new TreeSet<Tag>();
+         if (tagsString != null && !tagsString.isEmpty()) {
+            for (String tag : Arrays.asList(tagsString.split(","))) {
+               tags.add(Tag.findOrCreateByName(tag));
+            }
+         }
+         postRef.tags = tags;
       } else {
-         postRef = BlogController.doNewPostRef(params.get("postReference.tags"), postedAt, author, actionz, otherUrlId, otherLanguage);
+         postRef = BlogController.doNewPostRef(tagsString, postedAt, author, actionz, otherUrlId, otherLanguage);
       }
 
       if (!actionz.equals("edit")) {
