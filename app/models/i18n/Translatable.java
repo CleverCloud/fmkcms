@@ -3,6 +3,7 @@ package models.i18n;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -56,5 +57,9 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
          }
       }
       return returnMap;
+   }
+
+   public Iterable<T> getWithSameRef() {
+       return (this.reference == null) ? new LinkedList<T>(): (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).fetch();
    }
 }
