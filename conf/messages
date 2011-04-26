@@ -20,3 +20,4 @@ admin.menu.writeFile=Write a file
 admin.menu.importfromfiletext=Menu files import
 admin.menu.importthisfile=import this file
 admin.menu.viewthisfile=view
+blog.otherPostsFromThisBLog=Older posts from this blog
