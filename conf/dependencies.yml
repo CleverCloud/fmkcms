@@ -1,0 +1,6 @@
+self: clevercloud -> fmkcms 0.9
+
+
+require:
+    - play
+    - play -> secure

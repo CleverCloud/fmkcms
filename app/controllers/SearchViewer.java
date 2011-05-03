@@ -21,6 +21,12 @@ import play.Play;
 public class SearchViewer extends Controller {
 
    public static void search(String query) {
+      renderArgs.put("results", SearchViewer.doSearch(query));
+      renderArgs.put("query", query);
+      render();
+   }
+   
+   public static List<Searchable> doSearch(String query) {
       if (!query.isEmpty()) {
          Client c = new ElasticSearchClient();
 
@@ -32,10 +38,11 @@ public class SearchViewer extends Controller {
 
          for (SearchHit searchHit : rayponce.hits()) {
             try {
+               
                Object obj = Class.forName(searchHit.getType()).
                        getMethod("getFrom", new Class[]{SearchHit.class}).
                        invoke(Class.forName(searchHit.getType()), new Object[]{searchHit});
-
+                       
                if (obj != null) {
                   if (obj instanceof elasticsearch.Searchable) {
                      Searchable sobj = (Searchable) obj;
@@ -50,13 +57,13 @@ public class SearchViewer extends Controller {
             } catch (ClassNotFoundException ex) {
                Logger.error("no CRUDFieldProvider found for %s", ex);
             } catch (Exception e) {
-               Logger.error("Error : ", e);
+               Logger.error("Unknown error : ", e.getMessage());
             }
          }
-
-         render(result, query);
+         
+         return result;
       } else {
-         render(new LinkedList<Searchable>(), query);
+         return new LinkedList<Searchable>();
       }
 
    }

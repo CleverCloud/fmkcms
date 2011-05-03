@@ -7,4 +7,6 @@ test-result/application.log
 html
 .ditz-config
 *.backup
-
+modules
+*.komodoproject
+/.ditz/
