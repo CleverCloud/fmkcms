@@ -5,8 +5,8 @@
       <a href="@{BlogViewer.show(_post.urlId)}">${_post.title}</a>
    </h2>
    <div class="post-metadata">
-      <span class="post-author">by ${_post.reference.author}</span>,
-      <span class="post-date">${_post.reference.postedAt.format('dd MMM yy')}</span>
+      <span class="post-author">&{'blog.by'} ${_post.reference.author}</span>,
+      <span class="post-date">${_post.reference.postedAt.format('dd MMM yyyy')}</span>
       #{if _post.author != _post.reference.author}
       <span class="post-translator">, translated by ${_post.author}</span>
       <span class="post-translation-date">${_post.postedAt.format('dd MMM yy')}</span>
@@ -22,7 +22,6 @@
    </div>
    #{if _as != 'teaser'}
    <div class="post-content">
-      <div class="about">Detail: </div>
       ${_post.content.nl2br()}
    </div>
    #{/if}

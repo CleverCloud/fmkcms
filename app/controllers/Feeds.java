@@ -81,7 +81,7 @@ public class Feeds extends Controller {
          content.setType("text/html");
          content.setValue(post.content);
          item.setDescription(content);
-         item.setLink(request.getBase() + "/post/" + post.title);
+         item.setLink(request.getBase() +"/blog"+ "/post/" + post.urlId);
          entries.add(item);
       }
       feed.setEntries(entries);
