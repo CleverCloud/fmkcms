@@ -9,3 +9,4 @@ html
 *.backup
 modules
 *.komodoproject
+/.ditz/

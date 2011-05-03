@@ -39,14 +39,10 @@ public class SearchViewer extends Controller {
          for (SearchHit searchHit : rayponce.hits()) {
             try {
                
-               
-               play.Logger.info("Type : %s", searchHit.getType());
-               
                Object obj = Class.forName(searchHit.getType()).
                        getMethod("getFrom", new Class[]{SearchHit.class}).
                        invoke(Class.forName(searchHit.getType()), new Object[]{searchHit});
                        
-               play.Logger.info("obj : %s", obj);
                if (obj != null) {
                   if (obj instanceof elasticsearch.Searchable) {
                      Searchable sobj = (Searchable) obj;

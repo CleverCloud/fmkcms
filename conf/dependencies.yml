@@ -1,4 +1,5 @@
-# Application dependencies
+self: clevercloud -> fmkcms 0.9
+
 
 require:
     - play
