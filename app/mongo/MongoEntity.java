@@ -61,7 +61,7 @@ public abstract class MongoEntity {
     */
    public <T extends MongoEntity> T refresh() {
       if (this.id == null) {
-         return this;
+         return (T) this;
       } else {
          T entity = (T) MongoEntity.getDs().get(this.getClass(), this.id);
          for (Field field : this.getClass().getFields()) {
