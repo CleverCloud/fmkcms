@@ -131,11 +131,7 @@ public class BlogController extends Controller {
          if (Validation.hasErrors()) {
             unauthorized("Could not authenticate you");
          }
-         if (actionz.equals("edit")) {
-            author.refresh().save();
-         } else {
-            author.save();
-         }
+         author.refresh().save();
       }
 
       Post post = Post.getPostByUrlId(otherUrlId);
@@ -157,9 +153,9 @@ public class BlogController extends Controller {
 
       if (!actionz.equals("edit")) {
          post = new Post();
+         post.author = author;
       }
       post.reference = postRef;
-      post.author = author;
       post.content = content;
       post.urlId = urlId;
       post.title = title;
