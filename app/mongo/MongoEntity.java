@@ -30,7 +30,7 @@ public abstract class MongoEntity {
    public static Datastore getDs() {
       if (MongoEntity.datastore == null) {
          try {
-            Mongo mongo = new Mongo(Play.configuration.getProperty("fmkcms.db.host", "localhost"));
+            Mongo mongo = new Mongo(Play.configuration.getProperty("fmkcms.db.host", "127.0.0.1"));
             MongoEntity.datastore = (new Morphia()).createDatastore(mongo, Play.configuration.getProperty("fmkcms.db", "fmkcms"));
          } catch (Exception e) {
             play.Logger.error(e, "");
