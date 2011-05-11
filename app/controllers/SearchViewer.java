@@ -65,6 +65,5 @@ public class SearchViewer extends Controller {
       } else {
          return new LinkedList<Searchable>();
       }
-
    }
 }

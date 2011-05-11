@@ -44,7 +44,7 @@ public class IndexJob extends Job<String> {
 
       IndexResponse response = client.prepareIndex(Play.configuration.getProperty("elasticsearch.indexname"), indexname, id).setSource(source).execute().actionGet();
       client.close();
-
+      Logger.info(response.type());
       return response.toString();
    }
 }

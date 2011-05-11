@@ -1,6 +1,7 @@
 package models.user;
 
 import mongo.MongoEntity;
+import play.data.validation.Email;
 import play.data.validation.Required;
 import play.data.validation.URL;
 
@@ -11,8 +12,9 @@ import play.data.validation.URL;
 public abstract class User extends MongoEntity {
 
    @Required
+   @Email
    public String email;
-   @Required
+   
    public String userName;
    @URL
    public String webSite;
@@ -23,5 +25,10 @@ public abstract class User extends MongoEntity {
          return userName;
       }
       return "<a href=\"" + this.webSite + "\" >" + this.userName + "</a>";
+   }
+
+   
+   public static User getByUsername(String username) {
+      return User.getDs().find(User.class, "userName", username).get();
    }
 }

@@ -19,7 +19,10 @@ import play.mvc.With;
  * @author judu
  */
 @With(Secure.class)
+@Check(SearchController.CAN_EDIT)
 public class SearchController extends Controller {
+
+   public static final String CAN_EDIT = "can_edit_search";
 
    public static void indexAndStats(Boolean reindex) {
       ApplicationClasses classes = Play.classes;

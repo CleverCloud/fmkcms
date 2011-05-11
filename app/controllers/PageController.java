@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import models.Page;
 import models.PageRef;
 import models.Tag;
+import play.Logger;
 import play.data.validation.Validation;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -20,7 +21,10 @@ import play.vfs.VirtualFile;
  * @author keruspe
  */
 @With(Secure.class)
+@Check(PageController.CAN_EDIT)
 public class PageController extends Controller {
+
+   public static final String CAN_EDIT = "can_edit_page";
 
    /**
     * Display a list of Pages
@@ -73,7 +77,7 @@ public class PageController extends Controller {
     */
    public static void newPage() {
       renderArgs.put("action", "create");
-      render("PageController/newPage.html");
+      render();
    }
 
    /**
@@ -135,6 +139,7 @@ public class PageController extends Controller {
     * @param otherLanguage The lang of the Page we're translating or editing (may be null)
     */
    public static void doNewPage(String actionz, String otherUrlId, String otherLanguage) {
+      Logger.debug("début doNewPage");
       String urlId = otherUrlId;
       Page page = null;
       PageRef pageRef = null;

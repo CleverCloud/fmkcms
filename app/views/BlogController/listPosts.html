@@ -1,0 +1,47 @@
+#{extends 'main.html' /}
+#{set title : 'Articles' /}
+#{set 'moreStyles'}
+   #{press.stylesheet 'listItems.css' /}
+#{/set}
+
+
+
+<table class="listofpage">
+   <thead>
+      <tr>
+         <td>Langue</td>
+         <td>Titre</td>
+         <td>Identifiant</td>
+         <td>Éditer</td>
+         <td>Supprimer</td>
+         <td>Traduire</td>
+         <td>Visualiser</td>
+      </tr>
+   </thead>
+   #{list items:posts, as:'post'}
+
+   <tr>
+      <td>- - - - - - - - - - </td>
+   </tr>
+
+   #{list items:post.getAvailableLocalesAndTranslatables(), as:'ppp'}
+   <tr>
+      #{set pp:ppp.getValue()/}
+      <td>${pp.language}</td>
+      <td>${pp.title}</td>
+      <td>${pp.urlId}</td>
+      <td>#{a @BlogController.edit(pp.urlId, pp.language)}&{'admin.edit'}#{/a}</td>
+      <td>#{a @BlogController.deletePost_confirm(pp.urlId, pp.language)}&{'admin.delete'}#{/a}</td>
+      <td>#{a @BlogController.translate(pp.urlId, pp.language)}&{'admin.addnewlocale'}#{/a}</td>
+      <td>#{a @BlogViewer.show(pp.urlId)}&{'admin.see'}#{/a}</td>
+   </tr>
+   #{/list}
+
+   #{/list}
+   #{a @BlogController.listPosts((pagenumber-1)>0 ? pagenumber - 1 : 0 )} <<  #{/a} | #{a @BlogController.listPosts(pagenumber+1)} >> #{/a}
+</table>
+
+
+<div id="newpage"><a href="@{BlogController.newPost()}">Nouveau post</a></div>
+
+

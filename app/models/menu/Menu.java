@@ -18,7 +18,7 @@ public class Menu extends MongoEntity {
    @Required
    public String name;
    @Reference
-   public List<MenuItem> items;
+   public List<MenuItem> items = new ArrayList<MenuItem>();
 
    /**
     * @param name The name of the menu (play i18n key)

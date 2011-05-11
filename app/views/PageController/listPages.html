@@ -2,7 +2,20 @@
 #{set title:'list Pages' /}
 
 
+
+
 <table class="listofpage">
+   <thead>
+      <tr>
+         <td>Langue</td>
+         <td>Titre</td>
+         <td>Identifiant</td>
+         <td>Éditer</td>
+         <td>Supprimer</td>
+         <td>Traduire</td>
+         <td>Visualiser</td>
+      </tr>
+   </thead>
    #{list items:pages, as:'p'}
    <tr>
       <td>----------</td>
@@ -21,7 +34,8 @@
    #{/list}
 
    #{/list}
-
    #{a @PageController.listPages((pagenumber-1)>0 ? pagenumber - 1 : 0 )} << #{/a} | #{a @PageController.listPages(pagenumber+1)} >> #{/a}
-
 </table>
+<div id="newpage"><a href="@{PageController.newPage()}">Nouvelle page</a></div>
+
+ 
