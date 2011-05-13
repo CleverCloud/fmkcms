@@ -5,6 +5,7 @@ import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
 import com.mongodb.Mongo;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +17,7 @@ import play.Play;
  * @author keruspe
  */
 @SuppressWarnings("unchecked")
-public abstract class MongoEntity {
+public abstract class MongoEntity implements Serializable {
 
    @Id
    public ObjectId id;
