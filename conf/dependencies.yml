@@ -3,4 +3,14 @@ self: clevercloud -> fmkcms 0.9
 
 require:
     - play
-    - play -> secure
+    - clevercloud -> secure 0.5
+    
+repositories:
+  
+  - localModules:
+        type:       local
+        artifact: "/opt/playmods/[artifact]"
+        contains:
+            - clevercloud -> fmkcms 0.9
+            - clevercloud -> secure 0.5
+            - clevercloud -> fmkecom 0.1
