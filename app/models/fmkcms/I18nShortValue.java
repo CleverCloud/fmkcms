@@ -20,13 +20,13 @@ import mongo.MongoEntity;
 @Entity
 public class I18nShortValue extends MongoEntity {
 
-    public Map<Locale, String> values;
+    public Map<Locale, String> content;
 
-    public Map<Locale, String> getValues() {
-        if (values == null) {
-            values = new HashMap<Locale, String>();
+    public Map<Locale, String> getContent() {
+        if (content == null) {
+            content = new HashMap<Locale, String>();
         }
-        return values;
+        return content;
     }
 
     public String getBestFor(Locale l) {
@@ -37,7 +37,7 @@ public class I18nShortValue extends MongoEntity {
 
     public String getBestFor(List<Locale> l) {
         LocaleSet ls = new LocaleSet();
-        ls.addAll(values.keySet());
-        return values.get(ls.getTheBestLocale(l));
+        ls.addAll(content.keySet());
+        return content.get(ls.getTheBestLocale(l));
     }
 }
