@@ -27,7 +27,7 @@ public class I18nController extends Controller {
     public static List<Locale> getLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
         Locale tldLocale = I18nController.getTldLanguage();
-        
+
         locales.addAll(I18nController.getQueryStringLanguages());
         if (tldLocale != null) {
             locales.add(tldLocale);
@@ -44,7 +44,7 @@ public class I18nController extends Controller {
      */
     public static List<Locale> getQueryStringLanguages() {
         List<Locale> locales = new ArrayList<Locale>();
-        
+
         String[] queryString = Http.Request.current().querystring.split("&");
         for (int i = 0; i < queryString.length; ++i) {
             String[] current = queryString[i].split("=");
@@ -63,7 +63,7 @@ public class I18nController extends Controller {
                     break;
             }
         }
-        
+
         return locales;
     }
 
@@ -73,21 +73,21 @@ public class I18nController extends Controller {
      */
     public static Locale getTldLanguage() {
         String tld4locales = Play.configuration.getProperty("fmkcms.tld4locales", "false");
-        
+
         if (!tld4locales.equalsIgnoreCase("true")) {
             return null;
         }
-        
+
         Map<String, Locale> tldLocales = new HashMap<String, Locale>();
 
         // Add your tld specific locales here
         tldLocales.put("com", Locale.ENGLISH);
         tldLocales.put("org", Locale.ENGLISH);
         tldLocales.put("us", Locale.ENGLISH);
-        
+
         String[] domainSplitted = Http.Request.current().domain.split("\\.");
         String tld = domainSplitted[domainSplitted.length - 1];
-        
+
         Locale candidat = tldLocales.get(tld);
         if (candidat != null) {
             return candidat;
@@ -110,7 +110,7 @@ public class I18nController extends Controller {
         List<Locale> locales = new ArrayList<Locale>();
         List<String> languages = Http.Request.current().acceptLanguage();
         String[] locale;
-        
+
         for (String language : languages) {
             locale = language.split("-");
             switch (locale.length) {
@@ -124,7 +124,7 @@ public class I18nController extends Controller {
                     break;
             }
         }
-        
+
         return locales;
     }
 
@@ -153,16 +153,17 @@ public class I18nController extends Controller {
      */
     public static Map<String, Locale> getAllLocalesInMap(List<Locale> blacklist) {
         Map<String, Locale> locales = new TreeMap<String, Locale>();
-        for (Locale locale : Arrays.asList(Locale.getAvailableLocales())) {
-            String s = locale.getDisplayLanguage().substring(0,1).toUpperCase() + locale.getDisplayLanguage().substring(1);
-            locales.put(s + (!locale.getCountry().equals("") ? " : " + locale.getDisplayCountry() : ""), locale);
-        }
+        List<Locale> alllocale = new ArrayList<Locale>(Arrays.asList(Locale.getAvailableLocales()));
         if (blacklist != null && !blacklist.isEmpty()) {
-            for (Locale blacklisted : blacklist) {
-                locales.remove(blacklisted.getDisplayLanguage() + (blacklisted.getCountry().equals("") ? " : " + blacklisted.getDisplayCountry() : ""));
-            }
+            alllocale.removeAll(blacklist);
         }
-        
+        for (Locale locale : alllocale) {
+            StringBuilder sb = new StringBuilder(locale.getDisplayLanguage().substring(0, 1).toUpperCase()).append(locale.getDisplayLanguage().substring(1));
+            if (!locale.getCountry().equals("")) {
+                sb.append(" : ").append(locale.getDisplayCountry());
+            }
+            locales.put(sb.toString(), locale);
+        }
         return locales;
     }
 
