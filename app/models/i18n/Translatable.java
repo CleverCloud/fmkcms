@@ -62,4 +62,6 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
    public Iterable<T> getWithSameRef() {
        return (this.reference == null) ? new LinkedList<T>(): (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).fetch();
    }
+   
+   
 }
