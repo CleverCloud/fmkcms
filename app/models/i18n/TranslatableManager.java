@@ -6,6 +6,7 @@ package models.i18n;
 
 import com.clevercloud.utils.locale.LocaleSet;
 import controllers.I18nController;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -16,11 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import mongo.MongoEntity;
 import org.bson.types.ObjectId;
 
 /**
- *
  * @author waxzce
  */
 public class TranslatableManager<T extends Translatable, R extends TranslatableRef<T, R>> {
@@ -69,7 +70,7 @@ public class TranslatableManager<T extends Translatable, R extends TranslatableR
       ls.addAll(m.keySet());
       return m.get(ls.getTheBestLocale(l));
    }
-   
+
    public T getBestForLocales(R ref) {
       return getBestForLocales(ref, I18nController.getLanguages());
    }

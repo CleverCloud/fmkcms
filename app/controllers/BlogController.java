@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import models.Tag;
 import models.blog.Post;
 import models.blog.PostRef;
@@ -21,8 +22,8 @@ import play.mvc.With;
 import play.vfs.VirtualFile;
 import controllers.secure.Secure;
 import annotations.Check;
+
 /**
- *
  * @author clementnivolle
  * @author keruspe
  * @author judu
@@ -32,12 +33,13 @@ import annotations.Check;
 public class BlogController extends Controller {
 
    public static final String CAN_EDIT = "can_edit_blog";
-   
-   
+
+
    /**
     * Print the list of blog posts and permit to edit or delete them
+    *
     * @param pagenumber The number of the page to display (20 Post by page)
-    **/
+    */
    public static void listPosts(Integer pagenumber) {
       if (pagenumber == null) {
          pagenumber = 0;
@@ -54,7 +56,8 @@ public class BlogController extends Controller {
 
    /**
     * Ask confirmation for deleting a Post
-    * @param urlId The urlId of the Post
+    *
+    * @param urlId    The urlId of the Post
     * @param language The lang of the Post
     */
    public static void deletePost_confirm(String urlId, String language) {
@@ -64,7 +67,8 @@ public class BlogController extends Controller {
 
    /**
     * Delete a Post
-    * @param urlId The urlId of the Post
+    *
+    * @param urlId    The urlId of the Post
     * @param language The lang of the Post
     */
    public static void deletePost(String urlId, String language) {
@@ -90,7 +94,8 @@ public class BlogController extends Controller {
 
    /**
     * Edit a Post
-    * @param urlId The urlId of the Post
+    *
+    * @param urlId    The urlId of the Post
     * @param language The lang of the Post
     */
    public static void edit(String urlId, String language) {
@@ -112,8 +117,9 @@ public class BlogController extends Controller {
 
    /**
     * Translate a Post
+    *
     * @param otherUrlId The urlId of the Post to translate
-    * @param language The lang of the Post
+    * @param language   The lang of the Post
     */
    public static void translate(String otherUrlId, String language) {
       Post otherPost = Post.getPostByLocale(otherUrlId, new Locale(language));
@@ -134,8 +140,9 @@ public class BlogController extends Controller {
 
    /**
     * Create/Edit/Translate a Post
-    * @param actionz The action we're performing ("edit", "create", "translate")
-    * @param otherUrlId The urlId of the Post we're translating or editing (may be null)
+    *
+    * @param actionz       The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId    The urlId of the Post we're translating or editing (may be null)
     * @param otherLanguage The lang of the Post we're translating or editing (may be null)
     */
    public static void doNewPost(String actionz, String otherUrlId, String otherLanguage) {
@@ -222,8 +229,9 @@ public class BlogController extends Controller {
 
    /**
     * Create a PostRef for a new Post
-    * @param actionz The action we're performing ("edit", "create", "translate")
-    * @param otherUrlId The urlId of the Post we're translating or editing (may be null)
+    *
+    * @param actionz       The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId    The urlId of the Post we're translating or editing (may be null)
     * @param otherLanguage The lang of the Post we're translating or editing (may be null)
     * @return The PostRef
     */

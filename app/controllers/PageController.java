@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+
 import models.Page;
 import models.PageRef;
 import models.Tag;
@@ -18,7 +19,6 @@ import controllers.secure.Secure;
 import annotations.Check;
 
 /**
- *
  * @author waxzce
  * @author keruspe
  */
@@ -30,6 +30,7 @@ public class PageController extends Controller {
 
    /**
     * Display a list of Pages
+    *
     * @param pagenumber The number of the page to display (20 Page by page)
     */
    public static void listPages(Integer pagenumber) {
@@ -48,7 +49,8 @@ public class PageController extends Controller {
 
    /**
     * Ask confirmation for deleting a Page
-    * @param urlId The urlId of the Page
+    *
+    * @param urlId    The urlId of the Page
     * @param language The lang of the Page
     */
    public static void deletePage_confirm(String urlId, String language) {
@@ -58,7 +60,8 @@ public class PageController extends Controller {
 
    /**
     * Delete a Page
-    * @param urlId The urlId of the Page
+    *
+    * @param urlId    The urlId of the Page
     * @param language The lang of the Page
     */
    public static void deletePage(String urlId, String language) {
@@ -84,7 +87,8 @@ public class PageController extends Controller {
 
    /**
     * Edit a Page
-    * @param urlId The urlId of the Page
+    *
+    * @param urlId    The urlId of the Page
     * @param language The lang of the Page
     */
    public static void edit(String urlId, String language) {
@@ -110,8 +114,9 @@ public class PageController extends Controller {
 
    /**
     * Translate a page
+    *
     * @param otherUrlId The urlId of the Page to translate
-    * @param language The lang of the Page
+    * @param language   The lang of the Page
     */
    public static void translate(String otherUrlId, String language) {
       Page otherPage = Page.getPageByLocale(otherUrlId, new Locale(language));
@@ -136,8 +141,9 @@ public class PageController extends Controller {
 
    /**
     * Create/Edit/Translate a Page
-    * @param actionz The action we're performing ("edit", "create", "translate")
-    * @param otherUrlId The urlId of the Page we're translating or editing (may be null)
+    *
+    * @param actionz       The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId    The urlId of the Page we're translating or editing (may be null)
     * @param otherLanguage The lang of the Page we're translating or editing (may be null)
     */
    public static void doNewPage(String actionz, String otherUrlId, String otherLanguage) {
@@ -204,8 +210,9 @@ public class PageController extends Controller {
 
    /**
     * Create a PageRef for a new Page
-    * @param actionz The action we're performing ("edit", "create", "translate")
-    * @param otherUrlId The urlId of the Page we're translating or editing (may be null)
+    *
+    * @param actionz       The action we're performing ("edit", "create", "translate")
+    * @param otherUrlId    The urlId of the Page we're translating or editing (may be null)
     * @param otherLanguage The lang of the Page we're translating or editing (may be null)
     * @return The PageRef
     */

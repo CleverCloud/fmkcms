@@ -5,15 +5,16 @@ import com.google.code.morphia.Morphia;
 import com.google.code.morphia.annotations.Id;
 import com.google.code.morphia.annotations.Transient;
 import com.mongodb.Mongo;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.bson.types.ObjectId;
 import play.Play;
 
 /**
- *
  * @author keruspe
  */
 @SuppressWarnings("unchecked")
@@ -26,6 +27,7 @@ public abstract class MongoEntity implements Serializable {
 
    /**
     * Get the Datastore used to store the data
+    *
     * @return The Datastore
     */
    public static Datastore getDs() {
@@ -43,6 +45,7 @@ public abstract class MongoEntity implements Serializable {
 
    /**
     * Save the Entity
+    *
     * @return self
     */
    public <T extends MongoEntity> T save() {
@@ -58,6 +61,7 @@ public abstract class MongoEntity implements Serializable {
 
    /**
     * Refresh the Entity (fill missing field with values from BDD)
+    *
     * @return self, refreshed
     */
    public <T extends MongoEntity> T refresh() {
