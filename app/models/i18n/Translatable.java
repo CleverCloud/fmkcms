@@ -1,5 +1,6 @@
 package models.i18n;
 
+import com.google.code.morphia.annotations.Indexed;
 import com.google.code.morphia.annotations.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import groovy.transform.IndexedProperty;
 import mongo.MongoEntity;
 import org.elasticsearch.common.Required;
 
@@ -17,6 +20,7 @@ import org.elasticsearch.common.Required;
 public abstract class Translatable<T extends Translatable, R extends TranslatableRef<T, R>> extends MongoEntity {
 
    @Required
+   @Indexed(unique = true)
    public String urlId;
    @Required
    public Locale language;

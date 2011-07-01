@@ -21,7 +21,7 @@ import play.Play;
 public class SearchViewer extends Controller {
 
    public static void search(String query) {
-      renderArgs.put("results", SearchViewer.doSearch(query));
+      renderArgs.put("result", SearchViewer.doSearch(query));
       renderArgs.put("query", query);
       render();
    }
@@ -35,22 +35,28 @@ public class SearchViewer extends Controller {
          SearchResponse rayponce = c.prepareSearch(Play.configuration.getProperty("elasticsearch.indexname")).setSearchType(SearchType.DEFAULT).setQuery(qsqb).execute().actionGet();
 
          List<Searchable> result = new LinkedList<Searchable>();
+         
+         Logger.debug("hits : %s", rayponce.hits().totalHits());
 
          for (SearchHit searchHit : rayponce.hits()) {
             try {
-               
-               Object obj = Class.forName(searchHit.getType()).
+               Class clazz = Class.forName(searchHit.getType());
+               Object obj = clazz.
                        getMethod("getFrom", new Class[]{SearchHit.class}).
-                       invoke(Class.forName(searchHit.getType()), new Object[]{searchHit});
+                       invoke(clazz, new Object[]{searchHit});
                        
                if (obj != null) {
                   if (obj instanceof elasticsearch.Searchable) {
                      Searchable sobj = (Searchable) obj;
                      sobj.setScore(searchHit.getScore());
+                     Logger.debug("hit title : %s", sobj.getPrintTitle());
+                     
                      result.add(sobj);
                   } else {
                      throw new NotSearchableException("The returned object is not a Searchable element : " + searchHit.getType());
                   }
+               } else {
+                  Logger.debug("hit null");
                }
             } catch (NotSearchableException e) {
                Logger.error("Not searchable : %s", e.getMessage());
@@ -63,6 +69,7 @@ public class SearchViewer extends Controller {
          
          return result;
       } else {
+         
          return new LinkedList<Searchable>();
       }
    }

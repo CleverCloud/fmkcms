@@ -36,7 +36,7 @@ public class IndexJob extends Job<String> {
       this.strategies = strategies;
    }
 
-   @Override
+   //@Override
    public String doJobWithResult() throws Exception {
 
       Client client = new ElasticSearchClient();

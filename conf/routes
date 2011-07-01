@@ -12,7 +12,7 @@ GET     /pages/tagged/{tagName}                               PageViewer.pagesTa
 GET     /pages/list                                           PageController.listPages
 *       /pages/search                                         SearchController.search
 GET     /pages/new                                            PageController.newPage
-POST    /pages/new                                            PageController.doNewPage(actionz:'create',otherUrlId:'',otherLanguage:'')
+POST    /pages/new                                            PageController.doNewPage(actionz:'create')
 GET     /pages/edit/{urlId}/from/{language}                   PageController.edit
 POST    /pages/edit/{otherUrlId}/{otherLanguage}              PageController.doNewPage(actionz:'edit')
 GET     /pages/translate/{otherUrlId}/from/{language}         PageController.translate
