@@ -1,6 +1,26 @@
+# Vim: set sw=4; set sts=4
+
 self: clevercloud -> fmkcms 0.9
 
 
 require:
-    - play
-    - play -> secure
+  - play
+  - play -> secure
+  - org.elasticsearch -> elasticsearch 0.17.2
+  - com.google.code.morphia -> morphia 0.99
+  - net.java.dev.rome -> rome 1.0.0
+  - org.jsoup -> jsoup 1.6.1
+
+repositories:
+
+  - morphiaMaven:
+      type: iBiblio
+      root: "http://morphia.googlecode.com/svn/mavenrepo/"
+      contains:
+        - com.google.code.morphia -> *
+
+  - sonatypeMaven:
+      type: iBiblio
+      root: "https://oss.sonatype.org/content/repositories/releases/"
+      contains:
+        - org.elasticsearch -> *
