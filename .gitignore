@@ -11,3 +11,4 @@ modules
 *.komodoproject
 /.ditz/
 commands.pyc
+lib

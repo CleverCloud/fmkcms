@@ -9,7 +9,6 @@ import java.util.List;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.xcontent.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import play.Logger;
 import play.Play;
@@ -29,8 +28,7 @@ public class SearchViewer extends Controller {
    public static List<Searchable> doSearch(String query) {
       if (!query.isEmpty()) {
          Client c = new ElasticSearchClient();
-
-         QueryStringQueryBuilder qsqb = new QueryStringQueryBuilder(query);
+         org.elasticsearch.index.query.QueryStringQueryBuilder qsqb = new org.elasticsearch.index.query.QueryStringQueryBuilder(query);
 
          SearchResponse rayponce = c.prepareSearch(Play.configuration.getProperty("elasticsearch.indexname")).setSearchType(SearchType.DEFAULT).setQuery(qsqb).execute().actionGet();
 
