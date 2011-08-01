@@ -3,6 +3,7 @@ package controllers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import converter.MenuItemConverter;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import job.WriteFileMenu;
 import models.menu.Menu;
 import models.menu.MenuItem;
@@ -29,7 +31,6 @@ import controllers.secure.Secure;
 
 
 /**
- *
  * @author keruspe
  */
 @With(Secure.class)
@@ -56,6 +57,7 @@ public class MenuController extends Controller {
 
    /**
     * Edit a Menu
+    *
     * @param id The id of the Menu
     */
    public static void edit(String id) {
@@ -68,6 +70,7 @@ public class MenuController extends Controller {
 
    /**
     * End the edition of the Menu
+    *
     * @param id The id of the Menu
     */
    public static void edit_end(String id) {
@@ -82,6 +85,7 @@ public class MenuController extends Controller {
 
    /**
     * Delete a Menu
+    *
     * @param id The id of the Menu
     */
    public static void delete(String id) {
@@ -106,6 +110,7 @@ public class MenuController extends Controller {
 
    /**
     * Add a menuItem to the Menu
+    *
     * @param id The id of the Menu
     */
    public static void addItem(String id) {
@@ -123,6 +128,7 @@ public class MenuController extends Controller {
 
    /**
     * Apply the menuItem addition
+    *
     * @param id The id of the Menu
     */
    public static void doAddItem(String id) {
@@ -165,8 +171,9 @@ public class MenuController extends Controller {
 
    /**
     * Edit a MenuItem
-    * @param type The type of the item ("ControllerChain, Title, ...)
-    * @param idMenu The id of the Menu
+    *
+    * @param type       The type of the item ("ControllerChain, Title, ...)
+    * @param idMenu     The id of the Menu
     * @param idMenuItem The id of the MenuItem
     */
    public static void editItem(String type, String idMenu, String idMenuItem) {
@@ -184,9 +191,10 @@ public class MenuController extends Controller {
 
    /**
     * Apply the MenuItem edition
-    * @param type The type of the item ("ControllerChain, Title, ...)
+    *
+    * @param type   The type of the item ("ControllerChain, Title, ...)
     * @param idMenu The id of the Menu
-    * @param id The id of the MenuItem
+    * @param id     The id of the MenuItem
     */
    public static void doEditItem(String type, String idMenu, String id) {
       MenuItem item = MenuItem.getByMongodStringId(type, id);
@@ -218,8 +226,9 @@ public class MenuController extends Controller {
 
    /**
     * Remove a menuItem
-    * @param type The type of the item ("ControllerChain, Title, ...)
-    * @param idMenu The id of the Menu
+    *
+    * @param type       The type of the item ("ControllerChain, Title, ...)
+    * @param idMenu     The id of the Menu
     * @param idMenuItem The id of the MenuItem
     */
    public static void removeItem(String type, String idMenu, String idMenuItem) {
@@ -234,6 +243,7 @@ public class MenuController extends Controller {
 
    /**
     * Write the Menu to a file (as a JSON String)
+    *
     * @param id The id of the Menu
     */
    public static void writeMenuFile(String id) {
@@ -243,6 +253,7 @@ public class MenuController extends Controller {
 
    /**
     * Import a menu from a JSON file
+    *
     * @param path The path to the file
     */
    public static void importMenuFromFile(String path) {
@@ -259,6 +270,7 @@ public class MenuController extends Controller {
 
    /**
     * View the content of a JSON menu file
+    *
     * @param path The path to the file
     * @throws FileNotFoundException
     */

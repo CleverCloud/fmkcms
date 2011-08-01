@@ -1,17 +1,18 @@
 package models.i18n;
 
 import com.google.code.morphia.annotations.Reference;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import mongo.MongoEntity;
 import org.elasticsearch.common.Required;
 
 /**
- *
  * @author keruspe
  */
 public abstract class Translatable<T extends Translatable, R extends TranslatableRef<T, R>> extends MongoEntity {
@@ -29,6 +30,7 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
 
    /**
     * Get all available locales for this Translatable
+    *
     * @return The list of Locale
     */
    public List<Locale> getAvailableLocales() {
@@ -45,6 +47,7 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
 
    /**
     * Get all available locales for this Translatable + the corresponding Translatables
+    *
     * @return A Map<Locale, Translatable>
     */
    public Map<Locale, T> getAvailableLocalesAndTranslatables() {
@@ -60,8 +63,8 @@ public abstract class Translatable<T extends Translatable, R extends Translatabl
    }
 
    public Iterable<T> getWithSameRef() {
-       return (this.reference == null) ? new LinkedList<T>(): (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).fetch();
+      return (this.reference == null) ? new LinkedList<T>() : (List<T>) MongoEntity.getDs().find(this.getClass(), "reference", this.reference).fetch();
    }
-   
-   
+
+
 }
